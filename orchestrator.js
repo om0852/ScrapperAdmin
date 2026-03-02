@@ -1,0 +1,572 @@
+import express from 'express';
+import { spawn } from 'child_process';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+import bodyParser from 'body-parser';
+import fs from 'fs';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const app = express();
+const PORT = process.env.PORT || 7000;
+
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(express.static('public'));
+
+// Platform configuration
+const platforms = {
+    blinkit: {
+        name: 'Blinkit',
+        port: 3088,
+        path: '../Blinkit-Scrapper',
+        process: null,
+        status: 'stopped'
+    },
+    dmart: {
+        name: 'DMart',
+        port: 4199,
+        path: '../DMart-Scrapper',
+        process: null,
+        status: 'stopped'
+    },
+    flipkart: {
+        name: 'Flipkart',
+        port: 3089,
+        path: '../flipkart_minutes',
+        process: null,
+        status: 'stopped'
+    },
+    instamart: {
+        name: 'Instamart',
+        port: 3090,
+        path: '../instamart-category-scrapper',
+        process: null,
+        status: 'stopped'
+    },
+    jiomart: {
+        name: 'Jiomart',
+        port: 3091,
+        path: '../Jiomart-Scrapper',
+        process: null,
+        status: 'stopped'
+    },
+    zepto: {
+        name: 'Zepto',
+        port: 3092,
+        path: '../Zepto-Scrapper',
+        process: null,
+        status: 'stopped'
+    }
+};
+
+const colors = {
+    reset: "\x1b[0m",
+    bright: "\x1b[1m",
+    red: "\x1b[31m",
+    green: "\x1b[32m",
+    yellow: "\x1b[33m",
+    blue: "\x1b[34m",
+    cyan: "\x1b[36m",
+    magenta: "\x1b[35m"
+};
+
+const systemLogs = [];
+
+const log = (type, prefix, message) => {
+    const timestamp = new Date().toISOString();
+    const colorMap = {
+        'INFO': colors.blue,
+        'SUCCESS': colors.green,
+        'ERROR': colors.red,
+        'WARNING': colors.yellow,
+        'DEBUG': colors.cyan,
+        'STARTED': colors.magenta
+    };
+    const colorCode = colorMap[type] || colors.reset;
+    console.log(`${colors.bright}[${timestamp}] ${colorCode}[${type}]${colors.reset} [${prefix}] ${message}`);
+
+    // Store for frontend
+    let uiType = 'info';
+    if (type === 'ERROR') uiType = 'error';
+    if (type === 'WARNING') uiType = 'warning';
+    if (type === 'SUCCESS') uiType = 'success';
+
+    systemLogs.push({ time: timestamp, type: uiType, message: `[${prefix}] ${message}` });
+    if (systemLogs.length > 200) systemLogs.shift();
+};
+
+// --- Helper Functions ---
+
+const startServer = (platformKey) => {
+    return new Promise((resolve, reject) => {
+        const platform = platforms[platformKey];
+
+        if (platform.process && platform.status === 'running') {
+            reject(new Error(`${platform.name} server is already running`));
+            return;
+        }
+
+        const serverPath = path.join(__dirname, platform.path, 'server.js');
+
+        // Check if server.js exists
+        if (!fs.existsSync(serverPath)) {
+            reject(new Error(`Server file not found for ${platform.name}`));
+            return;
+        }
+
+        try {
+            log('INFO', 'Orchestrator', `Starting ${platform.name} server on port ${platform.port}...`);
+
+            const child = spawn('node', [serverPath], {
+                cwd: path.join(__dirname, platform.path),
+                env: {
+                    ...process.env,
+                    PORT: platform.port
+                },
+                stdio: ['pipe', 'pipe', 'pipe']
+            });
+
+            // Log stdout
+            child.stdout.on('data', (data) => {
+                console.log(`${colors.cyan}[${platform.name}]${colors.reset} ${data}`);
+            });
+
+            // Log stderr
+            child.stderr.on('data', (data) => {
+                console.log(`${colors.yellow}[${platform.name}]${colors.reset} ${data}`);
+            });
+
+            // Handle process exit
+            child.on('exit', (code, signal) => {
+                log('WARNING', 'Orchestrator', `${platform.name} server stopped (exit code: ${code})`);
+                platform.status = 'stopped';
+                platform.process = null;
+            });
+
+            // Handle process error
+            child.on('error', (err) => {
+                log('ERROR', 'Orchestrator', `Failed to start ${platform.name}: ${err.message}`);
+                platform.status = 'stopped';
+                platform.process = null;
+                reject(err);
+            });
+
+            platform.process = child;
+            platform.status = 'running';
+            platform.startTime = new Date();
+
+            log('INFO', 'Orchestrator', `Waiting for ${platform.name} server to be healthy...`);
+
+            // Poll /health Endpoint up to 60 seconds
+            let attempts = 0;
+            const maxAttempts = 30; // 30 * 2s = 60 seconds
+            const pollInterval = setInterval(async () => {
+                attempts++;
+                try {
+                    const res = await fetch(`http://127.0.0.1:${platform.port}/health`);
+                    if (res.ok) {
+                        clearInterval(pollInterval);
+                        log('SUCCESS', 'Orchestrator', `${platform.name} server started successfully`);
+                        resolve({
+                            success: true,
+                            platform: platform.name,
+                            port: platform.port,
+                            status: 'running',
+                            message: `${platform.name} server is now running`
+                        });
+                    }
+                } catch (e) {
+                    // Fetch failed (server not listening yet)
+                    if (attempts >= maxAttempts) {
+                        clearInterval(pollInterval);
+                        log('ERROR', 'Orchestrator', `${platform.name} server health check timed out`);
+                        platform.status = 'stopped';
+                        reject(new Error(`${platform.name} server failed to start within time limit`));
+                    }
+                }
+            }, 2000);
+
+        } catch (error) {
+            log('ERROR', 'Orchestrator', `Error starting ${platform.name}: ${error.message}`);
+            platform.status = 'stopped';
+            reject(error);
+        }
+    });
+};
+
+const stopServer = (platformKey) => {
+    return new Promise((resolve, reject) => {
+        const platform = platforms[platformKey];
+
+        if (!platform.process || platform.status === 'stopped') {
+            reject(new Error(`${platform.name} server is not running`));
+            return;
+        }
+
+        try {
+            log('INFO', 'Orchestrator', `Stopping ${platform.name} server...`);
+
+            platform.process.kill('SIGTERM');
+
+            // Give it 5 seconds to stop gracefully
+            const timeout = setTimeout(() => {
+                if (platform.process && !platform.process.killed) {
+                    platform.process.kill('SIGKILL');
+                    log('WARNING', 'Orchestrator', `Force killed ${platform.name} server`);
+                }
+            }, 5000);
+
+            platform.process.on('exit', () => {
+                clearTimeout(timeout);
+                platform.status = 'stopped';
+                platform.process = null;
+                log('SUCCESS', 'Orchestrator', `${platform.name} server stopped`);
+                resolve({
+                    success: true,
+                    platform: platform.name,
+                    message: `${platform.name} server stopped successfully`
+                });
+            });
+
+        } catch (error) {
+            log('ERROR', 'Orchestrator', `Error stopping ${platform.name}: ${error.message}`);
+            platform.status = 'stopped';
+            platform.process = null;
+            reject(error);
+        }
+    });
+};
+
+// --- API Routes ---
+
+app.get('/api/platforms', (req, res) => {
+    const platformsList = Object.entries(platforms).map(([key, config]) => ({
+        id: key,
+        name: config.name,
+        port: config.port,
+        status: config.status,
+        uptime: config.startTime ? new Date() - config.startTime : 0
+    }));
+    res.json(platformsList);
+});
+
+app.get('/api/logs', (req, res) => {
+    res.json(systemLogs);
+});
+
+app.get('/api/categories', (req, res) => {
+    try {
+        const filePath = path.join(__dirname, 'categories_with_urls.json');
+        if (!fs.existsSync(filePath)) {
+            return res.status(404).json({ error: 'categories_with_urls.json not found' });
+        }
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        const platformsAvailable = Object.keys(data);
+        const categories = new Set();
+
+        platformsAvailable.forEach(platform => {
+            if (Array.isArray(data[platform])) {
+                data[platform].forEach(item => {
+                    const cat = item.masterCategory || item.officalCategory || item.category;
+                    if (cat) categories.add(cat);
+                });
+            }
+        });
+
+        res.json({
+            platforms: platformsAvailable,
+            categories: Array.from(categories).sort()
+        });
+    } catch (error) {
+        log('ERROR', 'API', `Error reading categories: ${error.message}`);
+        res.status(500).json({ error: 'Failed to read categories' });
+    }
+});
+
+app.post('/api/mass-scrape', async (req, res) => {
+    const { platforms: selectedPlatforms, categories: selectedCategories, pincodes: selectedPincodes } = req.body;
+
+    if (!Array.isArray(selectedPlatforms) || !Array.isArray(selectedCategories) || !Array.isArray(selectedPincodes)) {
+        return res.status(400).json({ error: 'platforms, categories, and pincodes must be arrays' });
+    }
+
+    // Acknowledge the request immediately so the frontend doesn't hang
+    res.json({ success: true, message: 'Mass scrape started', jobId: Date.now() });
+
+    // Put this in an async IIFE to run in the background
+    (async () => {
+        log('INFO', 'MassScrape', `Starting mass scrape for Platforms: ${selectedPlatforms.join(', ')} | Categories: ${selectedCategories.join(', ')} | Pincodes: ${selectedPincodes.join(', ')}`);
+
+        try {
+            const filePath = path.join(__dirname, 'categories_with_urls.json');
+            const urlData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+            for (const category of selectedCategories) {
+                const safeCategoryName = category.replace(/[^a-zA-Z0-9_\- ]/g, '_').trim();
+                const categoryDirPath = path.join(__dirname, 'scraped_data', safeCategoryName);
+                if (!fs.existsSync(categoryDirPath)) {
+                    fs.mkdirSync(categoryDirPath, { recursive: true });
+                }
+
+                for (const platformKey of selectedPlatforms) {
+                    const pKeyLower = platformKey.toLowerCase();
+                    const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
+
+                    if (!platformConfigKey) {
+                        log('WARNING', 'MassScrape', `Platform config not found for: ${platformKey}`);
+                        continue;
+                    }
+
+                    const pConfig = platforms[platformConfigKey];
+                    const platformUrlsData = urlData[platformKey] || urlData[pConfig.name] || [];
+
+                    log('DEBUG', 'MassScrape', `Searching URLs for Platform: ${pConfig.name}, Category: ${category}. Total platform URLs available: ${platformUrlsData.length}`);
+
+                    // Filter URLs for this category
+                    const urlsToScrape = platformUrlsData
+                        .filter(item => (item.masterCategory === category || item.officalCategory === category || item.category === category) && item.url)
+                        .map(item => item.url);
+
+                    if (urlsToScrape.length === 0) {
+                        log('WARNING', 'MassScrape', `No URLs found for Platform: ${pConfig.name}, Category: ${category}`);
+                        continue;
+                    }
+
+                    log('INFO', 'MassScrape', `Found ${urlsToScrape.length} URLs for Platform: ${pConfig.name}, Category: ${category}`);
+
+                    // Start the server if it's not running
+                    if (pConfig.status !== 'running') {
+                        try {
+                            await startServer(platformConfigKey);
+                        } catch (err) {
+                            log('ERROR', 'MassScrape', `Failed to start server ${pConfig.name}: ${err.message}`);
+                            continue;
+                        }
+                    }
+
+                    // Mapping for specific platform endpoint paths
+                    let endpoint = `/${platformConfigKey}categoryscrapper`;
+                    if (platformConfigKey === 'instamart') endpoint = '/instamartcategorywrapper';
+
+                    for (const pincode of selectedPincodes) {
+                        try {
+                            log('INFO', 'MassScrape', `Requesting Scrape - Platform: ${pConfig.name}, Category: ${category}, Pincode: ${pincode}, URLs: ${urlsToScrape.length}`);
+
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(() => controller.abort(), 900000); // 15 minute timeout
+
+                            let response;
+                            try {
+                                response = await fetch(`http://127.0.0.1:${pConfig.port}${endpoint}`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                        pincode: pincode.trim(),
+                                        urls: urlsToScrape,
+                                        store: false // DO NOT store individually inside the scraper codebase
+                                    }),
+                                    signal: controller.signal
+                                });
+                            } finally {
+                                clearTimeout(timeoutId);
+                            }
+
+                            if (!response.ok) {
+                                const errText = await response.text();
+                                log('ERROR', 'MassScrape', `Scraper API Error (${pConfig.name}): ${errText}`);
+                            } else {
+                                const data = await response.json();
+
+                                // Save data directly in mainserver/scraped_data/<Category>
+                                const safePincode = pincode.trim().replace(/[^0-9a-zA-Z]/g, '');
+                                const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+                                const fileName = `${pConfig.name}_${safePincode}_${timestamp}.json`;
+                                const outPath = path.join(categoryDirPath, fileName);
+
+                                fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
+
+                                log('SUCCESS', 'MassScrape', `Scrape complete - Platform: ${pConfig.name}, Category: ${category}, Pincode: ${pincode}. Saved products natively to ${outPath}`);
+                            }
+                        } catch (err) {
+                            log('ERROR', 'MassScrape', `Failed to request scrape for ${pConfig.name} (${pincode}): ${err.message}`);
+                        }
+
+                        // Add a small delay between hitting the same scraper for different pincodes
+                        await new Promise(res => setTimeout(res, 5000));
+                    }
+                }
+            }
+
+            log('INFO', 'MassScrape', 'Auto-stopping servers used in this mass scrape...');
+            for (const platformKey of selectedPlatforms) {
+                const pKeyLower = platformKey.toLowerCase();
+                const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
+                if (platformConfigKey && platforms[platformConfigKey].status === 'running') {
+                    try {
+                        await stopServer(platformConfigKey);
+                    } catch (e) {
+                        log('ERROR', 'MassScrape', `Failed to auto-stop ${platforms[platformConfigKey].name}: ${e.message}`);
+                    }
+                }
+            }
+
+            log('SUCCESS', 'MassScrape', 'Completed all mass scraping tasks.');
+        } catch (error) {
+            log('ERROR', 'MassScrape', `Critical Error in Mass Scrape loop: ${error.message}`);
+        }
+    })();
+});
+
+app.post('/api/start/:platform', async (req, res) => {
+    const { platform } = req.params;
+
+    if (!platforms[platform]) {
+        return res.status(400).json({ error: 'Invalid platform' });
+    }
+
+    try {
+        const result = await startServer(platform);
+        res.json(result);
+    } catch (error) {
+        log('ERROR', 'API', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/stop/:platform', async (req, res) => {
+    const { platform } = req.params;
+
+    if (!platforms[platform]) {
+        return res.status(400).json({ error: 'Invalid platform' });
+    }
+
+    try {
+        const result = await stopServer(platform);
+        res.json(result);
+    } catch (error) {
+        log('ERROR', 'API', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.get('/api/status/:platform', async (req, res) => {
+    const { platform } = req.params;
+
+    if (!platforms[platform]) {
+        return res.status(400).json({ error: 'Invalid platform' });
+    }
+
+    const config = platforms[platform];
+    const baseInfo = {
+        name: config.name,
+        port: config.port,
+        status: config.status,
+        url: config.status === 'running' ? `http://localhost:${config.port}` : null,
+        uptime: config.startTime ? new Date() - config.startTime : 0
+    };
+
+    if (config.status === 'running') {
+        try {
+            // Fetch live scraper stats using 127.0.0.1 to avoid ipv6 resolution issues in fetch
+            const response = await fetch(`http://127.0.0.1:${config.port}/status`);
+            if (response.ok) {
+                const scraperStatus = await response.json();
+                return res.json({ ...baseInfo, scraper: scraperStatus });
+            }
+        } catch (e) {
+            // Ignore fetch errors, just return base info
+            baseInfo.scraperError = `Error fetching scraper live status: ${e.message}`;
+        }
+    }
+    res.json(baseInfo);
+});
+
+app.get('/api/health/:platform', async (req, res) => {
+    const { platform } = req.params;
+
+    if (!platforms[platform]) {
+        return res.status(400).json({ error: 'Invalid platform' });
+    }
+
+    const config = platforms[platform];
+
+    if (config.status === 'running') {
+        try {
+            const response = await fetch(`http://127.0.0.1:${config.port}/health`);
+            if (response.ok) {
+                const health = await response.json();
+                return res.json(health);
+            } else {
+                return res.status(response.status).json({ error: 'Health check failed' });
+            }
+        } catch (e) {
+            return res.status(500).json({ error: 'Could not connect to scraper server' });
+        }
+    }
+
+    res.status(503).json({ error: 'Server is not running' });
+});
+
+app.post('/api/stopall', async (req, res) => {
+    const results = [];
+
+    for (const [key, platform] of Object.entries(platforms)) {
+        if (platform.status === 'running') {
+            try {
+                await stopServer(key);
+                results.push({ platform: platform.name, status: 'stopped' });
+            } catch (error) {
+                results.push({ platform: platform.name, error: error.message });
+            }
+        }
+    }
+
+    log('SUCCESS', 'Orchestrator', 'All servers stopped');
+    res.json({ success: true, results });
+});
+
+app.get('/health', (req, res) => {
+    res.json({
+        status: 'healthy',
+        timestamp: new Date().toISOString(),
+        uptime: process.uptime()
+    });
+});
+
+// --- Startup ---
+
+app.listen(PORT, () => {
+    log('SUCCESS', 'Orchestrator', `🚀 Main Server running on http://localhost:${PORT}`);
+    log('INFO', 'Orchestrator', 'Available platforms:');
+    Object.values(platforms).forEach(p => {
+        log('INFO', 'Orchestrator', `  - ${p.name} (port ${p.port})`);
+    });
+    log('INFO', 'Orchestrator', '');
+    log('INFO', 'Orchestrator', 'Open your browser to control all servers');
+});
+
+// Handle graceful shutdown
+process.on('SIGINT', async () => {
+    log('WARNING', 'Orchestrator', 'Shutting down gracefully...');
+
+    for (const [key] of Object.entries(platforms)) {
+        const platform = platforms[key];
+        if (platform.process && platform.status === 'running') {
+            try {
+                await stopServer(key);
+            } catch (err) {
+                log('ERROR', 'Orchestrator', err.message);
+            }
+        }
+    }
+
+    log('SUCCESS', 'Orchestrator', 'All servers stopped. Exiting...');
+    process.exit(0);
+});
+
+export default app;

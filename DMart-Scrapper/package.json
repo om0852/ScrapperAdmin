@@ -1,0 +1,16 @@
+{
+  "name": "dmart-scrapper",
+  "version": "1.0.0",
+  "main": "dmart_api_scraper.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1",
+    "playwright": "^1.57.0"
+  }
+}
