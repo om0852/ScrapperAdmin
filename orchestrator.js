@@ -306,23 +306,38 @@ app.post('/api/mass-scrape', async (req, res) => {
             const filePath = path.join(__dirname, 'categories_with_urls.json');
             const urlData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-            for (const category of selectedCategories) {
-                const safeCategoryName = category.replace(/[^a-zA-Z0-9_\- ]/g, '_').trim();
-                const categoryDirPath = path.join(__dirname, 'scraped_data', safeCategoryName);
-                if (!fs.existsSync(categoryDirPath)) {
-                    fs.mkdirSync(categoryDirPath, { recursive: true });
+            for (const platformKey of selectedPlatforms) {
+                const pKeyLower = platformKey.toLowerCase();
+                const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
+
+                if (!platformConfigKey) {
+                    log('WARNING', 'MassScrape', `Platform config not found for: ${platformKey}`);
+                    continue;
                 }
 
-                for (const platformKey of selectedPlatforms) {
-                    const pKeyLower = platformKey.toLowerCase();
-                    const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
+                const pConfig = platforms[platformConfigKey];
 
-                    if (!platformConfigKey) {
-                        log('WARNING', 'MassScrape', `Platform config not found for: ${platformKey}`);
+                // Start the server if it's not running
+                if (pConfig.status !== 'running') {
+                    try {
+                        await startServer(platformConfigKey);
+                    } catch (err) {
+                        log('ERROR', 'MassScrape', `Failed to start server ${pConfig.name}: ${err.message}`);
                         continue;
                     }
+                }
 
-                    const pConfig = platforms[platformConfigKey];
+                // Mapping for specific platform endpoint paths
+                let endpoint = `/${platformConfigKey}categoryscrapper`;
+                if (platformConfigKey === 'instamart') endpoint = '/instamartcategorywrapper';
+
+                for (const category of selectedCategories) {
+                    const safeCategoryName = category.replace(/[^a-zA-Z0-9_\- ]/g, '_').trim();
+                    const categoryDirPath = path.join(__dirname, 'scraped_data', safeCategoryName);
+                    if (!fs.existsSync(categoryDirPath)) {
+                        fs.mkdirSync(categoryDirPath, { recursive: true });
+                    }
+
                     const platformUrlsData = urlData[platformKey] || urlData[pConfig.name] || [];
 
                     log('DEBUG', 'MassScrape', `Searching URLs for Platform: ${pConfig.name}, Category: ${category}. Total platform URLs available: ${platformUrlsData.length}`);
@@ -338,20 +353,6 @@ app.post('/api/mass-scrape', async (req, res) => {
                     }
 
                     log('INFO', 'MassScrape', `Found ${urlsToScrape.length} URLs for Platform: ${pConfig.name}, Category: ${category}`);
-
-                    // Start the server if it's not running
-                    if (pConfig.status !== 'running') {
-                        try {
-                            await startServer(platformConfigKey);
-                        } catch (err) {
-                            log('ERROR', 'MassScrape', `Failed to start server ${pConfig.name}: ${err.message}`);
-                            continue;
-                        }
-                    }
-
-                    // Mapping for specific platform endpoint paths
-                    let endpoint = `/${platformConfigKey}categoryscrapper`;
-                    if (platformConfigKey === 'instamart') endpoint = '/instamartcategorywrapper';
 
                     for (const pincode of selectedPincodes) {
                         try {
@@ -400,18 +401,13 @@ app.post('/api/mass-scrape', async (req, res) => {
                         await new Promise(res => setTimeout(res, 5000));
                     }
                 }
-            }
 
-            log('INFO', 'MassScrape', 'Auto-stopping servers used in this mass scrape...');
-            for (const platformKey of selectedPlatforms) {
-                const pKeyLower = platformKey.toLowerCase();
-                const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
-                if (platformConfigKey && platforms[platformConfigKey].status === 'running') {
-                    try {
-                        await stopServer(platformConfigKey);
-                    } catch (e) {
-                        log('ERROR', 'MassScrape', `Failed to auto-stop ${platforms[platformConfigKey].name}: ${e.message}`);
-                    }
+                // Auto-stop the platform server right after it finishes its job for all categories & pincodes
+                log('INFO', 'MassScrape', `Auto-stopping ${pConfig.name} server as its mass scrape tasks are complete...`);
+                try {
+                    await stopServer(platformConfigKey);
+                } catch (e) {
+                    log('ERROR', 'MassScrape', `Failed to auto-stop ${pConfig.name}: ${e.message}`);
                 }
             }
 
