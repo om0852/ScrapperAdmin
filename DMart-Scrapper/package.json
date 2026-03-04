@@ -1,6 +1,7 @@
 {
   "name": "dmart-scrapper",
   "version": "1.0.0",
+  "type": "module",
   "main": "dmart_api_scraper.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

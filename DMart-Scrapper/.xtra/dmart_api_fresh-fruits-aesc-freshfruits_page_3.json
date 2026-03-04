@@ -1,0 +1,232 @@
+{
+  "xSellData": [],
+  "totalRecords": 54,
+  "products": [],
+  "oosProducts": [],
+  "oosPosition": "",
+  "breadcrumb": [],
+  "plpBanners": "",
+  "sortFilterData": {
+    "filterData": [
+      {
+        "filterName": "Brand",
+        "filterQueryId": "filter_1",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "Malgudi",
+            "value": "mfName_ntk_cs%3A%22Malgudi%22",
+            "count": "5",
+            "image": ""
+          },
+          {
+            "name": "Zetva",
+            "value": "mfName_ntk_cs%3A%22Zetva%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Category",
+        "filterQueryId": "filter_2",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "Fresh Vegetables",
+            "value": "ads_f12508_ntk_cs%3A%22Fresh+Vegetables%22",
+            "count": "19",
+            "image": ""
+          },
+          {
+            "name": "Seasonal Fruits",
+            "value": "ads_f12508_ntk_cs%3A%22Seasonal+Fruits%22",
+            "count": "9",
+            "image": ""
+          },
+          {
+            "name": "All season Fruits",
+            "value": "ads_f12508_ntk_cs%3A%22All+season+Fruits%22",
+            "count": "6",
+            "image": ""
+          },
+          {
+            "name": "Coconut",
+            "value": "ads_f12508_ntk_cs%3A%22Coconut%22",
+            "count": "3",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Quantity",
+        "filterQueryId": "filter_3",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "1 U",
+            "value": "ads_f15002_ntk_cs%3A%221+U%22",
+            "count": "16",
+            "image": ""
+          },
+          {
+            "name": "2 U",
+            "value": "ads_f15002_ntk_cs%3A%222+U%22",
+            "count": "6",
+            "image": ""
+          },
+          {
+            "name": "4 U",
+            "value": "ads_f15002_ntk_cs%3A%224+U%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "6 U",
+            "value": "ads_f15002_ntk_cs%3A%226+U%22",
+            "count": "2",
+            "image": ""
+          },
+          {
+            "name": "3 U",
+            "value": "ads_f15002_ntk_cs%3A%223+U%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Weight",
+        "filterQueryId": "filter_4",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "500 g",
+            "value": "ads_f15004_ntk_cs%3A%22500+g%22",
+            "count": "12",
+            "image": ""
+          },
+          {
+            "name": "250 g",
+            "value": "ads_f15004_ntk_cs%3A%22250+g%22",
+            "count": "7",
+            "image": ""
+          },
+          {
+            "name": "1 kg",
+            "value": "ads_f15004_ntk_cs%3A%221+kg%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "200 g",
+            "value": "ads_f15004_ntk_cs%3A%22200+g%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "125 g",
+            "value": "ads_f15004_ntk_cs%3A%22125+g%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Country Of Origin",
+        "filterQueryId": "filter_5",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "India",
+            "value": "ads_f13001_ntk_cs%3A%22India%22",
+            "count": "49",
+            "image": ""
+          },
+          {
+            "name": "China / South Africa / Egypt",
+            "value": "ads_f13001_ntk_cs%3A%22China+%2F+South+Africa+%2F+Egypt%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "Iran / New Zealand / Greece",
+            "value": "ads_f13001_ntk_cs%3A%22Iran+%2F+New+Zealand+%2F+Greece%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "New Zealand",
+            "value": "ads_f13001_ntk_cs%3A%22New+Zealand%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "Turkey/New Zealand",
+            "value": "ads_f13001_ntk_cs%3A%22Turkey%2FNew+Zealand%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "USA",
+            "value": "ads_f13001_ntk_cs%3A%22USA%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Availability",
+        "filterQueryId": "invFilterOption",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "In stock",
+            "value": "1",
+            "count": "",
+            "image": ""
+          }
+        ]
+      }
+    ],
+    "sortData": {
+      "sortName": "Sort",
+      "sortOptions": [
+        {
+          "name": "Relevance",
+          "value": "",
+          "queryId": "sortBy",
+          "isDefault": "true",
+          "appliedText": ""
+        },
+        {
+          "name": "Price(Low to High)",
+          "value": "3",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Price"
+        },
+        {
+          "name": "Price(High to Low)",
+          "value": "4",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Price"
+        },
+        {
+          "name": "Discount % (High to Low)",
+          "value": "6",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Discount"
+        }
+      ]
+    }
+  },
+  "seoMeta": {
+    "seoTitle": "",
+    "seoDesc": "",
+    "seoKeywords": ""
+  },
+  "dynamicListingContent": []
+}

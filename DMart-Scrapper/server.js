@@ -35,7 +35,7 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
     const allProducts = [];
 
     try {
-        console.log("Launching browser for DMart...");
+        console.log(`Launching browser for DMart (pincode: ${pincode})...`);
         browser = await chromium.launch({
             headless: false,
             args: ["--start-maximized", "--disable-blink-features=AutomationControlled"],
@@ -44,7 +44,6 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
         const context = await browser.newContext({ viewport: null });
         const page = await context.newPage();
 
-        console.log(`Navigating to DMart home for pincode ${pincode}...`);
         await page.goto("https://www.dmart.in/", { waitUntil: "domcontentloaded", timeout: 60000 });
         await sleep(3000);
 
@@ -52,62 +51,42 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
         try {
             const pincodeInput = await page.$("#pincodeInput");
             if (pincodeInput) {
-                console.log("Pincode dialog detected. Entering pincode...");
                 await pincodeInput.fill(pincode);
                 await sleep(1500);
 
                 const firstResult = await page.$("ul.list-none > li:first-child > button");
                 if (firstResult) {
-                    console.log("Selecting first location result...");
                     await firstResult.click();
                     await sleep(2000);
 
-                    // Try clicking confirm / start shopping
                     try {
                         const confirmBtn = await page.$("button:has-text('START SHOPPING'), button:has-text('Start Shopping'), button:has-text('Confirm'), button:has-text('CONFIRM')");
                         if (confirmBtn) {
-                            console.log("Found confirm button, clicking...");
                             await confirmBtn.click();
                             await sleep(3000);
-                        } else {
-                            console.log("No confirm button found (maybe it auto-redirected).");
                         }
-                    } catch (e) {
-                        console.log("Could not click confirm button:", e.message);
-                    }
-                } else {
-                    console.log("No location results found!");
+                    } catch (e) { /* confirm button optional */ }
                 }
-            } else {
-                console.log("Pincode dialog not found immediately.");
             }
         } catch (e) {
-            console.log("Error handling pincode dialog:", e.message);
+            console.error("Error handling pincode dialog:", e.message);
         }
 
         let STORE_ID = "10706";
         try {
             const Cookies = await context.cookies();
             const dmStoreId = Cookies.find((c) => c.name === "dm_store_id");
-            if (dmStoreId) {
-                STORE_ID = dmStoreId.value;
-                console.log(`Updated STORE_ID to ${STORE_ID} from cookies.`);
-            }
-        } catch (e) {
-            console.log("Could not access cookies for Store ID.");
-        }
+            if (dmStoreId) STORE_ID = dmStoreId.value;
+        } catch (e) { /* ignore */ }
 
         for (const urlItem of urls) {
-            // Input schema specifically requests arrays of strings
             const url = typeof urlItem === 'string' ? urlItem : urlItem.url;
-            console.log(`\n--- Processing Category: ${url} ---`);
             const slug = getSlugFromUrl(url);
-
             if (!slug) {
                 console.error(`Could not extract slug from ${url}, skipping.`);
                 continue;
             }
-            console.log(`Slug: ${slug}`);
+            console.log(`\nProcessing: ${slug}`);
 
             let currentPage = 1;
             let keepScraping = true;
@@ -136,30 +115,40 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
                     }
 
                     // Raw format expected by transform_response_format.js
+                    // Mirrors the working dmart_bulk_scraper.js field mapping exactly
                     const rawItems = productsList.map(item => {
                         const sku = item.sKUs && item.sKUs.length > 0 ? item.sKUs[0] : {};
-                        let imageUrl = "";
+
+                        // Build image URL exactly as working bulk scraper does
+                        let productImage = '';
                         if (sku.imageKey) {
-                            imageUrl = `https://cdn.dmart.in/images/products/${sku.imageKey}_5_P.jpg`;
+                            productImage = `https://cdn.dmart.in/images/products/${sku.imageKey}_5_P.jpg`;
                         }
+
+                        // Build product URL exactly as working bulk scraper does
+                        const productUrl = item.seo_token_ntk
+                            ? `https://www.dmart.in/product/${item.seo_token_ntk}?selectedProd=${sku.skuUniqueID}`
+                            : '';
 
                         return {
                             ...item,
+                            // Direct fields used by transformer
+                            productImage,           // transformer checks product.productImage first
+                            productUrl,             // transformer checks product.productUrl first
+                            // SKU-level fields
                             sku: sku.skuUniqueID || 'N/A',
+                            skuId: sku.skuUniqueID || 'N/A',
                             price: sku.priceSALE ? parseFloat(sku.priceSALE) : 0,
                             originalPrice: sku.priceMRP ? parseFloat(sku.priceMRP) : 0,
                             packSize: sku.variantTextValue || '',
                             quantity: sku.variantTextValue || '',
                             invType: sku.invType,
-                            imageKey: sku.imageKey,
-                            image: imageUrl,
-                            skuId: sku.skuUniqueID || 'N/A',
-                            categoryUrl: url,
-                            // specific for transformer mapping
+                            imageKey: sku.imageKey || '',
+                            // Product-level fields
                             productId: item.productId,
                             productName: item.name,
-                            isOutOfStock: sku.invType !== "A",
-                            productUrl: `https://www.dmart.in/product/${item.seo_token_ntk}?selectedProd=${sku.skuUniqueID}`,
+                            isOutOfStock: sku.invType !== 'A',
+                            categoryUrl: url,
                             discountPercentage: sku.savingPercentage || 0
                         };
                     });

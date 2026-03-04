@@ -16,7 +16,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Chocolate Bar | Smooth & Rich Milk",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (26 g or 28 g)",
       "quantity": "1 pc (26 g or 28 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -27,7 +27,9 @@
       "discountPercentage": "N/A",
       "ranking": 1,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/97f20fe1-cf1b-4017-828a-f88336202c42"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/97f20fe1-cf1b-4017-828a-f88336202c42",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -42,7 +44,7 @@
       "brand": "N/A",
       "productName": "Cadbury Choclairs Gold Candy | Toffee Candy",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (25 x 5 g)",
       "quantity": "1 pack (25 x 5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -53,7 +55,9 @@
       "discountPercentage": "N/A",
       "ranking": 2,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-choclairs-gold-candy-toffee-candy/pvid/06c208b5-a047-48a1-a0e5-adae36a9d703"
+      "productUrl": "https://www.zepto.com/pn/cadbury-choclairs-gold-candy-toffee-candy/pvid/06c208b5-a047-48a1-a0e5-adae36a9d703",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -68,7 +72,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Premium Chocolates Gift Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (50 g)",
       "quantity": "1 pack (50 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -79,7 +83,9 @@
       "discountPercentage": "3",
       "ranking": 3,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/1fea4b84-6c7e-4f90-99ae-a26047097c2e"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/1fea4b84-6c7e-4f90-99ae-a26047097c2e",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -94,7 +100,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Milkinis Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (17 g)",
       "quantity": "1 pack (17 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -105,7 +111,9 @@
       "discountPercentage": "10",
       "ranking": 4,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-milkinis-chocolate-bar/pvid/dabb52be-7e87-4cfd-82a8-c463dd662bd7"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-milkinis-chocolate-bar/pvid/dabb52be-7e87-4cfd-82a8-c463dd662bd7",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -120,7 +128,7 @@
       "brand": "N/A",
       "productName": "Britannia Gobbles Choco Chill | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (100 or 110 g)",
       "quantity": "1 pc (100 or 110 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -131,7 +139,9 @@
       "discountPercentage": "17",
       "ranking": 5,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-choco-chill-bakery-delight/pvid/72784354-5dea-466f-8496-4a12d1bd838d"
+      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-choco-chill-bakery-delight/pvid/72784354-5dea-466f-8496-4a12d1bd838d",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -146,7 +156,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Premium Chocolates Gift Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (300 g)",
       "quantity": "1 pack (300 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -157,7 +167,9 @@
       "discountPercentage": "16",
       "ranking": 6,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/87b32ef4-b5d1-4047-8056-23864d3faf04"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/87b32ef4-b5d1-4047-8056-23864d3faf04",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -172,7 +184,7 @@
       "brand": "N/A",
       "productName": "Eat Better Co Vanilla & Chocolate Ladoos | No Added Sugar | High Protein | Truly Natural",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "19 mins",
@@ -183,7 +195,9 @@
       "discountPercentage": "2",
       "ranking": 7,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/eat-better-co-vanilla-chocolate-ladoos-no-added-sugar-high-protein-truly-natural/pvid/4fd18dd7-12cc-4ab4-b9da-c4767ebb7514"
+      "productUrl": "https://www.zepto.com/pn/eat-better-co-vanilla-chocolate-ladoos-no-added-sugar-high-protein-truly-natural/pvid/4fd18dd7-12cc-4ab4-b9da-c4767ebb7514",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -198,7 +212,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Chocolate Bar | Smooth & Rich Milk",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (20.2 g)",
       "quantity": "1 pc (20.2 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -209,7 +223,9 @@
       "discountPercentage": "N/A",
       "ranking": 8,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/ec75d477-2f83-4015-92bd-57dc0f777076"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/ec75d477-2f83-4015-92bd-57dc0f777076",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -224,7 +240,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Premium Chocolates Gift Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -235,7 +251,9 @@
       "discountPercentage": "8",
       "ranking": 9,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/ce13a22a-2680-4abe-b796-c6566ff79972"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-premium-chocolates-gift-pack/pvid/ce13a22a-2680-4abe-b796-c6566ff79972",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -250,7 +268,7 @@
       "brand": "N/A",
       "productName": "KOPIKO Cappuccino Coffee Candy Family Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (40 pcs)",
       "quantity": "1 pack (40 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -261,7 +279,9 @@
       "discountPercentage": "26",
       "ranking": 10,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/kopiko-cappuccino-coffee-candy-family-pack/pvid/0ebf1a29-f974-44ea-8ef7-2d9666ce621a"
+      "productUrl": "https://www.zepto.com/pn/kopiko-cappuccino-coffee-candy-family-pack/pvid/0ebf1a29-f974-44ea-8ef7-2d9666ce621a",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -276,7 +296,7 @@
       "brand": "N/A",
       "productName": "Nestle KitKat 4F Choco Wafer Bar, Valentines Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (38.5 g)",
       "quantity": "1 pc (38.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -287,7 +307,9 @@
       "discountPercentage": "N/A",
       "ranking": 11,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/nestle-kitkat-4f-choco-wafer-bar-valentines-pack/pvid/f7ee6357-dc9d-4de4-a77e-87f74225d3a9"
+      "productUrl": "https://www.zepto.com/pn/nestle-kitkat-4f-choco-wafer-bar-valentines-pack/pvid/f7ee6357-dc9d-4de4-a77e-87f74225d3a9",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -302,7 +324,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Moments Chocolate Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (92.8 g)",
       "quantity": "1 pack (92.8 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -313,7 +335,9 @@
       "discountPercentage": "8",
       "ranking": 12,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-moments-chocolate-pack/pvid/21d0e272-d357-4e7c-bec0-841b9a0ed1ba"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-moments-chocolate-pack/pvid/21d0e272-d357-4e7c-bec0-841b9a0ed1ba",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -328,7 +352,7 @@
       "brand": "N/A",
       "productName": "Britannia Treat Croissant | With Cocoa Creme Filling Veg",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (45 or 48.5 g)",
       "quantity": "1 pc (45 or 48.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -339,7 +363,9 @@
       "discountPercentage": "15",
       "ranking": 13,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-treat-croissant-with-cocoa-creme-filling-veg/pvid/cfe6f5cb-16ec-4e4f-b9ed-6cb3d2ffa22f"
+      "productUrl": "https://www.zepto.com/pn/britannia-treat-croissant-with-cocoa-creme-filling-veg/pvid/cfe6f5cb-16ec-4e4f-b9ed-6cb3d2ffa22f",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -354,7 +380,7 @@
       "brand": "N/A",
       "productName": "Chupa Chups Sour Belt Mixed Fruit Soft and Chewy Toffee",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (57.6 g)",
       "quantity": "1 pack (57.6 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -365,7 +391,9 @@
       "discountPercentage": "20",
       "ranking": 14,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/chupa-chups-sour-belt-mixed-fruit-soft-and-chewy-toffee/pvid/6519404c-4c03-466f-b377-c4d947138747"
+      "productUrl": "https://www.zepto.com/pn/chupa-chups-sour-belt-mixed-fruit-soft-and-chewy-toffee/pvid/6519404c-4c03-466f-b377-c4d947138747",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -380,7 +408,7 @@
       "brand": "N/A",
       "productName": "Nestle Munch Max Choco Coated Crunchy Wafer Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (38.5 or 42 g)",
       "quantity": "1 pc (38.5 or 42 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -391,7 +419,9 @@
       "discountPercentage": "N/A",
       "ranking": 15,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/nestle-munch-max-choco-coated-crunchy-wafer-bar/pvid/7b2a39c7-5177-46ff-810b-7606200acd70"
+      "productUrl": "https://www.zepto.com/pn/nestle-munch-max-choco-coated-crunchy-wafer-bar/pvid/7b2a39c7-5177-46ff-810b-7606200acd70",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -406,7 +436,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Chocolate Gift Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (100 g)",
       "quantity": "1 pack (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -417,7 +447,9 @@
       "discountPercentage": "3",
       "ranking": 16,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-chocolate-gift-pack/pvid/58afbca5-751f-43fb-9b27-27c603eb96c7"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-chocolate-gift-pack/pvid/58afbca5-751f-43fb-9b27-27c603eb96c7",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -432,7 +464,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Oreo Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (58.5 g)",
       "quantity": "1 pc (58.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -443,7 +475,9 @@
       "discountPercentage": "N/A",
       "ranking": 17,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-oreo-chocolate-bar/pvid/3ef335eb-0dee-4cba-bceb-de855ce6edd5"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-oreo-chocolate-bar/pvid/3ef335eb-0dee-4cba-bceb-de855ce6edd5",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -458,7 +492,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Zero Maida Banana Walnut Cake | Banana Cake | Fruit Cake | Loaded with Walnuts",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -469,7 +503,9 @@
       "discountPercentage": "12",
       "ranking": 18,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-zero-maida-banana-walnut-cake-banana-cake-fruit-cake-loaded-with-walnuts/pvid/85a59ea5-dd27-4cc3-8e76-03808a743441"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-zero-maida-banana-walnut-cake-banana-cake-fruit-cake-loaded-with-walnuts/pvid/85a59ea5-dd27-4cc3-8e76-03808a743441",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -484,7 +520,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Milk | Smooth & Creamy Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "75 g",
       "quantity": "75 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -495,7 +531,9 @@
       "discountPercentage": "20",
       "ranking": 19,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/415fa385-ede7-4fea-882d-168c3eb3ede9"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/415fa385-ede7-4fea-882d-168c3eb3ede9",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -510,7 +548,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Milkinis Duo Pack Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (34 g)",
       "quantity": "1 pack (34 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -521,7 +559,9 @@
       "discountPercentage": "N/A",
       "ranking": 20,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-milkinis-duo-pack-chocolate-bar/pvid/8585436b-0b4c-4eb1-a462-e97b90c5782c"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-milkinis-duo-pack-chocolate-bar/pvid/8585436b-0b4c-4eb1-a462-e97b90c5782c",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -536,7 +576,7 @@
       "brand": "N/A",
       "productName": "Cadbury Brownie | Rich & Fudgy",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (114 g)",
       "quantity": "1 pack (114 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -547,7 +587,9 @@
       "discountPercentage": "19",
       "ranking": 21,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-brownie-rich-fudgy/pvid/34a89464-49ae-4cd2-8e1e-ff78a6078d4c"
+      "productUrl": "https://www.zepto.com/pn/cadbury-brownie-rich-fudgy/pvid/34a89464-49ae-4cd2-8e1e-ff78a6078d4c",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -562,7 +604,7 @@
       "brand": "N/A",
       "productName": "Alpenliebe Gold Cream Strawberry Toffee Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (40 pcs)",
       "quantity": "1 pack (40 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -573,7 +615,9 @@
       "discountPercentage": "7",
       "ranking": 22,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/alpenliebe-gold-cream-strawberry-toffee-pouch/pvid/74ec5b69-8887-4d00-a686-a5b0af033bf2"
+      "productUrl": "https://www.zepto.com/pn/alpenliebe-gold-cream-strawberry-toffee-pouch/pvid/74ec5b69-8887-4d00-a686-a5b0af033bf2",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -588,7 +632,7 @@
       "brand": "N/A",
       "productName": "Alpenliebe Creamfills Butter Toffee Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (40 pcs)",
       "quantity": "1 pack (40 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -599,7 +643,9 @@
       "discountPercentage": "16",
       "ranking": 23,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/alpenliebe-creamfills-butter-toffee-pouch/pvid/58a9a423-19a8-4ece-8a1e-a85a5c719aaa"
+      "productUrl": "https://www.zepto.com/pn/alpenliebe-creamfills-butter-toffee-pouch/pvid/58a9a423-19a8-4ece-8a1e-a85a5c719aaa",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -614,7 +660,7 @@
       "brand": "N/A",
       "productName": "Amul Dark Chocolate Bar | Rich in Cocoa",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (150 g)",
       "quantity": "1 pc (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -625,7 +671,9 @@
       "discountPercentage": "6",
       "ranking": 24,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/amul-dark-chocolate-bar-rich-in-cocoa/pvid/671896eb-3b7f-43a1-bb4b-5db277ca53d9"
+      "productUrl": "https://www.zepto.com/pn/amul-dark-chocolate-bar-rich-in-cocoa/pvid/671896eb-3b7f-43a1-bb4b-5db277ca53d9",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -640,7 +688,7 @@
       "brand": "N/A",
       "productName": "Amul Kaju Katri | Rich & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -651,7 +699,9 @@
       "discountPercentage": "13",
       "ranking": 25,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/amul-kaju-katri-rich-delicious/pvid/16450d03-1189-4da5-8917-08440ecc301f"
+      "productUrl": "https://www.zepto.com/pn/amul-kaju-katri-rich-delicious/pvid/16450d03-1189-4da5-8917-08440ecc301f",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -666,7 +716,7 @@
       "brand": "N/A",
       "productName": "Ferrero Rocher Moments Chocolate Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (185.6 g)",
       "quantity": "1 pack (185.6 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -677,7 +727,9 @@
       "discountPercentage": "14",
       "ranking": 26,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-moments-chocolate-pack/pvid/c14b2316-62a6-47fe-bfef-c5c010a4062e"
+      "productUrl": "https://www.zepto.com/pn/ferrero-rocher-moments-chocolate-pack/pvid/c14b2316-62a6-47fe-bfef-c5c010a4062e",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -692,7 +744,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (55 g or 60g)",
       "quantity": "1 pc (55 g or 60g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -703,7 +755,9 @@
       "discountPercentage": "6",
       "ranking": 27,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-chocolate-bar/pvid/2ed16409-34d8-41de-9526-7934d560b8e8"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-chocolate-bar/pvid/2ed16409-34d8-41de-9526-7934d560b8e8",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -718,7 +772,7 @@
       "brand": "N/A",
       "productName": "Britannia Gobbles Bar Cake Fruity Fun | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (100 or 110 g)",
       "quantity": "1 pc (100 or 110 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -729,7 +783,9 @@
       "discountPercentage": "17",
       "ranking": 28,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-bar-cake-fruity-fun-bakery-delight/pvid/14beabf5-f35a-4135-a55f-542002718a9d"
+      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-bar-cake-fruity-fun-bakery-delight/pvid/14beabf5-f35a-4135-a55f-542002718a9d",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -744,7 +800,7 @@
       "brand": "N/A",
       "productName": "Amul Rabri (Cup)",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (85 g)",
       "quantity": "1 pc (85 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -755,7 +811,9 @@
       "discountPercentage": "N/A",
       "ranking": 29,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/amul-rabri-cup/pvid/579bf27b-6d7a-4aa8-83d2-2d3455e515d8"
+      "productUrl": "https://www.zepto.com/pn/amul-rabri-cup/pvid/579bf27b-6d7a-4aa8-83d2-2d3455e515d8",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -770,7 +828,7 @@
       "brand": "N/A",
       "productName": "Dabur Regular Hajmola | Digestive Candy",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (120 pcs)",
       "quantity": "1 pack (120 pcs)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -781,7 +839,9 @@
       "discountPercentage": "15",
       "ranking": 30,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/dabur-regular-hajmola-digestive-candy/pvid/a0599e81-bf3d-42b6-b306-d79773019c04"
+      "productUrl": "https://www.zepto.com/pn/dabur-regular-hajmola-digestive-candy/pvid/a0599e81-bf3d-42b6-b306-d79773019c04",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -796,7 +856,7 @@
       "brand": "N/A",
       "productName": "Britannia Gobbles Fruit Cake | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (45 or 50 g)",
       "quantity": "1 pack (45 or 50 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -807,7 +867,9 @@
       "discountPercentage": "13",
       "ranking": 31,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-fruit-cake-bakery-delight/pvid/a7e5c7f5-d16b-4670-a8bb-350f9cb07efb"
+      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-fruit-cake-bakery-delight/pvid/a7e5c7f5-d16b-4670-a8bb-350f9cb07efb",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -822,7 +884,7 @@
       "brand": "N/A",
       "productName": "Dabur Hajmola Imli Digestive Tablets | Tangy & Zesty",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (120 pcs)",
       "quantity": "1 pack (120 pcs)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -833,7 +895,9 @@
       "discountPercentage": "15",
       "ranking": 32,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/dabur-hajmola-imli-digestive-tablets-tangy-zesty/pvid/14b06011-ef3f-41e4-bc32-2f2e0c303c67"
+      "productUrl": "https://www.zepto.com/pn/dabur-hajmola-imli-digestive-tablets-tangy-zesty/pvid/14b06011-ef3f-41e4-bc32-2f2e0c303c67",
+      "subCategory": "Top Picks",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -848,7 +912,7 @@
       "brand": "N/A",
       "productName": "The Belgian Waffle Co Double Choco Crisps | Crispy & Chocolatey",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (85 g)",
       "quantity": "1 pack (85 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -859,7 +923,9 @@
       "discountPercentage": "N/A",
       "ranking": 33,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-double-choco-crisps-crispy-chocolatey/pvid/32542567-435c-4790-ae49-5718aa89e998"
+      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-double-choco-crisps-crispy-chocolatey/pvid/32542567-435c-4790-ae49-5718aa89e998",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -874,7 +940,7 @@
       "brand": "N/A",
       "productName": "The Belgian Waffle Co Classic Choco Crisps",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (85 g)",
       "quantity": "1 pack (85 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -885,7 +951,9 @@
       "discountPercentage": "2",
       "ranking": 34,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-classic-choco-crisps/pvid/f7a7d441-1512-46da-8cb0-a3b8a72ce34d"
+      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-classic-choco-crisps/pvid/f7a7d441-1512-46da-8cb0-a3b8a72ce34d",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -900,7 +968,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Bubbly Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (46 g)",
       "quantity": "1 pc (46 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -911,7 +979,9 @@
       "discountPercentage": "15",
       "ranking": 35,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-bubbly-chocolate-bar/pvid/ec8eb0cb-4065-4bf9-a645-f6f20c6ef1e6"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-bubbly-chocolate-bar/pvid/ec8eb0cb-4065-4bf9-a645-f6f20c6ef1e6",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -926,7 +996,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Chocolate Bar | Smooth & Rich Milk",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (112 g)",
       "quantity": "1 pc (112 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -937,7 +1007,9 @@
       "discountPercentage": "12",
       "ranking": 36,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/77ca89b8-c9bd-486a-8d39-2b59ec1e25fc"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/77ca89b8-c9bd-486a-8d39-2b59ec1e25fc",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -952,7 +1024,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Desserts Brownie Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (70 g)",
       "quantity": "1 pack (70 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -963,7 +1035,9 @@
       "discountPercentage": "8",
       "ranking": 37,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-desserts-brownie-chocolate-bar/pvid/afd2ff73-a688-480e-baf3-0f4d1a52c602"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-desserts-brownie-chocolate-bar/pvid/afd2ff73-a688-480e-baf3-0f4d1a52c602",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -978,7 +1052,7 @@
       "brand": "N/A",
       "productName": "Cadbury 5 Star Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (33 g or 35.2 g)",
       "quantity": "1 pc (33 g or 35.2 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -989,7 +1063,9 @@
       "discountPercentage": "N/A",
       "ranking": 38,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-5-star-chocolate-bar/pvid/a4bb3a95-1e0c-4063-9aee-fcc44bf6b15d"
+      "productUrl": "https://www.zepto.com/pn/cadbury-5-star-chocolate-bar/pvid/a4bb3a95-1e0c-4063-9aee-fcc44bf6b15d",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1004,7 +1080,7 @@
       "brand": "N/A",
       "productName": "Kinder Joy Disney Princess Chocolate | Single Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (20 g)",
       "quantity": "1 pack (20 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1015,7 +1091,9 @@
       "discountPercentage": "N/A",
       "ranking": 39,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/kinder-joy-disney-princess-chocolate-single-pack/pvid/635d89ea-5075-4dc9-bc5a-79f3bb9a2340"
+      "productUrl": "https://www.zepto.com/pn/kinder-joy-disney-princess-chocolate-single-pack/pvid/635d89ea-5075-4dc9-bc5a-79f3bb9a2340",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1030,7 +1108,7 @@
       "brand": "N/A",
       "productName": "Cadbury Temptations Rum & Raisins Premium Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (70 g)",
       "quantity": "1 pack (70 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1041,7 +1119,9 @@
       "discountPercentage": "16",
       "ranking": 40,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-temptations-rum-raisins-premium-chocolate-bar/pvid/38e0b78c-0b6a-4900-9996-b6b1d8ff89c9"
+      "productUrl": "https://www.zepto.com/pn/cadbury-temptations-rum-raisins-premium-chocolate-bar/pvid/38e0b78c-0b6a-4900-9996-b6b1d8ff89c9",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1056,7 +1136,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Fruit and Nut Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (51 g)",
       "quantity": "1 pc (51 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1067,7 +1147,9 @@
       "discountPercentage": "N/A",
       "ranking": 41,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-fruit-and-nut-chocolate-bar/pvid/36a83ccf-8c0f-45ff-a7e7-27842b7e0f02"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-fruit-and-nut-chocolate-bar/pvid/36a83ccf-8c0f-45ff-a7e7-27842b7e0f02",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1082,7 +1164,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Chocolate Bar | Smooth & Rich Milk",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (46 g)",
       "quantity": "1 pc (46 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1093,7 +1175,9 @@
       "discountPercentage": "6",
       "ranking": 42,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/c442ad9b-09b6-4505-a17d-7d2b3cceee0e"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-chocolate-bar-smooth-rich-milk/pvid/c442ad9b-09b6-4505-a17d-7d2b3cceee0e",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1108,7 +1192,7 @@
       "brand": "N/A",
       "productName": "Nestle Milkybar Choo Strawberry Flavour Sharebag",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (80 g or 99 g)",
       "quantity": "1 pack (80 g or 99 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1119,7 +1203,9 @@
       "discountPercentage": "4",
       "ranking": 43,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/nestle-milkybar-choo-strawberry-flavour-sharebag/pvid/13b2bb81-ba24-4dd8-b1e1-d270c9d0257a"
+      "productUrl": "https://www.zepto.com/pn/nestle-milkybar-choo-strawberry-flavour-sharebag/pvid/13b2bb81-ba24-4dd8-b1e1-d270c9d0257a",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1134,7 +1220,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (144 g)",
       "quantity": "1 pc (144 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1145,7 +1231,9 @@
       "discountPercentage": "10",
       "ranking": 44,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-chocolate-bar/pvid/50895043-2437-4097-a4f1-521944d3802c"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-chocolate-bar/pvid/50895043-2437-4097-a4f1-521944d3802c",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1160,7 +1248,7 @@
       "brand": "N/A",
       "productName": "Hershey's Dark Chocolate Bar | Rich Chocolate Taste",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "38 g",
       "quantity": "38 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1171,7 +1259,9 @@
       "discountPercentage": "11",
       "ranking": 45,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/hersheys-dark-chocolate-bar-rich-chocolate-taste/pvid/1ff87338-edad-4de0-b8ca-ebeb453c3863"
+      "productUrl": "https://www.zepto.com/pn/hersheys-dark-chocolate-bar-rich-chocolate-taste/pvid/1ff87338-edad-4de0-b8ca-ebeb453c3863",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1186,7 +1276,7 @@
       "brand": "N/A",
       "productName": "Hershey's Cookies 'N' Creme Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "38 g",
       "quantity": "38 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1197,7 +1287,9 @@
       "discountPercentage": "11",
       "ranking": 46,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/hersheys-cookies-n-creme-chocolate-bar/pvid/e9972c52-f603-43e9-9b72-7b351cf22a92"
+      "productUrl": "https://www.zepto.com/pn/hersheys-cookies-n-creme-chocolate-bar/pvid/e9972c52-f603-43e9-9b72-7b351cf22a92",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1212,7 +1304,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Fruit & Nut Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (36 g)",
       "quantity": "1 pc (36 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1223,7 +1315,9 @@
       "discountPercentage": "6",
       "ranking": 47,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-fruit-nut-chocolate-bar/pvid/76f6cf3f-1282-4e97-b223-aeab28903542"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-fruit-nut-chocolate-bar/pvid/76f6cf3f-1282-4e97-b223-aeab28903542",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1238,7 +1332,7 @@
       "brand": "N/A",
       "productName": "Hershey's Creamy Milk Chocolate Bar | Smooth & Chocolatey",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (38 g)",
       "quantity": "1 pc (38 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1249,7 +1343,9 @@
       "discountPercentage": "11",
       "ranking": 48,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/hersheys-creamy-milk-chocolate-bar-smooth-chocolatey/pvid/315fd5b3-349d-4210-8091-aba03eeb1eb5"
+      "productUrl": "https://www.zepto.com/pn/hersheys-creamy-milk-chocolate-bar-smooth-chocolatey/pvid/315fd5b3-349d-4210-8091-aba03eeb1eb5",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1264,7 +1360,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Crackle Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (36 g)",
       "quantity": "1 pc (36 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1275,7 +1371,9 @@
       "discountPercentage": "N/A",
       "ranking": 49,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-crackle-chocolate-bar/pvid/a576237b-9a8c-4bee-872d-8e5810a00c87"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-crackle-chocolate-bar/pvid/a576237b-9a8c-4bee-872d-8e5810a00c87",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1290,7 +1388,7 @@
       "brand": "N/A",
       "productName": "Cadbury Bournville Orange 70% Dark Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (75 g)",
       "quantity": "1 pack (75 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1301,7 +1399,9 @@
       "discountPercentage": "15",
       "ranking": 50,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-bournville-orange-70-dark-chocolate-bar/pvid/55ecd737-c9b6-451a-86d2-56f61b46af1c"
+      "productUrl": "https://www.zepto.com/pn/cadbury-bournville-orange-70-dark-chocolate-bar/pvid/55ecd737-c9b6-451a-86d2-56f61b46af1c",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1316,7 +1416,7 @@
       "brand": "N/A",
       "productName": "Open Secret Celebration Chocolate Gift Hamper | Healthy Snacks, No Maida",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (12 x 12.5 g)",
       "quantity": "1 pack (12 x 12.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1327,7 +1427,9 @@
       "discountPercentage": "32",
       "ranking": 51,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/open-secret-celebration-chocolate-gift-hamper-healthy-snacks-no-maida/pvid/b677ea2a-dd70-4d31-a798-32ecabf6847e"
+      "productUrl": "https://www.zepto.com/pn/open-secret-celebration-chocolate-gift-hamper-healthy-snacks-no-maida/pvid/b677ea2a-dd70-4d31-a798-32ecabf6847e",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1342,7 +1444,7 @@
       "brand": "N/A",
       "productName": "Amul Fruit 'N' Nut Dark Chocolate | Chocolate Indulgence",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1353,7 +1455,9 @@
       "discountPercentage": "11",
       "ranking": 52,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/amul-fruit-n-nut-dark-chocolate-chocolate-indulgence/pvid/224c7fa4-64af-4d6c-964d-f3a76826fdcf"
+      "productUrl": "https://www.zepto.com/pn/amul-fruit-n-nut-dark-chocolate-chocolate-indulgence/pvid/224c7fa4-64af-4d6c-964d-f3a76826fdcf",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1368,7 +1472,7 @@
       "brand": "N/A",
       "productName": "Cadbury Nutties | Chocolate Pack | Crunchy Cashew & Classic Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (30 g)",
       "quantity": "1 pc (30 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1379,7 +1483,9 @@
       "discountPercentage": "N/A",
       "ranking": 53,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-nutties-chocolate-pack-crunchy-cashew-classic-chocolate/pvid/92a9e18a-4c93-4800-93cc-fbe0cc400611"
+      "productUrl": "https://www.zepto.com/pn/cadbury-nutties-chocolate-pack-crunchy-cashew-classic-chocolate/pvid/92a9e18a-4c93-4800-93cc-fbe0cc400611",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1394,7 +1500,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Mousse Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (48.5 g)",
       "quantity": "1 pc (48.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1405,7 +1511,9 @@
       "discountPercentage": "2",
       "ranking": 54,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-mousse-chocolate-bar/pvid/796e0c7b-c2d9-43e6-b115-ac9f0b2d5525"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-mousse-chocolate-bar/pvid/796e0c7b-c2d9-43e6-b115-ac9f0b2d5525",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1420,7 +1528,7 @@
       "brand": "N/A",
       "productName": "Munch Max Nuts | Double Choco Coated Wafer Bar With Crunchy Nuts",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (37.5 g)",
       "quantity": "1 pc (37.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1431,7 +1539,9 @@
       "discountPercentage": "N/A",
       "ranking": 55,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/munch-max-nuts-double-choco-coated-wafer-bar-with-crunchy-nuts/pvid/166e27b0-8c02-48af-af24-f7f86cb47aee"
+      "productUrl": "https://www.zepto.com/pn/munch-max-nuts-double-choco-coated-wafer-bar-with-crunchy-nuts/pvid/166e27b0-8c02-48af-af24-f7f86cb47aee",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1446,7 +1556,7 @@
       "brand": "N/A",
       "productName": "Nestle Milkybar Moosha Made With Milk Yummy & Creamy Treat",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (38 or 40.5 g)",
       "quantity": "1 pc (38 or 40.5 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -1457,7 +1567,9 @@
       "discountPercentage": "N/A",
       "ranking": 56,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/nestle-milkybar-moosha-made-with-milk-yummy-creamy-treat/pvid/50782048-c5b9-469b-86cb-b97068d410c8"
+      "productUrl": "https://www.zepto.com/pn/nestle-milkybar-moosha-made-with-milk-yummy-creamy-treat/pvid/50782048-c5b9-469b-86cb-b97068d410c8",
+      "subCategory": "Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1472,7 +1584,7 @@
       "brand": "N/A",
       "productName": "Eat Better Co Orange & Ginger Laddoos | No Added Sugar | High Protein | Truly Natural",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "19 mins",
@@ -1483,7 +1595,9 @@
       "discountPercentage": "14",
       "ranking": 57,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/eat-better-co-orange-ginger-laddoos-no-added-sugar-high-protein-truly-natural/pvid/d97accfe-a817-44ef-bdd8-d8178fbd5b64"
+      "productUrl": "https://www.zepto.com/pn/eat-better-co-orange-ginger-laddoos-no-added-sugar-high-protein-truly-natural/pvid/d97accfe-a817-44ef-bdd8-d8178fbd5b64",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1498,7 +1612,7 @@
       "brand": "N/A",
       "productName": "Farmley Date Bites Dry Fruit Burfi - No Added Sugar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (20 g)",
       "quantity": "1 pack (20 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1509,7 +1623,9 @@
       "discountPercentage": "20",
       "ranking": 58,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/farmley-date-bites-dry-fruit-burfi-no-added-sugar/pvid/2971d131-99d2-4edb-82ca-cddc4dcd286b"
+      "productUrl": "https://www.zepto.com/pn/farmley-date-bites-dry-fruit-burfi-no-added-sugar/pvid/2971d131-99d2-4edb-82ca-cddc4dcd286b",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1524,7 +1640,7 @@
       "brand": "N/A",
       "productName": "GO DESi Kaju Katli Classic | Kaju Barfi",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1535,7 +1651,9 @@
       "discountPercentage": "20",
       "ranking": 59,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/go-desi-kaju-katli-classic-kaju-barfi/pvid/b4a61fbb-992f-4169-8625-9f4d12eff88b"
+      "productUrl": "https://www.zepto.com/pn/go-desi-kaju-katli-classic-kaju-barfi/pvid/b4a61fbb-992f-4169-8625-9f4d12eff88b",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1550,7 +1668,7 @@
       "brand": "N/A",
       "productName": "Lal Sweets Motichoor Laddu | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1561,7 +1679,9 @@
       "discountPercentage": "12",
       "ranking": 60,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lal-sweets-motichoor-laddu-sweet-delicious/pvid/d4fafc6e-5137-4f23-bc86-647d7b7072da"
+      "productUrl": "https://www.zepto.com/pn/lal-sweets-motichoor-laddu-sweet-delicious/pvid/d4fafc6e-5137-4f23-bc86-647d7b7072da",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1576,7 +1696,7 @@
       "brand": "N/A",
       "productName": "Daadi's Motichoor Ghee Laddoo | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1587,7 +1707,9 @@
       "discountPercentage": "19",
       "ranking": 61,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/daadis-motichoor-ghee-laddoo-sweet-delicious/pvid/40c65cca-1f96-4fae-a6ec-9e8c23fdc664"
+      "productUrl": "https://www.zepto.com/pn/daadis-motichoor-ghee-laddoo-sweet-delicious/pvid/40c65cca-1f96-4fae-a6ec-9e8c23fdc664",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1602,7 +1724,7 @@
       "brand": "N/A",
       "productName": "GO DESi Besan Laddoo | Made with Pure Ghee",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1613,7 +1735,9 @@
       "discountPercentage": "43",
       "ranking": 62,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/go-desi-besan-laddoo-made-with-pure-ghee/pvid/e7862e78-3c4c-4fce-8ad1-33fb7439c662"
+      "productUrl": "https://www.zepto.com/pn/go-desi-besan-laddoo-made-with-pure-ghee/pvid/e7862e78-3c4c-4fce-8ad1-33fb7439c662",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1628,7 +1752,7 @@
       "brand": "N/A",
       "productName": "Lal Sweets Ghee Kesariya Motichoor Laddoo",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1639,7 +1763,9 @@
       "discountPercentage": "17",
       "ranking": 63,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lal-sweets-ghee-kesariya-motichoor-laddoo/pvid/29fb15bb-745b-41e0-80a6-1f0c423a1a21"
+      "productUrl": "https://www.zepto.com/pn/lal-sweets-ghee-kesariya-motichoor-laddoo/pvid/29fb15bb-745b-41e0-80a6-1f0c423a1a21",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1654,7 +1780,7 @@
       "brand": "N/A",
       "productName": "Farmley Classic Delight Date Bites Dry Fruit Burfi | No Added Sugar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (10 x 20 g)",
       "quantity": "1 pack (10 x 20 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1665,7 +1791,9 @@
       "discountPercentage": "17",
       "ranking": 64,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/farmley-classic-delight-date-bites-dry-fruit-burfi-no-added-sugar/pvid/2b5cb65f-5440-47e4-bc97-5a94575dcbfa"
+      "productUrl": "https://www.zepto.com/pn/farmley-classic-delight-date-bites-dry-fruit-burfi-no-added-sugar/pvid/2b5cb65f-5440-47e4-bc97-5a94575dcbfa",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1680,7 +1808,7 @@
       "brand": "N/A",
       "productName": "Lal Sweets Besan Laddoo Classic | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1691,7 +1819,9 @@
       "discountPercentage": "10",
       "ranking": 65,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lal-sweets-besan-laddoo-classic-sweet-delicious/pvid/83bdbe14-f8e4-4d47-879a-3188e9167d1d"
+      "productUrl": "https://www.zepto.com/pn/lal-sweets-besan-laddoo-classic-sweet-delicious/pvid/83bdbe14-f8e4-4d47-879a-3188e9167d1d",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1706,7 +1836,7 @@
       "brand": "N/A",
       "productName": "Gits Besan Laddoo | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "200 g",
       "quantity": "200 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1717,7 +1847,9 @@
       "discountPercentage": "14",
       "ranking": 66,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/gits-besan-laddoo-sweet-delicious/pvid/45d3ddf2-62e3-4c72-bc23-02f0b393a6e0"
+      "productUrl": "https://www.zepto.com/pn/gits-besan-laddoo-sweet-delicious/pvid/45d3ddf2-62e3-4c72-bc23-02f0b393a6e0",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1732,7 +1864,7 @@
       "brand": "N/A",
       "productName": "Lal Sweets Kaju Katli | Rich & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1743,7 +1875,9 @@
       "discountPercentage": "20",
       "ranking": 67,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lal-sweets-kaju-katli-rich-delicious/pvid/32a4ac79-8987-4c82-9cdd-caeaba7d6e7e"
+      "productUrl": "https://www.zepto.com/pn/lal-sweets-kaju-katli-rich-delicious/pvid/32a4ac79-8987-4c82-9cdd-caeaba7d6e7e",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1758,7 +1892,7 @@
       "brand": "N/A",
       "productName": "Daadi'S Besan Laddoo Pure Ghee",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1769,7 +1903,9 @@
       "discountPercentage": "50",
       "ranking": 68,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/daadis-besan-laddoo-pure-ghee/pvid/bb0e9a34-3285-4025-b9d6-4a2f222a815c"
+      "productUrl": "https://www.zepto.com/pn/daadis-besan-laddoo-pure-ghee/pvid/bb0e9a34-3285-4025-b9d6-4a2f222a815c",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1784,7 +1920,7 @@
       "brand": "N/A",
       "productName": "OM Sweets Milk Cake | Traditional Indian Sweet",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1795,7 +1931,9 @@
       "discountPercentage": "N/A",
       "ranking": 69,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/om-sweets-milk-cake-traditional-indian-sweet/pvid/be092457-add9-4a1e-862d-8c2d24874982"
+      "productUrl": "https://www.zepto.com/pn/om-sweets-milk-cake-traditional-indian-sweet/pvid/be092457-add9-4a1e-862d-8c2d24874982",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1810,7 +1948,7 @@
       "brand": "N/A",
       "productName": "Bolas Kaju Katli | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1821,7 +1959,9 @@
       "discountPercentage": "55",
       "ranking": 70,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/bolas-kaju-katli-sweet-delicious/pvid/0910ebc5-0c74-410c-aa27-205ecb124fc4"
+      "productUrl": "https://www.zepto.com/pn/bolas-kaju-katli-sweet-delicious/pvid/0910ebc5-0c74-410c-aa27-205ecb124fc4",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1836,7 +1976,7 @@
       "brand": "N/A",
       "productName": "Daadi's Kaju Katli | Rich & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1847,7 +1987,9 @@
       "discountPercentage": "15",
       "ranking": 71,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/daadis-kaju-katli-rich-delicious/pvid/6446c1cf-81a1-40a0-8fca-1654961d4a44"
+      "productUrl": "https://www.zepto.com/pn/daadis-kaju-katli-rich-delicious/pvid/6446c1cf-81a1-40a0-8fca-1654961d4a44",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1862,7 +2004,7 @@
       "brand": "N/A",
       "productName": "Bikano Royal Gulab Jamun | Soft & Juicy Indian Dessert | Traditional Sweet with Rich Flavor",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (1 kg)",
       "quantity": "1 pack (1 kg)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1873,7 +2015,9 @@
       "discountPercentage": "51",
       "ranking": 72,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/bikano-royal-gulab-jamun-soft-juicy-indian-dessert-traditional-sweet-with-rich-flavor/pvid/d781cc0b-880a-485c-bc43-71d5278665ab"
+      "productUrl": "https://www.zepto.com/pn/bikano-royal-gulab-jamun-soft-juicy-indian-dessert-traditional-sweet-with-rich-flavor/pvid/d781cc0b-880a-485c-bc43-71d5278665ab",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1888,7 +2032,7 @@
       "brand": "N/A",
       "productName": "OM Sweets Mathura Peda",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1899,7 +2043,9 @@
       "discountPercentage": "4",
       "ranking": 73,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/om-sweets-mathura-peda/pvid/c584ac87-b671-4a4e-846f-e481c6686429"
+      "productUrl": "https://www.zepto.com/pn/om-sweets-mathura-peda/pvid/c584ac87-b671-4a4e-846f-e481c6686429",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1914,7 +2060,7 @@
       "brand": "N/A",
       "productName": "Charliee Til Laddu | Sweet & Nutty",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (156 or 200 g)",
       "quantity": "1 pack (156 or 200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1925,7 +2071,9 @@
       "discountPercentage": "4",
       "ranking": 74,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/charliee-til-laddu-sweet-nutty/pvid/d27e2382-9d3f-4a78-81df-f8b4a75521d1"
+      "productUrl": "https://www.zepto.com/pn/charliee-til-laddu-sweet-nutty/pvid/d27e2382-9d3f-4a78-81df-f8b4a75521d1",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1940,7 +2088,7 @@
       "brand": "N/A",
       "productName": "Daadi's Badam Pure Ghee Laddoo | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1951,7 +2099,9 @@
       "discountPercentage": "50",
       "ranking": 75,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/daadis-badam-pure-ghee-laddoo-sweet-delicious/pvid/23d70138-0099-48e4-be6f-10e3cbc8c042"
+      "productUrl": "https://www.zepto.com/pn/daadis-badam-pure-ghee-laddoo-sweet-delicious/pvid/23d70138-0099-48e4-be6f-10e3cbc8c042",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1966,7 +2116,7 @@
       "brand": "N/A",
       "productName": "Amul Malai Peda",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -1977,7 +2127,9 @@
       "discountPercentage": "6",
       "ranking": 76,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/amul-malai-peda/pvid/6a22d3ae-4443-46b3-8504-5437fbf08c4b"
+      "productUrl": "https://www.zepto.com/pn/amul-malai-peda/pvid/6a22d3ae-4443-46b3-8504-5437fbf08c4b",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -1992,7 +2144,7 @@
       "brand": "N/A",
       "productName": "Sweet Karam Coffee Jaggery Coconut Burfi - No Preservatives",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2003,7 +2155,9 @@
       "discountPercentage": "15",
       "ranking": 77,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/sweet-karam-coffee-jaggery-coconut-burfi-no-preservatives/pvid/300274f7-ce65-4317-9818-feffbedc5b0f"
+      "productUrl": "https://www.zepto.com/pn/sweet-karam-coffee-jaggery-coconut-burfi-no-preservatives/pvid/300274f7-ce65-4317-9818-feffbedc5b0f",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2018,7 +2172,7 @@
       "brand": "N/A",
       "productName": "Lal Mysore Pak | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2029,7 +2183,9 @@
       "discountPercentage": "10",
       "ranking": 78,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lal-mysore-pak-sweet-delicious/pvid/8746d239-1e03-4f0d-97f8-fb661ab09cfa"
+      "productUrl": "https://www.zepto.com/pn/lal-mysore-pak-sweet-delicious/pvid/8746d239-1e03-4f0d-97f8-fb661ab09cfa",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2044,7 +2200,7 @@
       "brand": "N/A",
       "productName": "Daadi's Coconut Ghee Burfi | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2055,7 +2211,9 @@
       "discountPercentage": "13",
       "ranking": 79,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/daadis-coconut-ghee-burfi-sweet-delicious/pvid/cd38edb0-f2d1-40fa-b830-702ff1d7954d"
+      "productUrl": "https://www.zepto.com/pn/daadis-coconut-ghee-burfi-sweet-delicious/pvid/cd38edb0-f2d1-40fa-b830-702ff1d7954d",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2070,7 +2228,7 @@
       "brand": "N/A",
       "productName": "Haldiram's Kaju Katli | Rich & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2081,7 +2239,9 @@
       "discountPercentage": "N/A",
       "ranking": 80,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/haldirams-kaju-katli-rich-delicious/pvid/0cf7a4ac-cf30-422a-9a3f-984f5a508493"
+      "productUrl": "https://www.zepto.com/pn/haldirams-kaju-katli-rich-delicious/pvid/0cf7a4ac-cf30-422a-9a3f-984f5a508493",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2096,7 +2256,7 @@
       "brand": "N/A",
       "productName": "OM Sweets & Snacks Dhoda | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2107,7 +2267,9 @@
       "discountPercentage": "2",
       "ranking": 81,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/om-sweets-snacks-dhoda-sweet-delicious/pvid/1cce29c1-c23d-43b4-9afd-1656de8380f8"
+      "productUrl": "https://www.zepto.com/pn/om-sweets-snacks-dhoda-sweet-delicious/pvid/1cce29c1-c23d-43b4-9afd-1656de8380f8",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2122,7 +2284,7 @@
       "brand": "N/A",
       "productName": "GO DESi Kesar Peda",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2133,7 +2295,9 @@
       "discountPercentage": "9",
       "ranking": 82,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/go-desi-kesar-peda/pvid/83263890-fd99-4d5d-8944-8ffcfa2b661a"
+      "productUrl": "https://www.zepto.com/pn/go-desi-kesar-peda/pvid/83263890-fd99-4d5d-8944-8ffcfa2b661a",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2148,7 +2312,7 @@
       "brand": "N/A",
       "productName": "GO DESi Milk Malai Peda",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2159,7 +2323,9 @@
       "discountPercentage": "9",
       "ranking": 83,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/go-desi-milk-malai-peda/pvid/7386680c-a51c-4cca-b088-871ec8d74e84"
+      "productUrl": "https://www.zepto.com/pn/go-desi-milk-malai-peda/pvid/7386680c-a51c-4cca-b088-871ec8d74e84",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2174,7 +2340,7 @@
       "brand": "N/A",
       "productName": "Daadi's Doodh Peda | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2185,7 +2351,9 @@
       "discountPercentage": "12",
       "ranking": 84,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/daadis-doodh-peda-sweet-delicious/pvid/1674c838-f608-4b58-912b-228f865c99aa"
+      "productUrl": "https://www.zepto.com/pn/daadis-doodh-peda-sweet-delicious/pvid/1674c838-f608-4b58-912b-228f865c99aa",
+      "subCategory": "Indian Mithai",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2200,7 +2368,7 @@
       "brand": "N/A",
       "productName": "Open Secret Chocolate Cake Box | Zero Maida, Zero Refined Sugar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (5 x 25 g)",
       "quantity": "1 pack (5 x 25 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2211,7 +2379,9 @@
       "discountPercentage": "16",
       "ranking": 85,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/open-secret-chocolate-cake-box-zero-maida-zero-refined-sugar/pvid/25aff640-7725-401b-b521-1523bf4da4bc"
+      "productUrl": "https://www.zepto.com/pn/open-secret-chocolate-cake-box-zero-maida-zero-refined-sugar/pvid/25aff640-7725-401b-b521-1523bf4da4bc",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2226,7 +2396,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Choco Chip Cake |Eggless Cake | Chocolate Cake | Tea Cake | Made with Cocoa Powder",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2237,7 +2407,9 @@
       "discountPercentage": "2",
       "ranking": 86,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-choco-chip-cake-eggless-cake-chocolate-cake-tea-cake-made-with-cocoa-powder/pvid/4a33f10e-0721-4e84-a957-ca5ba7b79109"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-choco-chip-cake-eggless-cake-chocolate-cake-tea-cake-made-with-cocoa-powder/pvid/4a33f10e-0721-4e84-a957-ca5ba7b79109",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2252,7 +2424,7 @@
       "brand": "N/A",
       "productName": "Britannia Fudge It Chocolate Brownie (With Egg) | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (3 x 40 g)",
       "quantity": "1 pack (3 x 40 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2263,7 +2435,9 @@
       "discountPercentage": "38",
       "ranking": 87,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-fudge-it-chocolate-brownie-with-egg-bakery-delight/pvid/f8bb7c09-e299-4d31-af54-baf4e33f49cf"
+      "productUrl": "https://www.zepto.com/pn/britannia-fudge-it-chocolate-brownie-with-egg-bakery-delight/pvid/f8bb7c09-e299-4d31-af54-baf4e33f49cf",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2278,7 +2452,7 @@
       "brand": "N/A",
       "productName": "Pintola Organic Wholegrain Brown Rice Cakes Unsalted | Snack Essential",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (125 g)",
       "quantity": "1 pack (125 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2289,7 +2463,9 @@
       "discountPercentage": "16",
       "ranking": 88,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pintola-organic-wholegrain-brown-rice-cakes-unsalted-snack-essential/pvid/2e3c72d6-26ff-47d1-9fa0-7e2df2a365ab"
+      "productUrl": "https://www.zepto.com/pn/pintola-organic-wholegrain-brown-rice-cakes-unsalted-snack-essential/pvid/2e3c72d6-26ff-47d1-9fa0-7e2df2a365ab",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2304,7 +2480,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Fruit & Nut Cake |Fruit Cake |Eggless Cake | Tea Cake | Zero Palm Oil",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2315,7 +2491,9 @@
       "discountPercentage": "32",
       "ranking": 89,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-fruit-nut-cake-fruit-cake-eggless-cake-tea-cake-zero-palm-oil/pvid/a301d612-5e22-4146-9e79-db73c8d06e57"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-fruit-nut-cake-fruit-cake-eggless-cake-tea-cake-zero-palm-oil/pvid/a301d612-5e22-4146-9e79-db73c8d06e57",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2330,7 +2508,7 @@
       "brand": "N/A",
       "productName": "Cadbury Brownie",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (38 g)",
       "quantity": "1 pack (38 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2341,7 +2519,9 @@
       "discountPercentage": "10",
       "ranking": 90,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-brownie/pvid/4cbfb9a5-22ea-4aa2-9b80-8e80b98784a6"
+      "productUrl": "https://www.zepto.com/pn/cadbury-brownie/pvid/4cbfb9a5-22ea-4aa2-9b80-8e80b98784a6",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2356,7 +2536,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Zero Maida Banana Bread | Banana Cake | Fruit Cake | Fruit Bread | Zero Palm Oil",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2367,7 +2547,9 @@
       "discountPercentage": "20",
       "ranking": 91,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-zero-maida-banana-bread-banana-cake-fruit-cake-fruit-bread-zero-palm-oil/pvid/1f6064d2-06d3-46ce-8888-a04a89ad89cf"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-zero-maida-banana-bread-banana-cake-fruit-cake-fruit-bread-zero-palm-oil/pvid/1f6064d2-06d3-46ce-8888-a04a89ad89cf",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2382,7 +2564,7 @@
       "brand": "N/A",
       "productName": "UNIBIC Royal Vanilla Cake | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (140 g)",
       "quantity": "1 pack (140 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2393,7 +2575,9 @@
       "discountPercentage": "12",
       "ranking": 92,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/unibic-royal-vanilla-cake-bakery-delight/pvid/79801a7e-ee57-43fd-9d92-384f9f65f47b"
+      "productUrl": "https://www.zepto.com/pn/unibic-royal-vanilla-cake-bakery-delight/pvid/79801a7e-ee57-43fd-9d92-384f9f65f47b",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2408,7 +2592,7 @@
       "brand": "N/A",
       "productName": "Britannia Romance Cake Nuts & Raisin | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (140 g)",
       "quantity": "1 pack (140 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2419,7 +2603,9 @@
       "discountPercentage": "19",
       "ranking": 93,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-romance-cake-nuts-raisin-bakery-delight/pvid/08eadbfa-badb-4392-833b-23d54b0c0ce4"
+      "productUrl": "https://www.zepto.com/pn/britannia-romance-cake-nuts-raisin-bakery-delight/pvid/08eadbfa-badb-4392-833b-23d54b0c0ce4",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2434,7 +2620,7 @@
       "brand": "N/A",
       "productName": "Cadbury Choco Bakes Choc Layered Cakes | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (6 x 19 g)",
       "quantity": "1 pack (6 x 19 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2445,7 +2631,9 @@
       "discountPercentage": "20",
       "ranking": 94,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-choco-bakes-choc-layered-cakes-bakery-delight/pvid/fbb41a22-a753-4eb8-999f-8c208c76deb4"
+      "productUrl": "https://www.zepto.com/pn/cadbury-choco-bakes-choc-layered-cakes-bakery-delight/pvid/fbb41a22-a753-4eb8-999f-8c208c76deb4",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2460,7 +2648,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Coffee Cake | Filter Coffee Decoction | Vegan Cake | Tea Cake | Zero Palm Oil",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2471,7 +2659,9 @@
       "discountPercentage": "30",
       "ranking": 95,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-coffee-cake-filter-coffee-decoction-vegan-cake-tea-cake-zero-palm-oil/pvid/c8d338f1-a165-47aa-b37e-8d72f6121aa4"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-coffee-cake-filter-coffee-decoction-vegan-cake-tea-cake-zero-palm-oil/pvid/c8d338f1-a165-47aa-b37e-8d72f6121aa4",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2486,7 +2676,7 @@
       "brand": "N/A",
       "productName": "Britannia Gobbles Marble Cake Choco Vanilla | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (110 or 122 g)",
       "quantity": "1 pack (110 or 122 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2497,7 +2687,9 @@
       "discountPercentage": "20",
       "ranking": 96,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-marble-cake-choco-vanilla-bakery-delight/pvid/06660a29-8dba-4669-95a9-1713e3f1e68e"
+      "productUrl": "https://www.zepto.com/pn/britannia-gobbles-marble-cake-choco-vanilla-bakery-delight/pvid/06660a29-8dba-4669-95a9-1713e3f1e68e",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2512,7 +2704,7 @@
       "brand": "N/A",
       "productName": "Winkies Novo Vanilla Cake | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (6 pcs)",
       "quantity": "1 pack (6 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2523,7 +2715,9 @@
       "discountPercentage": "10",
       "ranking": 97,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/winkies-novo-vanilla-cake-bakery-delight/pvid/4449a77f-88a9-43f9-af99-9349b10d365a"
+      "productUrl": "https://www.zepto.com/pn/winkies-novo-vanilla-cake-bakery-delight/pvid/4449a77f-88a9-43f9-af99-9349b10d365a",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2538,7 +2732,7 @@
       "brand": "N/A",
       "productName": "Winkies Love Bite | Choco Heart Cake Filled With Choco & Hazelnut Cream",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (4 x 50 g)",
       "quantity": "1 pack (4 x 50 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2549,7 +2743,9 @@
       "discountPercentage": "5",
       "ranking": 98,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/winkies-love-bite-choco-heart-cake-filled-with-choco-hazelnut-cream/pvid/021d471e-ee19-42fa-a0d2-a2e7747ee7f4"
+      "productUrl": "https://www.zepto.com/pn/winkies-love-bite-choco-heart-cake-filled-with-choco-hazelnut-cream/pvid/021d471e-ee19-42fa-a0d2-a2e7747ee7f4",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2564,7 +2760,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Rich Chocolate Cake | Choco Cake | Bakery Delight | Made with Cocoa Powder",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2575,7 +2771,9 @@
       "discountPercentage": "30",
       "ranking": 99,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-rich-chocolate-cake-choco-cake-bakery-delight-made-with-cocoa-powder/pvid/1126dd64-d572-4856-a677-407f4505b72a"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-rich-chocolate-cake-choco-cake-bakery-delight-made-with-cocoa-powder/pvid/1126dd64-d572-4856-a677-407f4505b72a",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2590,7 +2788,7 @@
       "brand": "N/A",
       "productName": "Zep Cake Premium Bis Coop Cheesecake | Dessert Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (80 g)",
       "quantity": "1 pack (80 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2601,7 +2799,9 @@
       "discountPercentage": "5",
       "ranking": 100,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-bis-coop-cheesecake-dessert-delight/pvid/360425b0-d8ea-41b0-b3e5-ad91cc8519f8"
+      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-bis-coop-cheesecake-dessert-delight/pvid/360425b0-d8ea-41b0-b3e5-ad91cc8519f8",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2616,7 +2816,7 @@
       "brand": "N/A",
       "productName": "The Baker's Dozen Handmade Fresh Orange Cake |Eggless Cake | Tea Cake | Made with Fresh Orange Juice",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (150 g)",
       "quantity": "1 pc (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2627,7 +2827,9 @@
       "discountPercentage": "30",
       "ranking": 101,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-handmade-fresh-orange-cake-eggless-cake-tea-cake-made-with-fresh-orange-juice/pvid/93b6c0dd-3f0b-44c4-bb27-a401571bff89"
+      "productUrl": "https://www.zepto.com/pn/the-bakers-dozen-handmade-fresh-orange-cake-eggless-cake-tea-cake-made-with-fresh-orange-juice/pvid/93b6c0dd-3f0b-44c4-bb27-a401571bff89",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2642,7 +2844,7 @@
       "brand": "N/A",
       "productName": "Zep Cake Premium Blueberry NY Cheesecake Slice | Dessert Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (80 g)",
       "quantity": "1 pc (80 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2653,7 +2855,9 @@
       "discountPercentage": "6",
       "ranking": 102,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-blueberry-ny-cheesecake-slice-dessert-delight/pvid/1a0c9d27-1dba-4cf7-b4e1-f070405e529f"
+      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-blueberry-ny-cheesecake-slice-dessert-delight/pvid/1a0c9d27-1dba-4cf7-b4e1-f070405e529f",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2668,7 +2872,7 @@
       "brand": "N/A",
       "productName": "Zep Cake Premium Classic NY Cheesecake Slice | Dessert Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (80 g)",
       "quantity": "1 pack (80 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2679,7 +2883,9 @@
       "discountPercentage": "4",
       "ranking": 103,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-classic-ny-cheesecake-slice-dessert-delight/pvid/bb55c2c4-3916-455a-8de2-96e540923fb9"
+      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-classic-ny-cheesecake-slice-dessert-delight/pvid/bb55c2c4-3916-455a-8de2-96e540923fb9",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2694,7 +2900,7 @@
       "brand": "N/A",
       "productName": "Dr. Oetker Kuppies Chocolate Waffle",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2705,7 +2911,9 @@
       "discountPercentage": "11",
       "ranking": 104,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/dr-oetker-kuppies-chocolate-waffle/pvid/907a0962-1bbd-4fad-9022-2d0af2e0b254"
+      "productUrl": "https://www.zepto.com/pn/dr-oetker-kuppies-chocolate-waffle/pvid/907a0962-1bbd-4fad-9022-2d0af2e0b254",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2720,7 +2928,7 @@
       "brand": "N/A",
       "productName": "Zep Cake Premium Choc Chip Brownie | Dessert Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (75 g)",
       "quantity": "1 pack (75 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2731,7 +2939,9 @@
       "discountPercentage": "4",
       "ranking": 105,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-choc-chip-brownie-dessert-delight/pvid/9e9b97e8-d696-4629-bbde-ad7dcbed1dbc"
+      "productUrl": "https://www.zepto.com/pn/zep-cake-premium-choc-chip-brownie-dessert-delight/pvid/9e9b97e8-d696-4629-bbde-ad7dcbed1dbc",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2746,7 +2956,7 @@
       "brand": "N/A",
       "productName": "Britannia Treat Croissant | with Vanilla Creme Filling Veg",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (45 or 48.5 g)",
       "quantity": "1 pack (45 or 48.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2757,7 +2967,9 @@
       "discountPercentage": "15",
       "ranking": 106,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/britannia-treat-croissant-with-vanilla-creme-filling-veg/pvid/cdede317-f350-4c04-8550-73f4a709b500"
+      "productUrl": "https://www.zepto.com/pn/britannia-treat-croissant-with-vanilla-creme-filling-veg/pvid/cdede317-f350-4c04-8550-73f4a709b500",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2772,7 +2984,7 @@
       "brand": "N/A",
       "productName": "Pintola Organic Wholegrain Brown Rice Cakes Multigrain | Snack Essential",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (125 g)",
       "quantity": "1 pack (125 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2783,7 +2995,9 @@
       "discountPercentage": "16",
       "ranking": 107,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/pintola-organic-wholegrain-brown-rice-cakes-multigrain-snack-essential/pvid/da378963-36ca-4533-a271-f9cdbadc7eb0"
+      "productUrl": "https://www.zepto.com/pn/pintola-organic-wholegrain-brown-rice-cakes-multigrain-snack-essential/pvid/da378963-36ca-4533-a271-f9cdbadc7eb0",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2798,7 +3012,7 @@
       "brand": "N/A",
       "productName": "Lavian Exotique Creme Cups Chocolate | Dessert Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (6 pcs)",
       "quantity": "1 pack (6 pcs)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2809,7 +3023,9 @@
       "discountPercentage": "2",
       "ranking": 108,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/lavian-exotique-creme-cups-chocolate-dessert-delight/pvid/56f1185f-3e8a-4113-be4d-1a2ed724a2e1"
+      "productUrl": "https://www.zepto.com/pn/lavian-exotique-creme-cups-chocolate-dessert-delight/pvid/56f1185f-3e8a-4113-be4d-1a2ed724a2e1",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2824,7 +3040,7 @@
       "brand": "N/A",
       "productName": "UNIBIC Fruit N' Nut Cake | Bakery Delight",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (140 g)",
       "quantity": "1 pc (140 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2835,7 +3051,9 @@
       "discountPercentage": "15",
       "ranking": 109,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/unibic-fruit-n-nut-cake-bakery-delight/pvid/7734909f-7196-4b7d-a923-2aef4cf4b499"
+      "productUrl": "https://www.zepto.com/pn/unibic-fruit-n-nut-cake-bakery-delight/pvid/7734909f-7196-4b7d-a923-2aef4cf4b499",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2850,7 +3068,7 @@
       "brand": "N/A",
       "productName": "Dr. Oetker Kuppies Vanilla Waffle",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -2861,7 +3079,9 @@
       "discountPercentage": "11",
       "ranking": 110,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/dr-oetker-kuppies-vanilla-waffle/pvid/6628abd0-1b50-4da9-b4c3-4a74544087b7"
+      "productUrl": "https://www.zepto.com/pn/dr-oetker-kuppies-vanilla-waffle/pvid/6628abd0-1b50-4da9-b4c3-4a74544087b7",
+      "subCategory": "Pastries Cakes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2876,7 +3096,7 @@
       "brand": "N/A",
       "productName": "Nestle Milkmaid Mini | Sweetened Liquid Condensed Milk | Rich & Creamy",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (190 g)",
       "quantity": "1 pc (190 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2887,7 +3107,9 @@
       "discountPercentage": "13",
       "ranking": 111,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/nestle-milkmaid-mini-sweetened-liquid-condensed-milk-rich-creamy/pvid/4302bada-88d1-472d-9d66-1ee35e6c8d3e"
+      "productUrl": "https://www.zepto.com/pn/nestle-milkmaid-mini-sweetened-liquid-condensed-milk-rich-creamy/pvid/4302bada-88d1-472d-9d66-1ee35e6c8d3e",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2902,7 +3124,7 @@
       "brand": "N/A",
       "productName": "Nestle Milkmaid Partly Skimmed Sweetened Condensed Milk | Smooth & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (380 g)",
       "quantity": "1 pc (380 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2913,7 +3135,9 @@
       "discountPercentage": "6",
       "ranking": 112,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/nestle-milkmaid-partly-skimmed-sweetened-condensed-milk-smooth-delicious/pvid/20a0dc3e-0ca1-4139-ab6a-6715c86484c6"
+      "productUrl": "https://www.zepto.com/pn/nestle-milkmaid-partly-skimmed-sweetened-condensed-milk-smooth-delicious/pvid/20a0dc3e-0ca1-4139-ab6a-6715c86484c6",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2928,7 +3152,7 @@
       "brand": "N/A",
       "productName": "Amul Mithai Mate Condensed Sweetened Milk Tin | Rich & Creamy",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (400 g)",
       "quantity": "1 pc (400 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2939,7 +3163,9 @@
       "discountPercentage": "N/A",
       "ranking": 113,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/amul-mithai-mate-condensed-sweetened-milk-tin-rich-creamy/pvid/c55ed352-f7dc-44a0-b8cf-a3c294b4c6a3"
+      "productUrl": "https://www.zepto.com/pn/amul-mithai-mate-condensed-sweetened-milk-tin-rich-creamy/pvid/c55ed352-f7dc-44a0-b8cf-a3c294b4c6a3",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2954,7 +3180,7 @@
       "brand": "N/A",
       "productName": "Weikfield Jelly Crystals Raspberry Flavour Carton",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (90 g)",
       "quantity": "1 pack (90 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2965,7 +3191,9 @@
       "discountPercentage": "5",
       "ranking": 114,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/weikfield-jelly-crystals-raspberry-flavour-carton/pvid/ddd66d47-cd9f-4e1c-a652-95c0e4d25391"
+      "productUrl": "https://www.zepto.com/pn/weikfield-jelly-crystals-raspberry-flavour-carton/pvid/ddd66d47-cd9f-4e1c-a652-95c0e4d25391",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -2980,7 +3208,7 @@
       "brand": "N/A",
       "productName": "Dabur Keora Water | Authentic Flavour For Biryanis and Desserts",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (250 ml)",
       "quantity": "1 pc (250 ml)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -2991,7 +3219,9 @@
       "discountPercentage": "9",
       "ranking": 115,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/dabur-keora-water-authentic-flavour-for-biryanis-and-desserts/pvid/7438b69d-b9d5-4572-a20a-c54c5d558c4e"
+      "productUrl": "https://www.zepto.com/pn/dabur-keora-water-authentic-flavour-for-biryanis-and-desserts/pvid/7438b69d-b9d5-4572-a20a-c54c5d558c4e",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3006,7 +3236,7 @@
       "brand": "N/A",
       "productName": "Betty Crocker Complete Classic Pancake Mix Pancake Mix For Kids",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (250 g)",
       "quantity": "1 pack (250 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3017,7 +3247,9 @@
       "discountPercentage": "20",
       "ranking": 116,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/betty-crocker-complete-classic-pancake-mix-pancake-mix-for-kids/pvid/2ec23ebe-178c-4944-b2ba-761ae1c80c04"
+      "productUrl": "https://www.zepto.com/pn/betty-crocker-complete-classic-pancake-mix-pancake-mix-for-kids/pvid/2ec23ebe-178c-4944-b2ba-761ae1c80c04",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3032,7 +3264,7 @@
       "brand": "N/A",
       "productName": "Slurrp Farm Chocolate Millet Pancake Mix | No Maida",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3043,7 +3275,9 @@
       "discountPercentage": "3",
       "ranking": 117,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/slurrp-farm-chocolate-millet-pancake-mix-no-maida/pvid/838e4fa0-a48d-4d26-bbf3-448216693eef"
+      "productUrl": "https://www.zepto.com/pn/slurrp-farm-chocolate-millet-pancake-mix-no-maida/pvid/838e4fa0-a48d-4d26-bbf3-448216693eef",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3058,7 +3292,7 @@
       "brand": "N/A",
       "productName": "Slurrp Farm Banana Choco-Chip Millet Pancake Mix | No Maida",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3069,7 +3303,9 @@
       "discountPercentage": "2",
       "ranking": 118,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/slurrp-farm-banana-choco-chip-millet-pancake-mix-no-maida/pvid/631fc122-7046-4abf-8bc3-e233497851f8"
+      "productUrl": "https://www.zepto.com/pn/slurrp-farm-banana-choco-chip-millet-pancake-mix-no-maida/pvid/631fc122-7046-4abf-8bc3-e233497851f8",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3084,7 +3320,7 @@
       "brand": "N/A",
       "productName": "Pillsbury Chocolate Flavour Pancake Mix 2-Minute Pancake Mix For Kids",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3095,7 +3331,9 @@
       "discountPercentage": "25",
       "ranking": 119,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pillsbury-chocolate-flavour-pancake-mix-2-minute-pancake-mix-for-kids/pvid/062de786-eaa5-4b00-8e26-98f14f018c36"
+      "productUrl": "https://www.zepto.com/pn/pillsbury-chocolate-flavour-pancake-mix-2-minute-pancake-mix-for-kids/pvid/062de786-eaa5-4b00-8e26-98f14f018c36",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3110,7 +3348,7 @@
       "brand": "N/A",
       "productName": "MTR Gulab Jamun Mix | Instant Sweet Mix",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "2 x 175 g",
       "quantity": "2 x 175 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3121,7 +3359,9 @@
       "discountPercentage": "5",
       "ranking": 120,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/mtr-gulab-jamun-mix-instant-sweet-mix/pvid/f0c82df8-38ac-4414-a0bf-13455213a155"
+      "productUrl": "https://www.zepto.com/pn/mtr-gulab-jamun-mix-instant-sweet-mix/pvid/f0c82df8-38ac-4414-a0bf-13455213a155",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3136,7 +3376,7 @@
       "brand": "N/A",
       "productName": "Slurrp Farm Millet Pancake Mix | Banana Choco-Chip and Chocolate | Kids and Adults | Pack Of 2",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "2 x 150 g",
       "quantity": "2 x 150 g",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3147,7 +3387,9 @@
       "discountPercentage": "12",
       "ranking": 121,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/slurrp-farm-millet-pancake-mix-banana-choco-chip-and-chocolate-kids-and-adults-pack-of-2/pvid/9405c09f-8dfc-4f0f-a589-f4e172334571"
+      "productUrl": "https://www.zepto.com/pn/slurrp-farm-millet-pancake-mix-banana-choco-chip-and-chocolate-kids-and-adults-pack-of-2/pvid/9405c09f-8dfc-4f0f-a589-f4e172334571",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3162,7 +3404,7 @@
       "brand": "N/A",
       "productName": "Pillsbury Butterscotch Flavour Pancake Mix | 2-Minute Pancake Mix For Kids",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (180 g)",
       "quantity": "1 pack (180 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3173,7 +3415,9 @@
       "discountPercentage": "25",
       "ranking": 122,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pillsbury-butterscotch-flavour-pancake-mix-2-minute-pancake-mix-for-kids/pvid/7ef4ab52-15da-4644-98fc-37e52f252d06"
+      "productUrl": "https://www.zepto.com/pn/pillsbury-butterscotch-flavour-pancake-mix-2-minute-pancake-mix-for-kids/pvid/7ef4ab52-15da-4644-98fc-37e52f252d06",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3188,7 +3432,7 @@
       "brand": "N/A",
       "productName": "Slurrp Farm Classic Pancake Mix | No Maida",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3199,7 +3443,9 @@
       "discountPercentage": "3",
       "ranking": 123,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/slurrp-farm-classic-pancake-mix-no-maida/pvid/194ba624-10e5-4614-9bd8-b9930a958d76"
+      "productUrl": "https://www.zepto.com/pn/slurrp-farm-classic-pancake-mix-no-maida/pvid/194ba624-10e5-4614-9bd8-b9930a958d76",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3214,7 +3460,7 @@
       "brand": "N/A",
       "productName": "Pillsbury Chocolate Flavour Pancake Mix 2-Minute Pancake Mix For Kids | No-Preservatives",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (500 g)",
       "quantity": "1 pack (500 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3225,7 +3471,9 @@
       "discountPercentage": "30",
       "ranking": 124,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pillsbury-chocolate-flavour-pancake-mix-2-minute-pancake-mix-for-kids-no-preservatives/pvid/95b55d84-c939-4c0b-970d-58c311506fd6"
+      "productUrl": "https://www.zepto.com/pn/pillsbury-chocolate-flavour-pancake-mix-2-minute-pancake-mix-for-kids-no-preservatives/pvid/95b55d84-c939-4c0b-970d-58c311506fd6",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3240,7 +3488,7 @@
       "brand": "N/A",
       "productName": "Pillsbury Butterscotch Flavour Pancake Mix 2-Minute Pancake Mix For Kids No-Preservatives",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (500 g)",
       "quantity": "1 pack (500 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3251,7 +3499,9 @@
       "discountPercentage": "30",
       "ranking": 125,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pillsbury-butterscotch-flavour-pancake-mix-2-minute-pancake-mix-for-kids-no-preservatives/pvid/5b1f22a3-5bf7-488f-81f7-acab00cbbed2"
+      "productUrl": "https://www.zepto.com/pn/pillsbury-butterscotch-flavour-pancake-mix-2-minute-pancake-mix-for-kids-no-preservatives/pvid/5b1f22a3-5bf7-488f-81f7-acab00cbbed2",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3266,7 +3516,7 @@
       "brand": "N/A",
       "productName": "Gits Gulab Jamun Instant Dessert Mix | Easy & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3277,7 +3527,9 @@
       "discountPercentage": "16",
       "ranking": 126,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/gits-gulab-jamun-instant-dessert-mix-easy-delicious/pvid/43a2ef49-d713-4f64-8f90-5b7ec87a6238"
+      "productUrl": "https://www.zepto.com/pn/gits-gulab-jamun-instant-dessert-mix-easy-delicious/pvid/43a2ef49-d713-4f64-8f90-5b7ec87a6238",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3292,7 +3544,7 @@
       "brand": "N/A",
       "productName": "Gits Gulab Jamun Instant Dessert Mix | Easy & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (500 g)",
       "quantity": "1 pack (500 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3303,7 +3555,9 @@
       "discountPercentage": "36",
       "ranking": 127,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/gits-gulab-jamun-instant-dessert-mix-easy-delicious/pvid/a50a6e0d-471b-4e05-9e53-f4bd2263ae12"
+      "productUrl": "https://www.zepto.com/pn/gits-gulab-jamun-instant-dessert-mix-easy-delicious/pvid/a50a6e0d-471b-4e05-9e53-f4bd2263ae12",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3318,7 +3572,7 @@
       "brand": "N/A",
       "productName": "Gits Rabdi Instant Dessert Mix",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (100 g)",
       "quantity": "1 pc (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3329,7 +3583,9 @@
       "discountPercentage": "16",
       "ranking": 128,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/gits-rabdi-instant-dessert-mix/pvid/2c03f75e-108c-4578-beaa-57f578ac7a96"
+      "productUrl": "https://www.zepto.com/pn/gits-rabdi-instant-dessert-mix/pvid/2c03f75e-108c-4578-beaa-57f578ac7a96",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3344,7 +3600,7 @@
       "brand": "N/A",
       "productName": "Puramate Falooda Mix Mango",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "19 mins",
@@ -3355,7 +3611,9 @@
       "discountPercentage": "31",
       "ranking": 129,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/puramate-falooda-mix-mango/pvid/89fe174e-e0ed-4281-b9c2-617df9790a98"
+      "productUrl": "https://www.zepto.com/pn/puramate-falooda-mix-mango/pvid/89fe174e-e0ed-4281-b9c2-617df9790a98",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3370,7 +3628,7 @@
       "brand": "N/A",
       "productName": "Cosmix No-Nonsense Protein Pancake mix | Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "19 mins",
@@ -3381,7 +3639,9 @@
       "discountPercentage": "13",
       "ranking": 130,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cosmix-no-nonsense-protein-pancake-mix-chocolate/pvid/a68fc4e7-e7cf-46d7-9cff-9db0f041d95b"
+      "productUrl": "https://www.zepto.com/pn/cosmix-no-nonsense-protein-pancake-mix-chocolate/pvid/a68fc4e7-e7cf-46d7-9cff-9db0f041d95b",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3396,7 +3656,7 @@
       "brand": "N/A",
       "productName": "Weikfield Jelly Crystals Strawberry Flavour Carton",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (90 g)",
       "quantity": "1 pack (90 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3407,7 +3667,9 @@
       "discountPercentage": "13",
       "ranking": 131,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/weikfield-jelly-crystals-strawberry-flavour-carton/pvid/89c2930c-2929-4f5b-9739-898066d1c98a"
+      "productUrl": "https://www.zepto.com/pn/weikfield-jelly-crystals-strawberry-flavour-carton/pvid/89c2930c-2929-4f5b-9739-898066d1c98a",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3422,7 +3684,7 @@
       "brand": "N/A",
       "productName": "Weikfield Custard Powder Mango Flavoured Carton",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (75 g)",
       "quantity": "1 pack (75 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3433,7 +3695,9 @@
       "discountPercentage": "22",
       "ranking": 132,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/weikfield-custard-powder-mango-flavoured-carton/pvid/67ae81c1-7060-4238-9339-b4471b79bb92"
+      "productUrl": "https://www.zepto.com/pn/weikfield-custard-powder-mango-flavoured-carton/pvid/67ae81c1-7060-4238-9339-b4471b79bb92",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3448,7 +3712,7 @@
       "brand": "N/A",
       "productName": "Weikfield Mango Falooda Mix Instant Falooda Mix Carton",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (200 g)",
       "quantity": "1 pc (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3459,7 +3723,9 @@
       "discountPercentage": "23",
       "ranking": 133,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/weikfield-mango-falooda-mix-instant-falooda-mix-carton/pvid/c2e447fd-ece8-46c6-8571-714d5b1d540b"
+      "productUrl": "https://www.zepto.com/pn/weikfield-mango-falooda-mix-instant-falooda-mix-carton/pvid/c2e447fd-ece8-46c6-8571-714d5b1d540b",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3474,7 +3740,7 @@
       "brand": "N/A",
       "productName": "Pillsbury Pancake Mix | Chocolate | Fun & Tasty Snack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (80 g)",
       "quantity": "1 pack (80 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3485,7 +3751,9 @@
       "discountPercentage": "58",
       "ranking": 134,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/pillsbury-pancake-mix-chocolate-fun-tasty-snack/pvid/b6473fb4-3b5a-4544-a3fb-ced970ec361f"
+      "productUrl": "https://www.zepto.com/pn/pillsbury-pancake-mix-chocolate-fun-tasty-snack/pvid/b6473fb4-3b5a-4544-a3fb-ced970ec361f",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3500,7 +3768,7 @@
       "brand": "N/A",
       "productName": "Puramate Pancake Mix Vanilla | Easy & Fluffy Pancakes",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (250 g)",
       "quantity": "1 pack (250 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3511,7 +3779,9 @@
       "discountPercentage": "5",
       "ranking": 135,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/puramate-pancake-mix-vanilla-easy-fluffy-pancakes/pvid/5e6991ea-3cd3-410d-8489-c174c4c116bd"
+      "productUrl": "https://www.zepto.com/pn/puramate-pancake-mix-vanilla-easy-fluffy-pancakes/pvid/5e6991ea-3cd3-410d-8489-c174c4c116bd",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3526,7 +3796,7 @@
       "brand": "N/A",
       "productName": "The Belgian Waffle Co Choco Oats Pancake and Waffle Mix",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (250 g)",
       "quantity": "1 pack (250 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3537,7 +3807,9 @@
       "discountPercentage": "2",
       "ranking": 136,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-choco-oats-pancake-and-waffle-mix/pvid/685def01-8d27-4655-9f83-d8822e58d7bd"
+      "productUrl": "https://www.zepto.com/pn/the-belgian-waffle-co-choco-oats-pancake-and-waffle-mix/pvid/685def01-8d27-4655-9f83-d8822e58d7bd",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3552,7 +3824,7 @@
       "brand": "N/A",
       "productName": "Gladful Strawberry Pancake Jowar and Oats Mix",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3563,7 +3835,9 @@
       "discountPercentage": "40",
       "ranking": 137,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/gladful-strawberry-pancake-jowar-and-oats-mix/pvid/63ef0c41-f05f-42d5-a4b2-1a664c1fbc35"
+      "productUrl": "https://www.zepto.com/pn/gladful-strawberry-pancake-jowar-and-oats-mix/pvid/63ef0c41-f05f-42d5-a4b2-1a664c1fbc35",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3578,7 +3852,7 @@
       "brand": "N/A",
       "productName": "Weikfield Falooda Mix Rose Flavour Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (200 g)",
       "quantity": "1 pc (200 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3589,7 +3863,9 @@
       "discountPercentage": "27",
       "ranking": 138,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/weikfield-falooda-mix-rose-flavour-pouch/pvid/2460c43a-5213-4d79-b412-366339c201db"
+      "productUrl": "https://www.zepto.com/pn/weikfield-falooda-mix-rose-flavour-pouch/pvid/2460c43a-5213-4d79-b412-366339c201db",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3604,7 +3880,7 @@
       "brand": "N/A",
       "productName": "Slurrp Farm Blueberry Millet Pancake Mix | No Maida",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3615,7 +3891,9 @@
       "discountPercentage": "8",
       "ranking": 139,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/slurrp-farm-blueberry-millet-pancake-mix-no-maida/pvid/c58df121-1391-4e69-b713-6129da4db07b"
+      "productUrl": "https://www.zepto.com/pn/slurrp-farm-blueberry-millet-pancake-mix-no-maida/pvid/c58df121-1391-4e69-b713-6129da4db07b",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3630,7 +3908,7 @@
       "brand": "N/A",
       "productName": "Yoga Bar Banana Chocolate Chip PancakeI No Maida or Baking Powder I No Added Preservatives",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (150 g)",
       "quantity": "1 pack (150 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3641,7 +3919,9 @@
       "discountPercentage": "31",
       "ranking": 140,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/yoga-bar-banana-chocolate-chip-pancakei-no-maida-or-baking-powder-i-no-added-preservatives/pvid/bb88d6bd-fba1-450d-a797-2f2be400d65e"
+      "productUrl": "https://www.zepto.com/pn/yoga-bar-banana-chocolate-chip-pancakei-no-maida-or-baking-powder-i-no-added-preservatives/pvid/bb88d6bd-fba1-450d-a797-2f2be400d65e",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3656,7 +3936,7 @@
       "brand": "N/A",
       "productName": "Mille Blueberry Pancake mix | Real blueberries | No atta | No maida | Raw natural sugar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (250 g)",
       "quantity": "1 pack (250 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3667,7 +3947,9 @@
       "discountPercentage": "10",
       "ranking": 141,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/mille-blueberry-pancake-mix-real-blueberries-no-atta-no-maida-raw-natural-sugar/pvid/2d607c2f-0edd-43ea-ab38-4be731ba4140"
+      "productUrl": "https://www.zepto.com/pn/mille-blueberry-pancake-mix-real-blueberries-no-atta-no-maida-raw-natural-sugar/pvid/2d607c2f-0edd-43ea-ab38-4be731ba4140",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3682,7 +3964,7 @@
       "brand": "N/A",
       "productName": "Hocco Moong Dal Halwa | Sweet & Delicious",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc",
       "quantity": "1 pc",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -3693,7 +3975,9 @@
       "discountPercentage": "14",
       "ranking": 142,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/hocco-moong-dal-halwa-sweet-delicious/pvid/f7c9550d-7b65-4a94-b542-c9a84f82eee6"
+      "productUrl": "https://www.zepto.com/pn/hocco-moong-dal-halwa-sweet-delicious/pvid/f7c9550d-7b65-4a94-b542-c9a84f82eee6",
+      "subCategory": "Dessert Mixes",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3708,7 +3992,7 @@
       "brand": "N/A",
       "productName": "Rang Munch Anardana Shots | Tangy Candy Treat",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (170 g)",
       "quantity": "1 pack (170 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3719,7 +4003,9 @@
       "discountPercentage": "17",
       "ranking": 143,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/rang-munch-anardana-shots-tangy-candy-treat/pvid/dec743a6-76e3-4aac-b1bb-01f6719af800"
+      "productUrl": "https://www.zepto.com/pn/rang-munch-anardana-shots-tangy-candy-treat/pvid/dec743a6-76e3-4aac-b1bb-01f6719af800",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3734,7 +4020,7 @@
       "brand": "N/A",
       "productName": "Orbit Spearmint Sugar-free Chewing Gum Pot",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (19.8 g)",
       "quantity": "1 pack (19.8 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3745,7 +4031,9 @@
       "discountPercentage": "4",
       "ranking": 144,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/orbit-spearmint-sugar-free-chewing-gum-pot/pvid/61b8e3c5-b1b7-4b71-bb21-3a4f1c2ec1a8"
+      "productUrl": "https://www.zepto.com/pn/orbit-spearmint-sugar-free-chewing-gum-pot/pvid/61b8e3c5-b1b7-4b71-bb21-3a4f1c2ec1a8",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3760,7 +4048,7 @@
       "brand": "N/A",
       "productName": "Pulse Kachcha Aam Candies | Tangy & Sweet",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (50 pcs)",
       "quantity": "1 pack (50 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3771,7 +4059,9 @@
       "discountPercentage": "8",
       "ranking": 145,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pulse-kachcha-aam-candies-tangy-sweet/pvid/f08ffcac-5eb7-4089-85f3-0a9ee541e1bf"
+      "productUrl": "https://www.zepto.com/pn/pulse-kachcha-aam-candies-tangy-sweet/pvid/f08ffcac-5eb7-4089-85f3-0a9ee541e1bf",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3786,7 +4076,7 @@
       "brand": "N/A",
       "productName": "Candyman Choco Double Eclairs | Rich Chocolate Treat | Celebration pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (75 x 3.5 g)",
       "quantity": "1 pack (75 x 3.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3797,7 +4087,9 @@
       "discountPercentage": "54",
       "ranking": 146,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/candyman-choco-double-eclairs-rich-chocolate-treat-celebration-pack/pvid/7d6d2ac8-609c-4ac2-96fb-d6aaef59fb2f"
+      "productUrl": "https://www.zepto.com/pn/candyman-choco-double-eclairs-rich-chocolate-treat-celebration-pack/pvid/7d6d2ac8-609c-4ac2-96fb-d6aaef59fb2f",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3812,7 +4104,7 @@
       "brand": "N/A",
       "productName": "Orbit Mixed Fruit Sugar Free Chewing Gum Tube",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (19.8 g)",
       "quantity": "1 pack (19.8 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3823,7 +4115,9 @@
       "discountPercentage": "9",
       "ranking": 147,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/orbit-mixed-fruit-sugar-free-chewing-gum-tube/pvid/998f421b-d400-462a-aa99-f7565ad7b4b5"
+      "productUrl": "https://www.zepto.com/pn/orbit-mixed-fruit-sugar-free-chewing-gum-tube/pvid/998f421b-d400-462a-aa99-f7565ad7b4b5",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3838,7 +4132,7 @@
       "brand": "N/A",
       "productName": "Rang Munch Tangy Imli | Candy Snack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (110 g)",
       "quantity": "1 pack (110 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3849,7 +4143,9 @@
       "discountPercentage": "17",
       "ranking": 148,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/rang-munch-tangy-imli-candy-snack/pvid/9cd0db60-d059-4b65-b8d7-2013f1f7ccb7"
+      "productUrl": "https://www.zepto.com/pn/rang-munch-tangy-imli-candy-snack/pvid/9cd0db60-d059-4b65-b8d7-2013f1f7ccb7",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3864,7 +4160,7 @@
       "brand": "N/A",
       "productName": "The Select Aisle Mini Marshmallows | Vegan",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (20 g)",
       "quantity": "1 pack (20 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3875,7 +4171,9 @@
       "discountPercentage": "4",
       "ranking": 149,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/the-select-aisle-mini-marshmallows-vegan/pvid/0849ba09-103f-4a7a-a6bf-8aa78b437cef"
+      "productUrl": "https://www.zepto.com/pn/the-select-aisle-mini-marshmallows-vegan/pvid/0849ba09-103f-4a7a-a6bf-8aa78b437cef",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3890,7 +4188,7 @@
       "brand": "N/A",
       "productName": "Fruittella Strawberry Flavour Chewy Toffee Stick",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (45 g)",
       "quantity": "1 pack (45 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3901,7 +4199,9 @@
       "discountPercentage": "20",
       "ranking": 150,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/fruittella-strawberry-flavour-chewy-toffee-stick/pvid/2911e4fa-13da-401a-b66f-728d120abfa2"
+      "productUrl": "https://www.zepto.com/pn/fruittella-strawberry-flavour-chewy-toffee-stick/pvid/2911e4fa-13da-401a-b66f-728d120abfa2",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3916,7 +4216,7 @@
       "brand": "N/A",
       "productName": "Alpenliebe Juzt Jelly Strawberry Soft Candy Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (140 g)",
       "quantity": "1 pack (140 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3927,7 +4227,9 @@
       "discountPercentage": "20",
       "ranking": 151,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/alpenliebe-juzt-jelly-strawberry-soft-candy-pouch/pvid/a60d8b10-caea-4255-a18e-b856a20f903d"
+      "productUrl": "https://www.zepto.com/pn/alpenliebe-juzt-jelly-strawberry-soft-candy-pouch/pvid/a60d8b10-caea-4255-a18e-b856a20f903d",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3942,7 +4244,7 @@
       "brand": "N/A",
       "productName": "Assorted Candy 20 Pcs, Tangy Imli, Kaccha & Real Aam, Chilli Guava No Refined Sugar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (20 pcs)",
       "quantity": "1 pack (20 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3953,7 +4255,9 @@
       "discountPercentage": "23",
       "ranking": 152,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/assorted-candy-20-pcs-tangy-imli-kaccha-real-aam-chilli-guava-no-refined-sugar/pvid/d18388e8-2407-431d-9e5f-29718467904a"
+      "productUrl": "https://www.zepto.com/pn/assorted-candy-20-pcs-tangy-imli-kaccha-real-aam-chilli-guava-no-refined-sugar/pvid/d18388e8-2407-431d-9e5f-29718467904a",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3968,7 +4272,7 @@
       "brand": "N/A",
       "productName": "Skittles Wildberry Bite-Size Fruit Flavoured Candy Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (90 g)",
       "quantity": "1 pack (90 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -3979,7 +4283,9 @@
       "discountPercentage": "9",
       "ranking": 153,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/skittles-wildberry-bite-size-fruit-flavoured-candy-pouch/pvid/b5c7c649-9f3f-470c-a32f-7206a9b9f4c0"
+      "productUrl": "https://www.zepto.com/pn/skittles-wildberry-bite-size-fruit-flavoured-candy-pouch/pvid/b5c7c649-9f3f-470c-a32f-7206a9b9f4c0",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -3994,7 +4300,7 @@
       "brand": "N/A",
       "productName": "Orbit Sugar Free Sweetmint Chewing Gum Tube",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (19.8 g)",
       "quantity": "1 pack (19.8 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4005,7 +4311,9 @@
       "discountPercentage": "7",
       "ranking": 154,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/orbit-sugar-free-sweetmint-chewing-gum-tube/pvid/06356f04-50e0-48c0-8e51-c95ee344e90f"
+      "productUrl": "https://www.zepto.com/pn/orbit-sugar-free-sweetmint-chewing-gum-tube/pvid/06356f04-50e0-48c0-8e51-c95ee344e90f",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4020,7 +4328,7 @@
       "brand": "N/A",
       "productName": "Pulse Litchi 50 Candies | Candy Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (50 pcs)",
       "quantity": "1 pack (50 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4031,7 +4339,9 @@
       "discountPercentage": "20",
       "ranking": 155,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pulse-litchi-50-candies-candy-pack/pvid/02cf1a1d-fa08-4a5b-92e5-c62e66d8231f"
+      "productUrl": "https://www.zepto.com/pn/pulse-litchi-50-candies-candy-pack/pvid/02cf1a1d-fa08-4a5b-92e5-c62e66d8231f",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4046,7 +4356,7 @@
       "brand": "N/A",
       "productName": "Doublemint Peppermint Flavour Chewy Mints Tube",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (27.3 g)",
       "quantity": "1 pack (27.3 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4057,7 +4367,9 @@
       "discountPercentage": "4",
       "ranking": 156,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/doublemint-peppermint-flavour-chewy-mints-tube/pvid/43ad4132-8105-44db-aad3-3e43889da45d"
+      "productUrl": "https://www.zepto.com/pn/doublemint-peppermint-flavour-chewy-mints-tube/pvid/43ad4132-8105-44db-aad3-3e43889da45d",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4072,7 +4384,7 @@
       "brand": "N/A",
       "productName": "Pulse Guava 50 Candies | Candy Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (50 pcs)",
       "quantity": "1 pack (50 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4083,7 +4395,9 @@
       "discountPercentage": "28",
       "ranking": 157,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/pulse-guava-50-candies-candy-pack/pvid/d48eb30b-03af-4763-934c-2adc83cb0774"
+      "productUrl": "https://www.zepto.com/pn/pulse-guava-50-candies-candy-pack/pvid/d48eb30b-03af-4763-934c-2adc83cb0774",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4098,7 +4412,7 @@
       "brand": "N/A",
       "productName": "Mentos Rainbow Assorted Flavour Chewy Toffee Pouch",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (108 g)",
       "quantity": "1 pack (108 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4109,7 +4423,9 @@
       "discountPercentage": "18",
       "ranking": 158,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/mentos-rainbow-assorted-flavour-chewy-toffee-pouch/pvid/6d4a7e9f-7308-4485-92a5-95fa5e733913"
+      "productUrl": "https://www.zepto.com/pn/mentos-rainbow-assorted-flavour-chewy-toffee-pouch/pvid/6d4a7e9f-7308-4485-92a5-95fa5e733913",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4124,7 +4440,7 @@
       "brand": "N/A",
       "productName": "Rang Munch Royal Paan (Mouth Freshener)",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (100 g)",
       "quantity": "1 pack (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4135,7 +4451,9 @@
       "discountPercentage": "19",
       "ranking": 159,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/rang-munch-royal-paan-mouth-freshener/pvid/0ebdb144-5f35-456d-abc1-b4ade90b228d"
+      "productUrl": "https://www.zepto.com/pn/rang-munch-royal-paan-mouth-freshener/pvid/0ebdb144-5f35-456d-abc1-b4ade90b228d",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4150,7 +4468,7 @@
       "brand": "N/A",
       "productName": "Candyman Sourzzz | Shockingly Sour Candy | Free Toy inside",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (7 pcs)",
       "quantity": "1 pack (7 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4161,7 +4479,9 @@
       "discountPercentage": "14",
       "ranking": 160,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/candyman-sourzzz-shockingly-sour-candy-free-toy-inside/pvid/6bac00f5-1980-4a27-ac48-f007c677fa85"
+      "productUrl": "https://www.zepto.com/pn/candyman-sourzzz-shockingly-sour-candy-free-toy-inside/pvid/6bac00f5-1980-4a27-ac48-f007c677fa85",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4176,7 +4496,7 @@
       "brand": "N/A",
       "productName": "Parle Bigger Orange Bite",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (214.5 g)",
       "quantity": "1 pack (214.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4187,7 +4507,9 @@
       "discountPercentage": "28",
       "ranking": 161,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/parle-bigger-orange-bite/pvid/814b8d6c-7a75-4b76-8d6e-4d8cedb3f8ce"
+      "productUrl": "https://www.zepto.com/pn/parle-bigger-orange-bite/pvid/814b8d6c-7a75-4b76-8d6e-4d8cedb3f8ce",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4202,7 +4524,7 @@
       "brand": "N/A",
       "productName": "Meetha Paan, 12 Pcs | Mouth Freshener | by GO DESi",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (12 pcs)",
       "quantity": "1 pack (12 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4213,7 +4535,9 @@
       "discountPercentage": "14",
       "ranking": 162,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/meetha-paan-12-pcs-mouth-freshener-by-go-desi/pvid/1c8d2040-c694-4dd5-bb07-1e80143279f1"
+      "productUrl": "https://www.zepto.com/pn/meetha-paan-12-pcs-mouth-freshener-by-go-desi/pvid/1c8d2040-c694-4dd5-bb07-1e80143279f1",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4228,7 +4552,7 @@
       "brand": "N/A",
       "productName": "Rangmunch Rainbow Treat",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4239,7 +4563,9 @@
       "discountPercentage": "16",
       "ranking": 163,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/rangmunch-rainbow-treat/pvid/328889dd-81f7-4dee-8301-ffe5fc6ae71b"
+      "productUrl": "https://www.zepto.com/pn/rangmunch-rainbow-treat/pvid/328889dd-81f7-4dee-8301-ffe5fc6ae71b",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4254,7 +4580,7 @@
       "brand": "N/A",
       "productName": "Doublemint Lemonmint Flavour Chewy Mints Pot",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (56.7 g)",
       "quantity": "1 pack (56.7 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4265,7 +4591,9 @@
       "discountPercentage": "13",
       "ranking": 164,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/doublemint-lemonmint-flavour-chewy-mints-pot/pvid/7b49d4b7-460a-4060-84da-decfa1ffd114"
+      "productUrl": "https://www.zepto.com/pn/doublemint-lemonmint-flavour-chewy-mints-pot/pvid/7b49d4b7-460a-4060-84da-decfa1ffd114",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4280,7 +4608,7 @@
       "brand": "N/A",
       "productName": "Dabur OTC Hajmola Anardana Digestive Tablets",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (120 pcs)",
       "quantity": "1 pack (120 pcs)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4291,7 +4619,9 @@
       "discountPercentage": "14",
       "ranking": 165,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/dabur-otc-hajmola-anardana-digestive-tablets/pvid/a658aaca-b2b8-4ea7-9eea-63a37617ee73"
+      "productUrl": "https://www.zepto.com/pn/dabur-otc-hajmola-anardana-digestive-tablets/pvid/a658aaca-b2b8-4ea7-9eea-63a37617ee73",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4306,7 +4636,7 @@
       "brand": "N/A",
       "productName": "Skittles Original Bite-Size Fruit Candy Tube",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (27.3 g)",
       "quantity": "1 pack (27.3 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4317,7 +4647,9 @@
       "discountPercentage": "7",
       "ranking": 166,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/skittles-original-bite-size-fruit-candy-tube/pvid/559b3e09-7780-4741-acfc-ae3a8b66aeef"
+      "productUrl": "https://www.zepto.com/pn/skittles-original-bite-size-fruit-candy-tube/pvid/559b3e09-7780-4741-acfc-ae3a8b66aeef",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4332,7 +4664,7 @@
       "brand": "N/A",
       "productName": "GO Desi Real Aam Fruti Twist Fruit Bar | Chewy & Fun",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (70 g)",
       "quantity": "1 pack (70 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4343,7 +4675,9 @@
       "discountPercentage": "4",
       "ranking": 167,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/go-desi-real-aam-fruti-twist-fruit-bar-chewy-fun/pvid/7d55c3cb-0376-43f9-9c41-4c3c29f60c41"
+      "productUrl": "https://www.zepto.com/pn/go-desi-real-aam-fruti-twist-fruit-bar-chewy-fun/pvid/7d55c3cb-0376-43f9-9c41-4c3c29f60c41",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4358,7 +4692,7 @@
       "brand": "N/A",
       "productName": "Pluffs Marshmallows Pink & White",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (140 g)",
       "quantity": "1 pack (140 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4369,7 +4703,9 @@
       "discountPercentage": "14",
       "ranking": 168,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/pluffs-marshmallows-pink-white/pvid/33e6e079-971a-44e3-bb54-6825c574ce66"
+      "productUrl": "https://www.zepto.com/pn/pluffs-marshmallows-pink-white/pvid/33e6e079-971a-44e3-bb54-6825c574ce66",
+      "subCategory": "Candies Gums Mints",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4384,7 +4720,7 @@
       "brand": "N/A",
       "productName": "Lindt Exotic Milk Cornet Chocolate | Premium Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4395,7 +4731,9 @@
       "discountPercentage": "6",
       "ranking": 169,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-exotic-milk-cornet-chocolate-premium-chocolate/pvid/a679050b-e886-4a37-b172-81c313cda11a"
+      "productUrl": "https://www.zepto.com/pn/lindt-exotic-milk-cornet-chocolate-premium-chocolate/pvid/a679050b-e886-4a37-b172-81c313cda11a",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4410,7 +4748,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Smooth Melting Assorted Chocolates Cornet | Luxuriously Smooth Center",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (200 g)",
       "quantity": "1 pack (200 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4421,7 +4759,9 @@
       "discountPercentage": "3",
       "ranking": 170,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-smooth-melting-assorted-chocolates-cornet-luxuriously-smooth-center/pvid/b717fcc1-bad2-4666-9696-debf6e7f56d8"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-smooth-melting-assorted-chocolates-cornet-luxuriously-smooth-center/pvid/b717fcc1-bad2-4666-9696-debf6e7f56d8",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4436,7 +4776,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindoor Heart Tin Chocolate Gift Box",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (62.5 g)",
       "quantity": "1 pack (62.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4447,7 +4787,9 @@
       "discountPercentage": "6",
       "ranking": 171,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindoor-heart-tin-chocolate-gift-box/pvid/adc71605-57c4-43b6-ac20-9e9126476667"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindoor-heart-tin-chocolate-gift-box/pvid/adc71605-57c4-43b6-ac20-9e9126476667",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4462,7 +4804,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Milk | Smooth & Creamy Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (16 x 12.5 g)",
       "quantity": "1 pack (16 x 12.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4473,7 +4815,9 @@
       "discountPercentage": "27",
       "ranking": 172,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/e507baa2-ddc9-4081-903f-2f756599ee35"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/e507baa2-ddc9-4081-903f-2f756599ee35",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4488,7 +4832,7 @@
       "brand": "N/A",
       "productName": "Toblerone Swiss Milk Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (100 g)",
       "quantity": "1 pack (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4499,7 +4843,9 @@
       "discountPercentage": "38",
       "ranking": 173,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/toblerone-swiss-milk-chocolate/pvid/383bb1a5-8c17-47a0-a96a-dd94416ff639"
+      "productUrl": "https://www.zepto.com/pn/toblerone-swiss-milk-chocolate/pvid/383bb1a5-8c17-47a0-a96a-dd94416ff639",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4514,7 +4860,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Assorted | Smooth & Creamy Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 set (75 g)",
       "quantity": "1 set (75 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4525,7 +4871,9 @@
       "discountPercentage": "21",
       "ranking": 174,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-smooth-creamy-chocolate/pvid/8b721881-9ea3-4903-9d61-415be789bc1c"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-smooth-creamy-chocolate/pvid/8b721881-9ea3-4903-9d61-415be789bc1c",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4540,7 +4888,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Smooth Melting Milk Chocolate Cornet Trio Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (37.5 g)",
       "quantity": "1 pack (37.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4551,7 +4899,9 @@
       "discountPercentage": "6",
       "ranking": 175,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-smooth-melting-milk-chocolate-cornet-trio-pack/pvid/70114059-445f-46cf-aa67-bbd241f6929f"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-smooth-melting-milk-chocolate-cornet-trio-pack/pvid/70114059-445f-46cf-aa67-bbd241f6929f",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4566,7 +4916,7 @@
       "brand": "N/A",
       "productName": "Fabelle Ganache Creamy Milk- 20 Smooth Handcrafted Chocolate Cubes",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (124 g)",
       "quantity": "1 pc (124 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4577,7 +4927,9 @@
       "discountPercentage": "45",
       "ranking": 176,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/fabelle-ganache-creamy-milk-20-smooth-handcrafted-chocolate-cubes/pvid/0773cf28-7112-447a-a99d-1c3da2dff765"
+      "productUrl": "https://www.zepto.com/pn/fabelle-ganache-creamy-milk-20-smooth-handcrafted-chocolate-cubes/pvid/0773cf28-7112-447a-a99d-1c3da2dff765",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4592,7 +4944,7 @@
       "brand": "N/A",
       "productName": "Cadbury Dairy Milk Silk Heart Shaped Chocolate Valentines Gift Box",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (15 x 9 g)",
       "quantity": "1 pack (15 x 9 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4603,7 +4955,9 @@
       "discountPercentage": "20",
       "ranking": 177,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-heart-shaped-chocolate-valentines-gift-box/pvid/a6cf9419-208e-4047-889a-c35771287b81"
+      "productUrl": "https://www.zepto.com/pn/cadbury-dairy-milk-silk-heart-shaped-chocolate-valentines-gift-box/pvid/a6cf9419-208e-4047-889a-c35771287b81",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4618,7 +4972,7 @@
       "brand": "N/A",
       "productName": "Fabelle Divine Dark Trilogy Gift Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (3 pcs)",
       "quantity": "1 pack (3 pcs)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4629,7 +4983,9 @@
       "discountPercentage": "11",
       "ranking": 178,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/fabelle-divine-dark-trilogy-gift-pack/pvid/41347c94-cbef-405d-ae9e-b6e5261ae57d"
+      "productUrl": "https://www.zepto.com/pn/fabelle-divine-dark-trilogy-gift-pack/pvid/41347c94-cbef-405d-ae9e-b6e5261ae57d",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4644,7 +5000,7 @@
       "brand": "N/A",
       "productName": "Cadbury Studio Gianduja Hazelnut Signature Pralines Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (52 g)",
       "quantity": "1 pack (52 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4655,7 +5011,9 @@
       "discountPercentage": "11",
       "ranking": 179,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/cadbury-studio-gianduja-hazelnut-signature-pralines-chocolate/pvid/08eadf0a-6cbe-4470-85cf-24160b21d3bc"
+      "productUrl": "https://www.zepto.com/pn/cadbury-studio-gianduja-hazelnut-signature-pralines-chocolate/pvid/08eadf0a-6cbe-4470-85cf-24160b21d3bc",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4670,7 +5028,7 @@
       "brand": "N/A",
       "productName": "Mr Beast Feastables Peanut Butter Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (60 g)",
       "quantity": "1 pc (60 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4681,7 +5039,9 @@
       "discountPercentage": "9",
       "ranking": 180,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/mr-beast-feastables-peanut-butter-chocolate/pvid/df989277-879a-425a-8733-3e5bb44f8b80"
+      "productUrl": "https://www.zepto.com/pn/mr-beast-feastables-peanut-butter-chocolate/pvid/df989277-879a-425a-8733-3e5bb44f8b80",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4696,7 +5056,7 @@
       "brand": "N/A",
       "productName": "Chokola Berry Love | Berry Flavored Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (52 g)",
       "quantity": "1 pack (52 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4707,7 +5067,9 @@
       "discountPercentage": "40",
       "ranking": 181,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/chokola-berry-love-berry-flavored-chocolate/pvid/07cf94b5-a605-484c-b54e-f1a0e7ad9e00"
+      "productUrl": "https://www.zepto.com/pn/chokola-berry-love-berry-flavored-chocolate/pvid/07cf94b5-a605-484c-b54e-f1a0e7ad9e00",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4722,7 +5084,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Assorted | Smooth & Creamy Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (16 x 12.5 g)",
       "quantity": "1 pack (16 x 12.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4733,7 +5095,9 @@
       "discountPercentage": "27",
       "ranking": 182,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-smooth-creamy-chocolate/pvid/585ed525-f81d-4ef7-b263-bac86fd0e89a"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-smooth-creamy-chocolate/pvid/585ed525-f81d-4ef7-b263-bac86fd0e89a",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4748,7 +5112,7 @@
       "brand": "N/A",
       "productName": "Twix Minis Cookie Caramel Chocolate Pack | 5 Mini Treats Inside",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (5 x 20 g)",
       "quantity": "1 pack (5 x 20 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4759,7 +5123,9 @@
       "discountPercentage": "11",
       "ranking": 183,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/twix-minis-cookie-caramel-chocolate-pack-5-mini-treats-inside/pvid/7ce211f0-6e17-4c30-9ebe-32cc29e0eb6a"
+      "productUrl": "https://www.zepto.com/pn/twix-minis-cookie-caramel-chocolate-pack-5-mini-treats-inside/pvid/7ce211f0-6e17-4c30-9ebe-32cc29e0eb6a",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4774,7 +5140,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Assorted Trio Pack",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (37.5 g)",
       "quantity": "1 pack (37.5 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4785,7 +5151,9 @@
       "discountPercentage": "8",
       "ranking": 184,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-trio-pack/pvid/5e9396de-b19c-48ff-9216-a139791930d9"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-assorted-trio-pack/pvid/5e9396de-b19c-48ff-9216-a139791930d9",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4800,7 +5168,7 @@
       "brand": "N/A",
       "productName": "Lindt Excellence 90% Cocoa Supreme Dark Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (100 g)",
       "quantity": "1 pack (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4811,7 +5179,9 @@
       "discountPercentage": "8",
       "ranking": 185,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-excellence-90-cocoa-supreme-dark-chocolate-bar/pvid/e6cdf673-e87e-46c7-aaa3-ee9c5a0367f6"
+      "productUrl": "https://www.zepto.com/pn/lindt-excellence-90-cocoa-supreme-dark-chocolate-bar/pvid/e6cdf673-e87e-46c7-aaa3-ee9c5a0367f6",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4826,7 +5196,7 @@
       "brand": "N/A",
       "productName": "Lindt Swiss Classic Milk Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (100 g)",
       "quantity": "1 pc (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4837,7 +5207,9 @@
       "discountPercentage": "15",
       "ranking": 186,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-swiss-classic-milk-chocolate/pvid/ab354a64-a45b-4694-acff-70affd1de8f5"
+      "productUrl": "https://www.zepto.com/pn/lindt-swiss-classic-milk-chocolate/pvid/ab354a64-a45b-4694-acff-70affd1de8f5",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4852,7 +5224,7 @@
       "brand": "N/A",
       "productName": "Kinder Bueno | Smooth Snack Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (43 g)",
       "quantity": "1 pack (43 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4863,7 +5235,9 @@
       "discountPercentage": "30",
       "ranking": 187,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/kinder-bueno-smooth-snack-bar/pvid/15b20acf-16ea-4206-8f29-e770fff2b036"
+      "productUrl": "https://www.zepto.com/pn/kinder-bueno-smooth-snack-bar/pvid/15b20acf-16ea-4206-8f29-e770fff2b036",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4878,7 +5252,7 @@
       "brand": "N/A",
       "productName": "Loyka Dubai Kunafa Chocolate Bar",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (89 g)",
       "quantity": "1 pack (89 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4889,7 +5263,9 @@
       "discountPercentage": "14",
       "ranking": 188,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/loyka-dubai-kunafa-chocolate-bar/pvid/9096031d-7f79-4bc3-831a-654d6ef650d6"
+      "productUrl": "https://www.zepto.com/pn/loyka-dubai-kunafa-chocolate-bar/pvid/9096031d-7f79-4bc3-831a-654d6ef650d6",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4904,7 +5280,7 @@
       "brand": "N/A",
       "productName": "Lindt Excellence Orange Intense Dark Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (100 g)",
       "quantity": "1 pack (100 g)",
       "combo": "N/A",
       "deliveryTime": "12 mins",
@@ -4915,7 +5291,9 @@
       "discountPercentage": "14",
       "ranking": 189,
       "isOutOfStock": false,
-      "productUrl": "https://www.zepto.com/pn/lindt-excellence-orange-intense-dark-chocolate/pvid/a01fa7e7-fa5b-45e9-851f-a0cc719d796a"
+      "productUrl": "https://www.zepto.com/pn/lindt-excellence-orange-intense-dark-chocolate/pvid/a01fa7e7-fa5b-45e9-851f-a0cc719d796a",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4930,7 +5308,7 @@
       "brand": "N/A",
       "productName": "Choki Choki Choco Milk Stick Pouch | Fun Treat",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (50 pcs)",
       "quantity": "1 pack (50 pcs)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4941,7 +5319,9 @@
       "discountPercentage": "8",
       "ranking": 190,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/choki-choki-choco-milk-stick-pouch-fun-treat/pvid/f28a9cc3-7aaf-4dbb-ae17-4583dcc25f54"
+      "productUrl": "https://www.zepto.com/pn/choki-choki-choco-milk-stick-pouch-fun-treat/pvid/f28a9cc3-7aaf-4dbb-ae17-4583dcc25f54",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4956,7 +5336,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Milk | Smooth & Creamy Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (112.5 g)",
       "quantity": "1 pack (112.5 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4967,7 +5347,9 @@
       "discountPercentage": "23",
       "ranking": 191,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/09457c1e-874e-47ef-80de-1e6b652b571e"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-milk-smooth-creamy-chocolate/pvid/09457c1e-874e-47ef-80de-1e6b652b571e",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -4982,7 +5364,7 @@
       "brand": "N/A",
       "productName": "Lindt Lindor Single Milk Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pc (100 g)",
       "quantity": "1 pc (100 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -4993,7 +5375,9 @@
       "discountPercentage": "21",
       "ranking": 192,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/lindt-lindor-single-milk-chocolate/pvid/e0e350cd-99db-4a39-ab64-e858592aa47f"
+      "productUrl": "https://www.zepto.com/pn/lindt-lindor-single-milk-chocolate/pvid/e0e350cd-99db-4a39-ab64-e858592aa47f",
+      "subCategory": "Premium Chocolates",
+      "new": false
     },
     {
       "category": "Sweet Cravings",
@@ -5008,7 +5392,7 @@
       "brand": "N/A",
       "productName": "Confetteria Raffaello | Premium Coconut Chocolate",
       "productImage": "https://cdn.zeptonow.com/production/images/defaultPlaceholder.svg",
-      "productWeight": "N/A",
+      "productWeight": "1 pack (80 g)",
       "quantity": "1 pack (80 g)",
       "combo": "N/A",
       "deliveryTime": "N/A",
@@ -5019,7 +5403,9 @@
       "discountPercentage": "20",
       "ranking": 193,
       "isOutOfStock": true,
-      "productUrl": "https://www.zepto.com/pn/confetteria-raffaello-premium-coconut-chocolate/pvid/a368721a-4a1a-422f-a900-7103d49bb0f1"
+      "productUrl": "https://www.zepto.com/pn/confetteria-raffaello-premium-coconut-chocolate/pvid/a368721a-4a1a-422f-a900-7103d49bb0f1",
+      "subCategory": "Premium Chocolates",
+      "new": false
     }
   ],
   "meta": {

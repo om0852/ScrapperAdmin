@@ -1,0 +1,1135 @@
+{
+  "xSellData": [],
+  "totalRecords": 54,
+  "products": [
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Anjeer (Figs)",
+      "seo_token_ntk": "anjeer-(figs)-pssonfruits0057xx271219",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "647695",
+      "targetUrl": "/pdp/647695",
+      "sKUs": [
+        {
+          "name": "Fresh Anjeer (Figs) : 6 Pieces",
+          "skuUniqueID": "657001",
+          "articleNumber": "250000118",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "85.00",
+          "priceSALE": "69.00",
+          "savePrice": "16.00",
+          "invStatus": "2",
+          "savingPercentage": 18,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "6 U",
+          "variantInfoTxtValue": "(₹ 11.50 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg",
+            "hd"
+          ],
+          "groceryType": "v",
+          "imageKey": "D/E/C/DEC250000118xx16DEC21",
+          "defaultRank": "100757001",
+          "productImageKey": "DEC250000118xx16DEC21",
+          "binaryImgCode": "3584",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Fruits Mix (Chunks)",
+      "seo_token_ntk": "fresh-fruits-mix-(chunks)-pfreshvegetables14xx181224",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "215006",
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1674060",
+      "targetUrl": "/pdp/1674060",
+      "sKUs": [
+        {
+          "name": "Fresh Fruits Mix (Chunks) : 200 g",
+          "skuUniqueID": "1673087",
+          "articleNumber": "250000395",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "85.00",
+          "priceSALE": "69.00",
+          "savePrice": "16.00",
+          "invStatus": "2",
+          "savingPercentage": 18,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "200 g",
+          "variantInfoTxtValue": "(₹ 0.34 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg",
+            "hd"
+          ],
+          "groceryType": "v",
+          "imageKey": "J/U/L/JULY250000395xx14JUL25",
+          "defaultRank": "101773087",
+          "productImageKey": "JULY250000395xx14JUL25",
+          "binaryImgCode": "3072",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Raw Banana (Kela)",
+      "seo_token_ntk": "fresh-raw-banana-pfreshvegetables64xx181224",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374",
+        "93500"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1674110",
+      "targetUrl": "/pdp/1674110",
+      "sKUs": [
+        {
+          "name": "Fresh Raw Banana (Kela) : 500 g",
+          "skuUniqueID": "1673138",
+          "articleNumber": "250000446",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "70.00",
+          "priceSALE": "60.00",
+          "savePrice": "10.00",
+          "invStatus": "2",
+          "savingPercentage": 14,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "500 g",
+          "variantInfoTxtValue": "(₹ 0.12 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "D/E/C/DEC250000446xx17DEC24",
+          "defaultRank": "101773138",
+          "productImageKey": "DEC250000446xx17DEC24",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Mango Lalbagh Sindhura",
+      "seo_token_ntk": "fresh-mango-lalbagh-sindhura-pmango10xx18425",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1732578",
+      "targetUrl": "/pdp/1732578",
+      "sKUs": [
+        {
+          "name": "Fresh Mango Lalbagh Sindhura : 2 Pieces",
+          "skuUniqueID": "1732068",
+          "articleNumber": "250000658",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "120.00",
+          "priceSALE": "99.00",
+          "savePrice": "21.00",
+          "invStatus": "2",
+          "savingPercentage": 17,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "2 U",
+          "variantInfoTxtValue": "(₹ 49.50 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "A/P/R/APR250000658xx18APR25",
+          "defaultRank": "101832068",
+          "productImageKey": "APR250000658xx18APR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "Malgudi",
+      "name": "Fresh Pomegranate (Anar)",
+      "seo_token_ntk": "pomegranate-premium-pssonfruits0malg11xx70623",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1345006",
+      "targetUrl": "/pdp/1345006",
+      "sKUs": [
+        {
+          "name": "Fresh Pomegranate (Anar) : 2 Pieces",
+          "skuUniqueID": "1326515",
+          "articleNumber": "250000217",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "140.00",
+          "priceSALE": "119.00",
+          "savePrice": "21.00",
+          "invStatus": "2",
+          "savingPercentage": 15,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "2 U",
+          "variantInfoTxtValue": "(₹ 59.50 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "D/E/C/DEC250000217xx22DEC25vvG2pc",
+          "defaultRank": "101426515",
+          "productImageKey": "DEC250000217xx22DEC25vvG2pc",
+          "binaryImgCode": "3968",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Muskmelon Honeydew (Kharbooja)",
+      "seo_token_ntk": "fresh-muskmelon-honeydew-pfruits6xx30325",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1706533",
+      "targetUrl": "/pdp/1706533",
+      "sKUs": [
+        {
+          "name": "Fresh Muskmelon Honeydew (Kharbooja) : 1 Piece",
+          "skuUniqueID": "1706027",
+          "articleNumber": "250000548",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "70.00",
+          "priceSALE": "59.00",
+          "savePrice": "11.00",
+          "invStatus": "2",
+          "savingPercentage": 15,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "1 U",
+          "variantInfoTxtValue": "(₹ 59.00 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "M/A/R/MAR250000548xx2MAR25",
+          "defaultRank": "101806027",
+          "productImageKey": "MAR250000548xx2MAR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Apple Washington",
+      "seo_token_ntk": "fresh-apple-washington-papple1xx18425",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1732569",
+      "targetUrl": "/pdp/1732569",
+      "sKUs": [
+        {
+          "name": "Fresh Apple Washington : 2 Pieces",
+          "skuUniqueID": "1732059",
+          "articleNumber": "250000649",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "125.00",
+          "priceSALE": "99.00",
+          "savePrice": "26.00",
+          "invStatus": "0",
+          "savingPercentage": 20,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "2 U",
+          "variantInfoTxtValue": "(₹ 49.50 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg",
+            "imported"
+          ],
+          "groceryType": "v",
+          "imageKey": "A/P/R/APR250000649xx18APR25",
+          "defaultRank": "101832059",
+          "productImageKey": "APR250000649xx18APR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "OOS",
+          "isProductNotifiable": "true"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Jackfruit Peeled (Ripe) (Kathahal)",
+      "seo_token_ntk": "fresh-jackfruit-peeled-(ripe)-pfreshvegetables4xx3425",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "201007",
+        "215006",
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1724647",
+      "targetUrl": "/pdp/1724647",
+      "sKUs": [
+        {
+          "name": "Fresh Jackfruit Peeled (Ripe) (Kathahal) : 250 g",
+          "skuUniqueID": "1721151",
+          "articleNumber": "250000617",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "99.00",
+          "priceSALE": "75.00",
+          "savePrice": "24.00",
+          "invStatus": "2",
+          "savingPercentage": 24,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "250 g",
+          "variantInfoTxtValue": "(₹ 0.30 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "A/P/R/APR250000617xx3APR25",
+          "defaultRank": "101821151",
+          "productImageKey": "APR250000617xx3APR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Sonaka Grapes (Draksha)",
+      "seo_token_ntk": "fresh-grapes-pfruits09xx40618",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "101010",
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "315501",
+      "targetUrl": "/pdp/315501",
+      "sKUs": [
+        {
+          "name": "Fresh Sonaka Grapes (Draksha) : 500 g",
+          "skuUniqueID": "314002",
+          "articleNumber": "250000029",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "120.00",
+          "priceSALE": "99.00",
+          "savePrice": "21.00",
+          "invStatus": "2",
+          "savingPercentage": 17,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "500 g",
+          "variantInfoTxtValue": "(₹ 0.20 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "F/E/B/FEB250000029xx6FEB23",
+          "defaultRank": "50315002",
+          "productImageKey": "FEB250000029xx6FEB23",
+          "binaryImgCode": "3840",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Grapes Red Flem",
+      "seo_token_ntk": "fresh-grapes-red-flem-pfreshvegetables15xx191224",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1674156",
+      "targetUrl": "/pdp/1674156",
+      "sKUs": [
+        {
+          "name": "Fresh Grapes Red Flem : 250 g",
+          "skuUniqueID": "1673184",
+          "articleNumber": "250000492",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "95.00",
+          "priceSALE": "75.00",
+          "savePrice": "20.00",
+          "invStatus": "2",
+          "savingPercentage": 21,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "250 g",
+          "variantInfoTxtValue": "(₹ 0.30 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "D/E/C/DEC250000492xx17DEC24",
+          "defaultRank": "101773184",
+          "productImageKey": "DEC250000492xx17DEC24",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Tri Color Grapes",
+      "seo_token_ntk": "fresh-tri-color-grapes-pfreshvegetables17xx191224",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1674158",
+      "targetUrl": "/pdp/1674158",
+      "sKUs": [
+        {
+          "name": "Fresh Tri Color Grapes : 250 g",
+          "skuUniqueID": "1673186",
+          "articleNumber": "250000494",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "85.00",
+          "priceSALE": "70.00",
+          "savePrice": "15.00",
+          "invStatus": "2",
+          "savingPercentage": 17,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "250 g",
+          "variantInfoTxtValue": "(₹ 0.28 / 1 g)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "J/A/N/JAN250000494xx23JAN26vvG250g",
+          "defaultRank": "101773186",
+          "productImageKey": "JAN250000494xx23JAN26vvG250g",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Watermelon Striped Large (Tarbooj)",
+      "seo_token_ntk": "fresh-watermelon-striped-large-pfruits1xx30325",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "201007",
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1706528",
+      "targetUrl": "/pdp/1706528",
+      "sKUs": [
+        {
+          "name": "Fresh Watermelon Striped Large (Tarbooj) : 1 Piece (Approx 3.5-5 kg)",
+          "skuUniqueID": "1706022",
+          "articleNumber": "250000543",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "210.00",
+          "priceSALE": "149.00",
+          "savePrice": "61.00",
+          "invStatus": "2",
+          "savingPercentage": 29,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "1 U",
+          "variantInfoTxtValue": "(₹ 149.00 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "M/A/R/MAR250000543xx2MAR25",
+          "defaultRank": "101806022",
+          "productImageKey": "MAR250000543xx2MAR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Muskmelon Striped (Kharbooja)",
+      "seo_token_ntk": "fresh-muskmelon-striped-pfruits5xx30325",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1706532",
+      "targetUrl": "/pdp/1706532",
+      "sKUs": [
+        {
+          "name": "Fresh Muskmelon Striped (Kharbooja) : 1 Piece",
+          "skuUniqueID": "1706026",
+          "articleNumber": "250000547",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "55.00",
+          "priceSALE": "39.00",
+          "savePrice": "16.00",
+          "invStatus": "2",
+          "savingPercentage": 29,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "1 U",
+          "variantInfoTxtValue": "(₹ 39.00 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "F/E/B/FEB250000547xx23FEB26vvG1pc",
+          "defaultRank": "101806026",
+          "productImageKey": "FEB250000547xx23FEB26vvG1pc",
+          "binaryImgCode": "3072",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    },
+    {
+      "buyable": "true",
+      "manufacturer": "",
+      "name": "Fresh Mango Badami",
+      "seo_token_ntk": "fresh-mango-badami-pmango5xx18425",
+      "numberOfskus": 1,
+      "seo_meta_desc": "",
+      "seo_meta_title": "",
+      "availabilityType": "A",
+      "categoryId": "93199",
+      "categoryName": "Fruits & Vegetables",
+      "categoryThumbnail": "fruits-vegetables-131022",
+      "parentCategoryIds": [
+        "93374"
+      ],
+      "isItemShareable": "true",
+      "PRODUCT_SKUS_SPLIT": "false",
+      "announcementTags": [],
+      "productAnnouncement": [],
+      "productId": "1732573",
+      "targetUrl": "/pdp/1732573",
+      "sKUs": [
+        {
+          "name": "Fresh Mango Badami : 2 Pieces",
+          "skuUniqueID": "1732063",
+          "articleNumber": "250000653",
+          "buyable": "true",
+          "availabilityType": "A",
+          "priceMRP": "185.00",
+          "priceSALE": "149.00",
+          "savePrice": "36.00",
+          "invStatus": "2",
+          "savingPercentage": 19,
+          "maxQuantity": "12",
+          "totalVolume": "",
+          "variantText": "volume",
+          "variantTextValue": "2 U",
+          "variantInfoTxtValue": "(₹ 74.50 / 1 U)",
+          "variantType": "textOnly",
+          "variantImgValue": "",
+          "tags": [
+            "veg"
+          ],
+          "groceryType": "v",
+          "imageKey": "A/P/R/APR250000653xx18APR25",
+          "defaultRank": "101832063",
+          "productImageKey": "APR250000653xx18APR25",
+          "binaryImgCode": "2048",
+          "imgCode": "5",
+          "usp": "",
+          "offers": "",
+          "isPriceEditAllowed": "Y",
+          "bulk": "N",
+          "bulkQuantity": "",
+          "bulkThreshold": "",
+          "minBulkQuantity": "",
+          "defaultVariant": "Y",
+          "invType": "A",
+          "isProductNotifiable": "false"
+        }
+      ],
+      "templatetype": "Grocery"
+    }
+  ],
+  "oosProducts": [],
+  "oosPosition": "",
+  "breadcrumb": [
+    {
+      "label": "Fruits & Vegetables",
+      "type_": "FACET_ENTRY_CATEGORY",
+      "value": "93199"
+    },
+    {
+      "label": "Fruits",
+      "type_": "FACET_ENTRY_CATEGORY",
+      "value": "93374"
+    }
+  ],
+  "plpBanners": "",
+  "sortFilterData": {
+    "filterData": [
+      {
+        "filterName": "Brand",
+        "filterQueryId": "filter_1",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "Malgudi",
+            "value": "mfName_ntk_cs%3A%22Malgudi%22",
+            "count": "5",
+            "image": ""
+          },
+          {
+            "name": "Zetva",
+            "value": "mfName_ntk_cs%3A%22Zetva%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Category",
+        "filterQueryId": "filter_2",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "Fresh Vegetables",
+            "value": "ads_f12508_ntk_cs%3A%22Fresh+Vegetables%22",
+            "count": "19",
+            "image": ""
+          },
+          {
+            "name": "Seasonal Fruits",
+            "value": "ads_f12508_ntk_cs%3A%22Seasonal+Fruits%22",
+            "count": "9",
+            "image": ""
+          },
+          {
+            "name": "All season Fruits",
+            "value": "ads_f12508_ntk_cs%3A%22All+season+Fruits%22",
+            "count": "6",
+            "image": ""
+          },
+          {
+            "name": "Coconut",
+            "value": "ads_f12508_ntk_cs%3A%22Coconut%22",
+            "count": "3",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Quantity",
+        "filterQueryId": "filter_3",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "1 U",
+            "value": "ads_f15002_ntk_cs%3A%221+U%22",
+            "count": "16",
+            "image": ""
+          },
+          {
+            "name": "2 U",
+            "value": "ads_f15002_ntk_cs%3A%222+U%22",
+            "count": "6",
+            "image": ""
+          },
+          {
+            "name": "4 U",
+            "value": "ads_f15002_ntk_cs%3A%224+U%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "6 U",
+            "value": "ads_f15002_ntk_cs%3A%226+U%22",
+            "count": "2",
+            "image": ""
+          },
+          {
+            "name": "3 U",
+            "value": "ads_f15002_ntk_cs%3A%223+U%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Weight",
+        "filterQueryId": "filter_4",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "500 g",
+            "value": "ads_f15004_ntk_cs%3A%22500+g%22",
+            "count": "12",
+            "image": ""
+          },
+          {
+            "name": "250 g",
+            "value": "ads_f15004_ntk_cs%3A%22250+g%22",
+            "count": "7",
+            "image": ""
+          },
+          {
+            "name": "1 kg",
+            "value": "ads_f15004_ntk_cs%3A%221+kg%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "200 g",
+            "value": "ads_f15004_ntk_cs%3A%22200+g%22",
+            "count": "3",
+            "image": ""
+          },
+          {
+            "name": "125 g",
+            "value": "ads_f15004_ntk_cs%3A%22125+g%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Country Of Origin",
+        "filterQueryId": "filter_5",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "India",
+            "value": "ads_f13001_ntk_cs%3A%22India%22",
+            "count": "49",
+            "image": ""
+          },
+          {
+            "name": "China / South Africa / Egypt",
+            "value": "ads_f13001_ntk_cs%3A%22China+%2F+South+Africa+%2F+Egypt%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "Iran / New Zealand / Greece",
+            "value": "ads_f13001_ntk_cs%3A%22Iran+%2F+New+Zealand+%2F+Greece%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "New Zealand",
+            "value": "ads_f13001_ntk_cs%3A%22New+Zealand%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "Turkey/New Zealand",
+            "value": "ads_f13001_ntk_cs%3A%22Turkey%2FNew+Zealand%22",
+            "count": "1",
+            "image": ""
+          },
+          {
+            "name": "USA",
+            "value": "ads_f13001_ntk_cs%3A%22USA%22",
+            "count": "1",
+            "image": ""
+          }
+        ]
+      },
+      {
+        "filterName": "Availability",
+        "filterQueryId": "invFilterOption",
+        "filterType": "text",
+        "filterOptions": [
+          {
+            "name": "In stock",
+            "value": "1",
+            "count": "",
+            "image": ""
+          }
+        ]
+      }
+    ],
+    "sortData": {
+      "sortName": "Sort",
+      "sortOptions": [
+        {
+          "name": "Relevance",
+          "value": "",
+          "queryId": "sortBy",
+          "isDefault": "true",
+          "appliedText": ""
+        },
+        {
+          "name": "Price(Low to High)",
+          "value": "3",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Price"
+        },
+        {
+          "name": "Price(High to Low)",
+          "value": "4",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Price"
+        },
+        {
+          "name": "Discount % (High to Low)",
+          "value": "6",
+          "queryId": "sortBy",
+          "isDefault": "false",
+          "appliedText": "By Discount"
+        }
+      ]
+    }
+  },
+  "seoMeta": {
+    "seoTitle": "Buy Fresh Fruits on DMart Ready",
+    "seoDesc": "Min. 7%* Off on Groceries, Dairy & Beverages, Packaged Foods, Personal Care, Home & Kitchen, Stationery & Much More. Order now.",
+    "seoKeywords": "0"
+  },
+  "dynamicListingContent": []
+}

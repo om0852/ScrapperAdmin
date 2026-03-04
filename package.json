@@ -5,17 +5,23 @@
   "description": "Main server orchestrator for managing all platform scrapers",
   "main": "orchestrator.js",
   "scripts": {
-    "start": "node orchestrator.js",
-    "dev": "nodemon orchestrator.js"
+    "start": "xtra run npm run dev",
+    "dev": "nodemon --ignore scraped_data/ --ignore DMart-Scrapper/ --ignore Blinkit-Scrapper/ --ignore flipkart_minutes/ --ignore Instamart-Scrapper/ --ignore Jiomart-Scrapper/ --ignore Zepto-Scrapper/ orchestrator.js"
   },
-  "keywords": ["orchestrator", "scraper", "quick-commerce"],
+  "keywords": [
+    "orchestrator",
+    "scraper",
+    "quick-commerce"
+  ],
   "author": "Creatosaurus",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.18.2",
-    "cors": "^2.8.5",
     "body-parser": "^1.20.2",
-    "dotenv": "^16.0.3"
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "mongoose": "^9.2.3",
+    "node-fetch": "^3.3.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

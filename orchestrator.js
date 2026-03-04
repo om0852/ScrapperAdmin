@@ -5,6 +5,13 @@ import { fileURLToPath } from 'url';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import fs from 'fs';
+import fetch from 'node-fetch';
+import dotenv from 'dotenv';
+import mongoose from 'mongoose';
+import dataRoutes from './routes/dataRoutes.js';
+import ProductSnapshot from './models/ProductSnapshot.js';
+
+dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -12,8 +19,20 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 7000;
 
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('✅ Connected to MongoDB Backend successfully.');
+    }).catch(err => {
+        console.error('❌ Failed to connect to MongoDB Backend:', err);
+    });
+
 // Middleware
+app.use(express.json({ limit: '50mb' }));
 app.use(cors());
+
+// Internal API routes
+app.use('/api/data', dataRoutes);
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
@@ -29,12 +48,12 @@ const platforms = {
     dmart: {
         name: 'DMart',
         port: 4199,
-        path: '../DMart-Scrapper',
+        path: './DMart-Scrapper',
         process: null,
         status: 'stopped'
     },
     flipkart: {
-        name: 'Flipkart',
+        name: 'FlipkartMinutes',
         port: 3089,
         path: '../flipkart_minutes',
         process: null,
@@ -289,7 +308,7 @@ app.get('/api/categories', (req, res) => {
 });
 
 app.post('/api/mass-scrape', async (req, res) => {
-    const { platforms: selectedPlatforms, categories: selectedCategories, pincodes: selectedPincodes } = req.body;
+    const { platforms: selectedPlatforms, categories: selectedCategories, pincodes: selectedPincodes, autoIngest } = req.body;
 
     if (!Array.isArray(selectedPlatforms) || !Array.isArray(selectedCategories) || !Array.isArray(selectedPincodes)) {
         return res.status(400).json({ error: 'platforms, categories, and pincodes must be arrays' });
@@ -300,7 +319,7 @@ app.post('/api/mass-scrape', async (req, res) => {
 
     // Put this in an async IIFE to run in the background
     (async () => {
-        log('INFO', 'MassScrape', `Starting mass scrape for Platforms: ${selectedPlatforms.join(', ')} | Categories: ${selectedCategories.join(', ')} | Pincodes: ${selectedPincodes.join(', ')}`);
+        log('INFO', 'MassScrape', `Starting mass scrape for Platforms: ${selectedPlatforms.join(', ')} | Categories: ${selectedCategories.join(', ')} | Pincodes: ${selectedPincodes.join(', ')} | AutoIngest: ${autoIngest ? 'ON' : 'OFF'}`);
 
         try {
             const filePath = path.join(__dirname, 'categories_with_urls.json');
@@ -330,6 +349,7 @@ app.post('/api/mass-scrape', async (req, res) => {
                 // Mapping for specific platform endpoint paths
                 let endpoint = `/${platformConfigKey}categoryscrapper`;
                 if (platformConfigKey === 'instamart') endpoint = '/instamartcategorywrapper';
+                if (platformConfigKey === 'flipkart') endpoint = '/scrape-flipkart-minutes';
 
                 for (const category of selectedCategories) {
                     const safeCategoryName = category.replace(/[^a-zA-Z0-9_\- ]/g, '_').trim();
@@ -389,9 +409,112 @@ app.post('/api/mass-scrape', async (req, res) => {
                                 const fileName = `${pConfig.name}_${safePincode}_${timestamp}.json`;
                                 const outPath = path.join(categoryDirPath, fileName);
 
+                                // --- Post-process categories before saving ---
+                                if (data && data.products && Array.isArray(data.products)) {
+                                    // For finding mappings, use the platform key if available
+                                    let platformKey = pConfig.name;
+                                    if (platformKey === 'flipkartMinutes') platformKey = 'Flipkart';
+                                    if (platformKey === 'instamart') platformKey = 'Instamart';
+                                    if (platformKey === 'blinkit') platformKey = 'Blinkit';
+                                    if (platformKey === 'zepto') platformKey = 'Zepto';
+                                    if (platformKey === 'jiomart') platformKey = 'Jiomart';
+                                    if (platformKey === 'dmart') platformKey = 'DMart';
+
+                                    let allMappings = [];
+                                    if (urlData[platformKey]) {
+                                        allMappings = urlData[platformKey];
+                                    } else {
+                                        Object.values(urlData).forEach(platformArr => {
+                                            if (Array.isArray(platformArr)) allMappings.push(...platformArr);
+                                        });
+                                    }
+
+                                    data.products = await Promise.all(data.products.map(async prod => {
+                                        const url = prod.categoryUrl;
+                                        let mapping = null;
+
+                                        if (url && url !== 'N/A') {
+                                            const urlWithoutQuery = url.split('?')[0];
+                                            mapping = allMappings.find(m => {
+                                                if (!m.url) return false;
+                                                return m.url === url || m.url.split('?')[0] === urlWithoutQuery;
+                                            });
+                                        }
+
+                                        let newCategory = prod.category || 'Unknown';
+                                        let newSubCategory = 'N/A';
+                                        let newOfficialCategory = 'N/A';
+                                        let newOfficialSubCategory = 'N/A';
+
+                                        if (mapping) {
+                                            newCategory = mapping.masterCategory || newCategory;
+                                            newSubCategory = mapping.subCategory || mapping.officalSubCategory || 'N/A';
+                                            newOfficialCategory = mapping.officalCategory || mapping.officialCategory || 'N/A';
+                                            newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
+                                        }
+
+                                        // Check if product is inherently new by querying DB
+                                        const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
+                                        const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === pConfig.name.toLowerCase()) || pConfig.name.toLowerCase();
+
+                                        const lastSnapshot = await ProductSnapshot.findOne({
+                                            productId: prod.id || prod.productId,
+                                            platform: normalizedPlatform,
+                                            pincode: pincode.trim(),
+                                            category: newCategory.trim() // using mapped category
+                                        }).lean();
+
+                                        let finalWeight = prod.productWeight || prod.weight || 'N/A';
+                                        if (finalWeight === 'N/A' || finalWeight === '') {
+                                            finalWeight = prod.quantity || 'N/A';
+                                        }
+
+                                        return {
+                                            ...prod,
+                                            category: newCategory,
+                                            subCategory: newSubCategory,
+                                            officialCategory: newOfficialCategory,
+                                            officialSubCategory: newOfficialSubCategory,
+                                            productWeight: finalWeight,
+                                            new: !lastSnapshot // true if it doesn't exist in DB
+                                        };
+                                    }));
+                                }
+                                // ---------------------------------------------
+
                                 fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
 
                                 log('SUCCESS', 'MassScrape', `Scrape complete - Platform: ${pConfig.name}, Category: ${category}, Pincode: ${pincode}. Saved products natively to ${outPath}`);
+
+                                // ---- INGEST INTO BACKEND DB ----
+                                if (autoIngest) {
+                                    if (data && data.products && data.products.length > 0) {
+                                        try {
+                                            log('INFO', 'MassScrape', `Ingesting ${data.products.length} products to Backend Database...`);
+                                            const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
+                                                method: 'POST',
+                                                headers: { 'Content-Type': 'application/json' },
+                                                body: JSON.stringify({
+                                                    pincode,
+                                                    platform: pConfig.name,
+                                                    category,
+                                                    products: data.products
+                                                })
+                                            });
+
+                                            if (ingestRes.ok) {
+                                                const ingestJson = await ingestRes.json();
+                                                log('SUCCESS', 'MassScrape', `Ingestion complete! New: ${ingestJson.stats.new}, Updated: ${ingestJson.stats.updated}`);
+                                            } else {
+                                                log('ERROR', 'MassScrape', `Database Ingestion Failed with Status: ${ingestRes.status}`);
+                                            }
+                                        } catch (ingestErr) {
+                                            log('ERROR', 'MassScrape', `Database Ingestion CRASHED: ${ingestErr.message}`);
+                                        }
+                                    }
+                                } else {
+                                    log('INFO', 'MassScrape', `Auto Ingestion is disabled. Skipping database operations for this chunk.`);
+                                }
                             }
                         } catch (err) {
                             log('ERROR', 'MassScrape', `Failed to request scrape for ${pConfig.name} (${pincode}): ${err.message}`);
@@ -506,6 +629,141 @@ app.get('/api/health/:platform', async (req, res) => {
     }
 
     res.status(503).json({ error: 'Server is not running' });
+});
+
+app.get('/api/scraped-folders', (req, res) => {
+    const scrapedDir = path.join(__dirname, 'scraped_data');
+    if (!fs.existsSync(scrapedDir)) return res.json([]);
+    const folders = fs.readdirSync(scrapedDir).filter(f => fs.statSync(path.join(scrapedDir, f)).isDirectory());
+    res.json(folders);
+});
+
+app.get('/api/scraped-files', (req, res) => {
+    const { folder } = req.query;
+    if (!folder) return res.status(400).json({ error: 'Folder required' });
+    const targetDir = path.join(__dirname, 'scraped_data', folder);
+    if (!fs.existsSync(targetDir)) return res.json([]);
+    const files = fs.readdirSync(targetDir).filter(f => f.endsWith('.json'));
+    res.json(files);
+});
+
+app.post('/api/manual-ingest', async (req, res) => {
+    const { category, file, dateOverride } = req.body;
+    if (!category || !file) return res.status(400).json({ error: 'Category and file required' });
+
+    const filePath = path.join(__dirname, 'scraped_data', category, file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
+
+    try {
+        const data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+
+        // Infer platform name from data or file string
+        let platformName = data.platform;
+        if (!platformName) {
+            const fileParts = file.split('_');
+            if (fileParts.length > 0) platformName = fileParts[0];
+        }
+
+        const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
+        const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === platformName.toLowerCase()) || platformName.toLowerCase();
+
+        // Let's load categories_with_urls.json to map category exactly like orchestrator does
+        const mapPath = path.join(__dirname, 'categories_with_urls.json');
+        let allMappings = [];
+        if (fs.existsSync(mapPath)) {
+            const parsedConfig = JSON.parse(fs.readFileSync(mapPath, 'utf8'));
+            if (Array.isArray(parsedConfig)) {
+                allMappings = parsedConfig;
+            } else {
+                // Flatten the object keys into a single array
+                for (const platKey of Object.keys(parsedConfig)) {
+                    if (Array.isArray(parsedConfig[platKey])) {
+                        allMappings = allMappings.concat(parsedConfig[platKey]);
+                    }
+                }
+            }
+        }
+
+        // Apply advanced mappings and calculate `new` flag
+        if (data.products && Array.isArray(data.products)) {
+            data.products = await Promise.all(data.products.map(async prod => {
+                // Apply Date Override if provided
+                if (dateOverride) {
+                    prod.time = new Date(dateOverride).toISOString();
+                }
+
+                const url = prod.categoryUrl;
+                let mapping = null;
+
+                if (url && url !== 'N/A') {
+                    const urlWithoutQuery = url.split('?')[0];
+                    mapping = allMappings.find(m => {
+                        if (!m.url) return false;
+                        return m.url === url || m.url.split('?')[0] === urlWithoutQuery;
+                    });
+                }
+
+                let newCategory = prod.category || 'Unknown';
+                let newSubCategory = 'N/A';
+                let newOfficialCategory = 'N/A';
+                let newOfficialSubCategory = 'N/A';
+
+                if (mapping) {
+                    newCategory = mapping.masterCategory || newCategory;
+                    newSubCategory = mapping.subCategory || mapping.officalSubCategory || 'N/A';
+                    newOfficialCategory = mapping.officalCategory || mapping.officialCategory || 'N/A';
+                    newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
+                }
+
+                // Calculate productWeight fallback
+                let finalWeight = prod.productWeight || prod.weight || 'N/A';
+                if (finalWeight === 'N/A' || finalWeight === '') {
+                    finalWeight = prod.quantity || 'N/A';
+                }
+
+                // Check DB for new flag
+                const lastSnapshot = await ProductSnapshot.findOne({
+                    productId: prod.id || prod.productId,
+                    platform: normalizedPlatform,
+                    pincode: (data.pincode || 'Unknown').trim(),
+                    category: newCategory.trim()
+                }).lean();
+
+                return {
+                    ...prod,
+                    category: newCategory,
+                    subCategory: newSubCategory,
+                    officialCategory: newOfficialCategory,
+                    officialSubCategory: newOfficialSubCategory,
+                    productWeight: finalWeight,
+                    new: !lastSnapshot
+                };
+            }));
+        }
+
+        log('INFO', 'Orchestrator', `Manual Ingestion triggered for ${file} with overrideDate: ${dateOverride || 'none'}`);
+
+        const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                pincode: data.pincode || 'Unknown',
+                platform: normalizedPlatform,
+                category: category,
+                products: data.products
+            })
+        });
+
+        if (ingestRes.ok) {
+            const ingestJson = await ingestRes.json();
+            return res.json(ingestJson);
+        } else {
+            return res.status(ingestRes.status).json({ error: 'Database ingestion failed internally.' });
+        }
+    } catch (err) {
+        log('ERROR', 'Orchestrator', `Manual ingest error: ${err.message}`);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 app.post('/api/stopall', async (req, res) => {

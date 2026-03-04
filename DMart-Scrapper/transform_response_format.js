@@ -4,9 +4,6 @@
  * Handles deduplication, field mapping, N/A values, and category enrichment
  */
 
-import fs from 'fs';
-import path from 'path';
-
 // === CONSTANTS ===
 const PLATFORM_NAME = 'DMart';
 
@@ -41,8 +38,30 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
     // Safely handle values
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
     const cleanPrice = (val) => {
-        if (!val) return 'N/A';
-        return String(val).replace(/[^\d.]/g, ''); // aggressive cleanup
+        if (!val && val !== 0) return 'N/A';
+        const n = parseFloat(String(val).replace(/[^\d.]/g, ''));
+        return isNaN(n) ? 'N/A' : n;
+    };
+    const cleanDiscount = (val) => {
+        if (!val && val !== 0) return 'N/A';
+        const n = parseFloat(String(val).replace(/[^\d.]/g, ''));
+        return isNaN(n) ? 'N/A' : n;
+    };
+
+    // Extract Image URL
+    let imgUrl = product.productImage || product.image || '';
+    if (!imgUrl || imgUrl === 'N/A') {
+        if (product.imageKey && typeof product.imageKey === 'string' && product.imageKey.trim() !== '') {
+            imgUrl = `https://cdn.dmart.in/images/products/${product.imageKey}_5_P.jpg`;
+        }
+    }
+
+    // Extract Product URL
+    let productLink = product.productUrl || product.url || '';
+    if (!productLink || productLink === 'N/A') {
+        if (product.seo_token_ntk && product.skuUniqueID) {
+            productLink = `https://www.dmart.in/product/${product.seo_token_ntk}?selectedProd=${product.skuUniqueID}`;
+        }
     }
 
     return {
@@ -57,7 +76,7 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         skuId: safeString(product.sku || product.skuId || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.name || product.productName),
-        productImage: safeString(product.image || product.productImage),
+        productImage: safeString(imgUrl),
         productWeight: safeString(product.weight || product.packSize || product.quantity || 'N/A'),
         quantity: safeString(product.quantity || product.packSize || 'N/A'),
         combo: safeString(product.combo || 'N/A'),
@@ -66,10 +85,10 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         rating: safeString(product.rating || 'N/A'),
         currentPrice: cleanPrice(product.price || product.sellingPrice),
         originalPrice: cleanPrice(product.originalPrice || product.mrp),
-        discountPercentage: safeString(product.discount || product.discountPercentage),
+        discountPercentage: cleanDiscount(product.discount || product.discountPercentage),
         ranking: rank,
         isOutOfStock: !!product.isOutOfStock,
-        productUrl: safeString(product.url || product.productUrl)
+        productUrl: safeString(productLink)
     };
 }
 

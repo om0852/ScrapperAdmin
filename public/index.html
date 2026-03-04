@@ -1,101 +1,268 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Commerce Scraper - Server Manager</title>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Scraper Orchestrator Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Roboto+Mono:wght@400;500&amp;display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13eca4",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#0B110F",
+                        "surface-dark": "#16221E",
+                        "surface-darker": "#111A17",
+                        "border-dark": "#283933",
+                        "text-muted": "#9db9b0"
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"],
+                        "mono": ["Roboto Mono", "monospace"]
+                    },
+                    borderRadius: { "DEFAULT": "0.625rem", "lg": "0.625rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
     <link rel="stylesheet" href="styles.css">
 </head>
 
-<body>
-    <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <div class="header-content">
-                <h1>🚀 Quick Commerce Server Manager</h1>
-                <p class="subtitle">Control all platform scrapers from one place</p>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen font-display">
+    <div class="flex flex-col h-screen overflow-hidden">
+        <header
+            class="flex items-center justify-between whitespace-nowrap border-b border-border-dark bg-surface-darker px-8 py-4 shrink-0">
+            <div class="flex items-center gap-4">
+                <div class="size-6 text-primary">
+                    <svg class="w-full h-full" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M36.7273 44C33.9891 44 31.6043 39.8386 30.3636 33.69C29.123 39.8386 26.7382 44 24 44C21.2618 44 18.877 39.8386 17.6364 33.69C16.3957 39.8386 14.0109 44 11.2727 44C7.25611 44 4 35.0457 4 24C4 12.9543 7.25611 4 11.2727 4C14.0109 4 16.3957 8.16144 17.6364 14.31C18.877 8.16144 21.2618 4 24 4C26.7382 4 29.123 8.16144 30.3636 14.31C31.6043 8.16144 33.9891 4 36.7273 4C40.7439 4 44 12.9543 44 24C44 35.0457 40.7439 44 36.7273 44Z"
+                            fill="currentColor"></path>
+                    </svg>
+                </div>
+                <h1 class="text-xl font-bold tracking-tight">Q-Commerce Scraper Admin</h1>
             </div>
-            <div class="header-actions">
-                <button id="refreshBtn" class="btn btn-refresh" title="Refresh status">🔄 Refresh</button>
-                <button id="stopAllBtn" class="btn btn-danger" title="Stop all servers">⏹️ Stop All</button>
+            <div class="flex items-center gap-4">
+                <div class="flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface-dark border border-border-dark">
+                    <div class="w-2.5 h-2.5 rounded-full bg-primary relative">
+                        <div class="absolute inset-0 rounded-full bg-primary animate-ping opacity-75"></div>
+                    </div>
+                    <span class="text-sm font-medium text-text-muted">
+                        Active: <span id="activeCount" class="text-white font-bold ml-1">0</span>/6 |
+                        Updated: <span id="lastUpdate" class="text-white ml-1">-</span>
+                    </span>
+                </div>
+                <button id="refreshBtn"
+                    class="flex items-center gap-2 px-4 py-2 rounded-lg bg-surface-dark border border-border-dark hover:border-primary/50 transition-colors text-sm font-medium text-text-muted hover:text-white"
+                    title="Refresh Platforms">
+                    <span class="material-symbols-outlined text-[18px]">refresh</span>
+                </button>
+                <button id="stopAllBtn"
+                    class="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-red-500/10 text-red-500 hover:bg-red-500/20 border border-red-500/20 transition-colors font-semibold text-sm">
+                    <span class="material-symbols-outlined text-lg">stop_circle</span>
+                    Emergency Stop All
+                </button>
             </div>
         </header>
 
-        <!-- Status Summary -->
-        <div class="summary-card">
-            <div class="summary-item">
-                <span class="summary-label">Active Servers:</span>
-                <span class="summary-value" id="activeCount">0</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Total Platforms:</span>
-                <span class="summary-value">6</span>
-            </div>
-            <div class="summary-item">
-                <span class="summary-label">Last Updated:</span>
-                <span class="summary-value" id="lastUpdate">-</span>
-            </div>
-        </div>
+        <div class="flex-1 overflow-y-auto p-4 md:p-8 flex flex-col gap-8">
+            <section>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold">Scraper Fleet Status</h2>
+                </div>
+                <!-- Platform Grid populated by script.js -->
+                <div id="platforms-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 platforms-grid">
+                </div>
+            </section>
 
-        <!-- Platforms Grid -->
-        <div class="platforms-grid">
-            <!-- Platform cards will be generated by JavaScript -->
-        </div>
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
+                <!-- Mass Scrape Runner -->
+                <section
+                    class="bg-surface-dark border border-border-dark rounded-xl flex flex-col overflow-hidden h-fit">
+                    <div class="p-5 border-b border-border-dark bg-surface-darker">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <span class="material-symbols-outlined text-primary">rocket_launch</span>
+                            Mass Scrape Runner
+                        </h2>
+                    </div>
 
-        <!-- Mass Scraping Section -->
-        <div class="mass-scrape-section">
-            <h2>📦 Mass Scrape Runner</h2>
-            <div class="mass-scrape-card">
-                <form id="massScrapeForm">
-                    <div class="form-group grid-2">
-                        <div>
-                            <label>1. Select Platforms</label>
-                            <div class="checkbox-group" id="platformCheckboxes">
-                                <!-- Populated by JS -->
-                                <div class="loading-text">Loading platforms...</div>
+                    <form id="massScrapeForm" class="p-6 flex flex-col gap-5">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-text-muted">1. Target Platforms</label>
+                                <div id="platformCheckboxes" class="flex flex-wrap gap-2 checkbox-group">
+                                    <div class="text-sm text-text-muted">Loading platforms...</div>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2">
+                                <label class="text-sm font-medium text-text-muted">2. Target Categories</label>
+                                <div id="categoryCheckboxes"
+                                    class="flex flex-col gap-2 bg-surface-darker border border-border-dark rounded-lg max-h-48 overflow-y-auto p-3 custom-scrollbar">
+                                    <div class="text-sm text-text-muted">Loading categories...</div>
+                                </div>
                             </div>
                         </div>
-                        <div>
-                            <label>2. Select Categories</label>
-                            <div class="checkbox-group category-list" id="categoryCheckboxes">
-                                <!-- Populated by JS -->
-                                <div class="loading-text">Loading categories...</div>
+
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-text-muted">3. Target Pincodes</label>
+                            <div id="pincodeCheckboxes"
+                                class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-2 bg-surface-darker border border-border-dark rounded-lg max-h-48 overflow-y-auto p-3 custom-scrollbar">
+                                <div class="text-sm text-text-muted col-span-full">Loading pincodes...</div>
+                            </div>
+                            <p class="text-xs text-text-muted mt-1 shadow-sm">The scraper will sequentially run for each
+                                platform and category on these pincodes.</p>
+                        </div>
+
+                        <div
+                            class="flex items-center justify-between bg-surface-darker border border-border-dark rounded-lg p-3">
+                            <div class="flex flex-col gap-1">
+                                <span class="text-sm font-medium text-slate-200 flex items-center gap-1"><span
+                                        class="material-symbols-outlined text-[16px] text-primary">auto_mode</span>Auto
+                                    DB Ingestion</span>
+                                <span class="text-xs text-text-muted">Insert scraped data into the DB
+                                    automatically.</span>
+                            </div>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="autoIngestToggle" class="sr-only peer" checked>
+                                <div
+                                    class="w-11 h-6 bg-surface-dark peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary border border-border-dark">
+                                </div>
+                            </label>
+                        </div>
+
+                        <button type="submit" id="startMassScrapeBtn"
+                            class="mt-2 w-full bg-gradient-to-r from-primary to-emerald-400 text-surface-darker font-bold py-3.5 rounded-lg flex items-center justify-center gap-2 hover:opacity-90 transition-opacity shadow-[0_0_15px_rgba(19,236,164,0.3)] disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="material-symbols-outlined">play_arrow</span>
+                            Start Mass Scrape
+                        </button>
+                    </form>
+                </section>
+
+                <!-- Manual DB Ingestion -->
+                <section
+                    class="bg-surface-dark border border-border-dark rounded-xl flex flex-col overflow-hidden h-fit">
+                    <div class="p-5 border-b border-border-dark bg-surface-darker">
+                        <h2 class="text-lg font-semibold flex items-center gap-2">
+                            <span class="material-symbols-outlined text-blue-400">database</span>
+                            Manual DB Ingestion
+                        </h2>
+                    </div>
+
+                    <form id="manualIngestForm" class="p-6 flex flex-col gap-5">
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-text-muted">1. Category Folder</label>
+                            <select id="manualCategorySelect"
+                                class="w-full bg-surface-darker border border-border-dark rounded-lg focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3 outline-none text-slate-200">
+                                <option value="">Loading folders...</option>
+                            </select>
+                        </div>
+
+                        <div class="flex flex-col gap-2 flex-1 min-h-[120px]">
+                            <div class="flex justify-between items-end">
+                                <label class="text-sm font-medium text-text-muted">2. Select JSON Files</label>
+                            </div>
+                            <div id="manualFileCheckboxes"
+                                class="bg-surface-darker border border-border-dark rounded-lg h-32 overflow-y-auto p-2 flex flex-col gap-1 custom-scrollbar">
+                                <div class="text-sm text-text-muted p-2">Select a category first</div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group mt-3">
-                        <label>3. Select Target Pincodes</label>
-                        <div class="checkbox-group category-list" id="pincodeCheckboxes">
-                            <!-- Populated by JS -->
-                            <div class="loading-text">Loading pincodes...</div>
+                        <div class="flex flex-col gap-2">
+                            <label class="text-sm font-medium text-text-muted">3. Override Scrape Date/Time
+                                (Optional)</label>
+                            <input type="datetime-local" id="manualDateOverride"
+                                class="w-full bg-surface-darker border border-border-dark rounded-lg focus:border-primary focus:ring-1 focus:ring-primary text-sm p-3 outline-none text-slate-200" />
+                            <p class="text-xs text-text-muted mt-1">Leave blank to use the file's original scrape time.
+                            </p>
                         </div>
-                        <small class="help-text">The scraper will sequentially run for each platform and category on
-                            these pincodes.</small>
-                    </div>
 
-                    <div class="form-actions mt-3">
-                        <button type="submit" class="btn btn-primary btn-large" id="startMassScrapeBtn">🚀 Start Mass
-                            Scrape</button>
-                    </div>
-                </form>
+                        <button type="submit" id="startManualIngestBtn"
+                            class="mt-2 w-full bg-surface-darker border border-border-dark hover:border-blue-400/50 text-blue-400 font-medium py-3.5 rounded-lg flex items-center justify-center gap-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span class="material-symbols-outlined text-current">data_object</span>
+                            Insert and Group Data
+                        </button>
+                    </form>
+                </section>
             </div>
         </div>
 
-        <!-- Activity Log -->
-        <div class="activity-section">
-            <h2>📋 Activity Log</h2>
-            <div class="activity-log" id="activityLog">
-                <div class="log-entry">
-                    <span class="log-time">Ready</span>
-                    <span class="log-message">Server manager initialized</span>
+        <!-- Terminal Logs -->
+        <div id="terminalContainer"
+            class="h-64 bg-[#0B110F] border-t border-border-dark shrink-0 flex flex-col z-10 box-shadow-[0_-5px_20px_rgba(0,0,0,0.5)] relative transition-all duration-300">
+            <div id="terminalHeader"
+                class="flex items-center justify-between px-4 py-2 bg-surface-darker border-b border-border-dark relative">
+                <div class="flex items-center gap-2 text-xs text-slate-400 font-mono">
+                    <span class="material-symbols-outlined text-sm">terminal</span>
+                    System Logs
+                </div>
+                <div class="flex items-center gap-3">
+                    <button class="text-xs text-slate-500 hover:text-slate-300 font-mono"
+                        onclick="document.getElementById('activityLog').innerHTML=''">Clear Session</button>
+                    <button id="toggleTerminalBtn"
+                        class="text-slate-500 hover:text-slate-300 focus:outline-none flex items-center"
+                        title="Toggle Terminal">
+                        <span class="material-symbols-outlined text-lg">expand_more</span>
+                    </button>
+                </div>
+            </div>
+            <div id="activityLog"
+                class="flex-1 overflow-y-auto p-4 terminal text-sm flex flex-col gap-1.5 custom-scrollbar bg-black/40">
+                <!-- Populated by script.js -->
+                <div class="flex gap-3 text-slate-300">
+                    <span class="text-slate-500">[-]</span>
+                    <span class="text-blue-400 w-20">[INFO]</span>
+                    <span>Waiting for UI initialization...</span>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="script.js?v=2"></script>
+    <!-- Injecting styles needed for custom-scrollbar not part of tailwind directly without class usage -->
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(11, 17, 15, 0.5);
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #283933;
+            border-radius: 4px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3b544b;
+        }
+
+        /* Checkbox custom styles applied via JS generated HTML */
+        .check-pill input:checked+div {
+            background-color: rgba(19, 236, 164, 0.1);
+            color: #13eca4;
+            border-color: rgba(19, 236, 164, 0.2);
+        }
+
+        .check-pill input:not(:checked)+div {
+            background-color: #111A17;
+            color: #cbd5e1;
+            border-color: #283933;
+        }
+    </style>
+    <script src="script.js?v=3"></script>
 </body>
 
 </html>
