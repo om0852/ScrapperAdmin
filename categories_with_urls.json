@@ -3,24 +3,6 @@
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fresh Vegetables",
-      "masterCategory": "Demo",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh%20Vegetables&storeId=1404643&offset=0&filterName=&taxonomyType=Speciality%20taxonomy%201&showAgeConsent=false"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Leafy and Seasonings",
-      "masterCategory": "Demo",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aa3&filterName=Leafy+and+Seasonings&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Pooja & Festive",
-      "masterCategory": "Demo",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aa7&filterName=Pooja+%26+Festive&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Fresh Vegetables",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh%20Vegetables&storeId=1404643&offset=0&filterName=&taxonomyType=Speciality%20taxonomy%201&showAgeConsent=false"
     },
@@ -1247,24 +1229,6 @@
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fresh Fruits",
-      "masterCategory": "Demo",
-      "url": "https://www.jiomart.com/c/groceries/fruits-vegetables/fresh-fruits/220"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Basic Vegetables",
-      "masterCategory": "Demo",
-      "url": "https://www.jiomart.com/c/groceries/fruits-vegetables/basic-vegetables/28981"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Roots, Herbs & Others",
-      "masterCategory": "Demo",
-      "url": "https://www.jiomart.com/c/groceries/fruits-vegetables/roots-herbs-others/28982"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Fresh Fruits",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.jiomart.com/c/groceries/fruits-vegetables/fresh-fruits/220"
     },
@@ -1990,24 +1954,6 @@
     }
   ],
   "Zepto": [
-    {
-      "officalCategory": "Fruits Vegetables",
-      "officalSubCategory": "All",
-      "masterCategory": "Demo",
-      "url": "https://www.zepto.com/cn/fruits-vegetables/all/cid/64374cfe-d06f-4a01-898e-c07c46462c36/scid/e78a8422-5f20-4e4b-9a9f-22a0e53962e3"
-    },
-    {
-      "officalCategory": "Fruits Vegetables",
-      "officalSubCategory": "Fresh Vegetables",
-      "masterCategory": "Demo",
-      "url": "https://www.zepto.com/cn/fruits-vegetables/fresh-vegetables/cid/64374cfe-d06f-4a01-898e-c07c46462c36/scid/b4827798-fcb6-4520-ba5b-0f2bd9bd7208"
-    },
-    {
-      "officalCategory": "Fruits Vegetables",
-      "officalSubCategory": "New Launches",
-      "masterCategory": "Demo",
-      "url": "https://www.zepto.com/cn/fruits-vegetables/new-launches/cid/64374cfe-d06f-4a01-898e-c07c46462c36/scid/fc342528-4d25-4a6b-a28a-7c8df22fa857"
-    },
     {
       "officalCategory": "Fruits Vegetables",
       "officalSubCategory": "All",
@@ -2982,18 +2928,6 @@
     }
   ],
   "Blinkit": [
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Exotics & Premium",
-      "masterCategory": "Demo",
-      "url": "https://blinkit.com/cn/exotics-premium/cid/1487/278"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Freshly Cut & Sprouts",
-      "masterCategory": "Demo",
-      "url": "https://blinkit.com/cn/freshly-cut-sprouts/cid/1487/395"
-    },
     {
       "officalCategory": "Vegetables & Fruits",
       "officalSubCategory": "Gourmet Mushroom",
@@ -5423,18 +5357,6 @@
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fresh Vegetable",
-      "masterCategory": "Demo",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/7201/pr?sid=hloc%2F0072%2F7201&marketplace=HYPERLOCAL&pageUID=1766499285460"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Seasonal Vegetables",
-      "masterCategory": "Demo",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/7213/pr?sid=hloc%2F0072%2F7213&marketplace=HYPERLOCAL&pageUID=1766499285460"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Fresh Vegetable",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.flipkart.com/hyperlocal/hloc/7201/pr?sid=hloc%2F0072%2F7201&marketplace=HYPERLOCAL&pageUID=1766499285460"
     },
@@ -6490,18 +6412,6 @@
     }
   ],
   "DMart": [
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Fruits",
-      "masterCategory": "Demo",
-      "url": "https://www.dmart.in/category/fresh-fruits-aesc-freshfruits"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Vegetables",
-      "masterCategory": "Demo",
-      "url": "https://www.dmart.in/category/vegetables-aesc-vegetables"
-    },
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fruits",

@@ -21,6 +21,15 @@ const PORT = process.env.PORT || 4199;
 // Load mappings
 const CATEGORY_MAPPINGS = loadCategoryMappings(path.join(__dirname, '..', 'categories_with_urls.json'));
 
+// Pincode → Store ID mapping (used to set correct storeId in API calls)
+const PINCODE_STORE_MAP = {
+    "400706": "10718",
+    "400703": "10718",
+    "401101": "10706",
+    "401202": "10706",
+    "400070": "10734",
+};
+
 // --- HELPER FUNCTIONS ---
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -72,11 +81,17 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
             console.error("Error handling pincode dialog:", e.message);
         }
 
-        let STORE_ID = "10706";
+        // Resolve Store ID: prefer pincode map, then fall back to cookie
+        let STORE_ID = PINCODE_STORE_MAP[pincode] || "10706";
+        console.log(`[DMart] Using Store ID: ${STORE_ID} for pincode: ${pincode}`);
         try {
             const Cookies = await context.cookies();
             const dmStoreId = Cookies.find((c) => c.name === "dm_store_id");
-            if (dmStoreId) STORE_ID = dmStoreId.value;
+            if (dmStoreId && !PINCODE_STORE_MAP[pincode]) {
+                // Only override from cookie if we don't have a known mapping
+                STORE_ID = dmStoreId.value;
+                console.log(`[DMart] Overriding Store ID from cookie: ${STORE_ID}`);
+            }
         } catch (e) { /* ignore */ }
 
         for (const urlItem of urls) {
@@ -204,11 +219,8 @@ app.post('/dmartcategoryscrapper', async (req, res) => {
     try {
         const rawProducts = await scrapeDMart(pincode, targetUrls, maxConcurrentTabs);
 
-        // 1. Deduplicate
-        const dedupedCtx = deduplicateRawProducts(rawProducts);
-
-        // 2. Transform
-        const transformed = dedupedCtx.map((p, i) => {
+        // 1. Transform first (suffix gets added here)
+        const transformedAll = rawProducts.map((p, i) => {
             const catUrl = p.categoryUrl || 'N/A';
             let mapping = null;
             if (catUrl !== 'N/A') {
@@ -226,6 +238,20 @@ app.post('/dmartcategoryscrapper', async (req, res) => {
                 mapping
             );
         });
+
+        // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+        const seenIds = new Set();
+        const transformed = transformedAll.filter(p => {
+            const key = p.productId || p.productName;
+            if (!key || seenIds.has(key)) return false;
+            seenIds.add(key);
+            return true;
+        });
+
+        // 3. Re-assign rankings after dedup
+        transformed.forEach((p, i) => { p.ranking = i + 1; });
+
+        console.log(`DMart: Raw ${rawProducts.length}, After transform+dedup: ${transformed.length} unique products`);
 
         const responsePayload = {
             status: 'success',

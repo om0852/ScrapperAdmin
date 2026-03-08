@@ -37,6 +37,11 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
 
     // Safely handle values
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
+
+    const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
+        ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+        : '';
+
     const cleanPrice = (val) => {
         if (!val && val !== 0) return 'N/A';
         const n = parseFloat(String(val).replace(/[^\d.]/g, ''));
@@ -72,7 +77,7 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.id || product.productId), // DMart raw has 'id'
+        productId: safeString(product.id || product.productId) + subCatSuffix, // DMart raw has 'id'
         skuId: safeString(product.sku || product.skuId || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.name || product.productName),

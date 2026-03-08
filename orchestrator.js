@@ -453,6 +453,14 @@ app.post('/api/mass-scrape', async (req, res) => {
                                             newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
                                         }
 
+                                        // Build the officialSubCategory suffix and update productId
+                                        const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
+                                            ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+                                            : '';
+                                        // Strip any existing suffix (starting with '__') then re-append
+                                        const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
+                                        const updatedProductId = baseProductId + subCatSuffix;
+
                                         // Check if product is inherently new by querying DB
                                         const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
                                         const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === pConfig.name.toLowerCase()) || pConfig.name.toLowerCase();
@@ -471,6 +479,7 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                                         return {
                                             ...prod,
+                                            productId: updatedProductId,
                                             category: newCategory,
                                             subCategory: newSubCategory,
                                             officialCategory: newOfficialCategory,
@@ -689,7 +698,7 @@ app.post('/api/manual-ingest', async (req, res) => {
             data.products = await Promise.all(data.products.map(async prod => {
                 // Apply Date Override if provided
                 if (dateOverride) {
-                    prod.time = new Date(dateOverride).toISOString();
+                    prod.scrapedAt = new Date(dateOverride).toISOString();
                 }
 
                 const url = prod.categoryUrl;
@@ -715,6 +724,14 @@ app.post('/api/manual-ingest', async (req, res) => {
                     newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
                 }
 
+                // Build the officialSubCategory suffix and update productId
+                const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
+                    ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+                    : '';
+                // Strip any existing suffix (starting with '__') then re-append
+                const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
+                const updatedProductId = baseProductId + subCatSuffix;
+
                 // Calculate productWeight fallback
                 let finalWeight = prod.productWeight || prod.weight || 'N/A';
                 if (finalWeight === 'N/A' || finalWeight === '') {
@@ -731,6 +748,7 @@ app.post('/api/manual-ingest', async (req, res) => {
 
                 return {
                     ...prod,
+                    productId: updatedProductId,
                     category: newCategory,
                     subCategory: newSubCategory,
                     officialCategory: newOfficialCategory,
@@ -743,13 +761,19 @@ app.post('/api/manual-ingest', async (req, res) => {
 
         log('INFO', 'Orchestrator', `Manual Ingestion triggered for ${file} with overrideDate: ${dateOverride || 'none'}`);
 
+        // Use the real category name from the mapped products (avoids folder-name
+        // sanitization where & → _ on Windows). Fall back to decoding " _ " → " & ".
+        const resolvedCategory = (data.products && data.products.length > 0 && data.products[0].category)
+            ? data.products[0].category
+            : category.replace(/ _ /g, ' & ');
+
         const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 pincode: data.pincode || 'Unknown',
                 platform: normalizedPlatform,
-                category: category,
+                category: resolvedCategory,
                 products: data.products
             })
         });

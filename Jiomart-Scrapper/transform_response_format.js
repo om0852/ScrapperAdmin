@@ -43,6 +43,10 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
     // Safely handle values
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
 
+    const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
+        ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+        : '';
+
     // Jiomart prices often have ₹ symbol or commas
     const cleanPrice = (val) => {
         if (!val) return 'N/A';
@@ -130,7 +134,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             pincode: safeString(pincode),
             platform: PLATFORM_NAME,
             scrapedAt: scrapedAt,
-            productId: productId,
+            productId: productId + subCatSuffix,
             skuId: 'N/A',
             brand: brandName,
             productName: productName,
@@ -159,7 +163,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.id || product.productId),
+        productId: safeString(product.id || product.productId) + subCatSuffix,
         skuId: safeString(product.skuId || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.name || product.productName),

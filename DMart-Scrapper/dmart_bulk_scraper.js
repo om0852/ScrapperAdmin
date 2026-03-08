@@ -4,9 +4,19 @@ const path = require("path");
 
 // Configuration
 const URLS_FILE = path.join(__dirname, "..", "dmart_urls_array.json");
-let STORE_ID = "10706"; // Default, will update dynamically  //400706/3 "10718"  //401101-10706  401202-10706   400070 - 10734
+
+// Pincode → Store ID mapping
+const PINCODE_STORE_MAP = {
+  "400706": "10718",
+  "400703": "10718",
+  "401101": "10706",
+  "401202": "10706",
+  "400070": "10734",
+};
+
 const PAGE_SIZE = 40;
 const PINCODE = "401101";
+let STORE_ID = PINCODE_STORE_MAP[PINCODE] || "10706"; // Auto-resolves from map; falls back to 10706
 const OUTPUT_FILE = path.join(__dirname, `dmart_bulk_data_${PINCODE}.json`);
 const PLATFORM = "dmart";
 

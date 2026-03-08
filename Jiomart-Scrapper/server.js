@@ -7,11 +7,11 @@ import { fileURLToPath } from 'url';
 import { transformJiomartProduct, deduplicateRawProducts } from './transform_response_format.js';
 import { loadCategoryMappings, enrichProductWithCategoryMapping } from '../enrich_categories.js';
 
-// Load mappings once at startup
-const CATEGORY_MAPPINGS = loadCategoryMappings('./categories_with_urls.json');
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// Load mappings once at startup
+const CATEGORY_MAPPINGS = loadCategoryMappings(path.join(__dirname, '..', 'categories_with_urls.json'));
 
 const app = express();
 app.use(express.json());
@@ -473,16 +473,11 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
 
         // === APPLY STANDARDIZED FORMAT ===
 
-        // 1. Deduplicate
-        const dedupedProducts = deduplicateRawProducts(allProducts);
-        console.log(`✨ Deduplicated from ${allProducts.length} to ${dedupedProducts.length} unique products`);
-
-        // 2. Transform and Enrich
-        const transformedProducts = dedupedProducts.map((product, index) => {
+        // 1. Transform and Enrich first (suffix gets added here)
+        const transformedProducts = allProducts.map((product, index) => {
             const productCategoryUrl = product.categoryUrl || 'N/A';
-            const officialCategory = product.name ? 'Unknown' : 'N/A'; // Fallback if needed
+            const officialCategory = 'Unknown';
 
-            // Enrich
             let categoryMapping = null;
             if (productCategoryUrl !== 'N/A') {
                 const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
@@ -495,18 +490,32 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
                 product,
                 productCategoryUrl,
                 officialCategory,
-                'N/A', // subCategory
+                'N/A',
                 pincode,
-                index + 1, // Rank
+                index + 1,
                 categoryMapping
             );
         });
 
+        // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+        const seenIds = new Set();
+        const dedupedProducts = transformedProducts.filter(p => {
+            const key = p.productId || p.productName;
+            if (!key || seenIds.has(key)) return false;
+            seenIds.add(key);
+            return true;
+        });
+
+        // 3. Re-assign rankings after dedup
+        dedupedProducts.forEach((p, i) => { p.ranking = i + 1; });
+
+        console.log(`✨ Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
+
         const responsePayload = {
             status: 'success',
             pincode,
-            totalProducts: transformedProducts.length,
-            products: transformedProducts,
+            totalProducts: dedupedProducts.length,
+            products: dedupedProducts,
             meta: {
                 totalCategories: targetCategories.length,
                 scrapedAt: new Date().toISOString()
