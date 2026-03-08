@@ -62,9 +62,9 @@ function renderPincodes() {
         const div = document.createElement('div');
         div.className = 'w-full check-pill';
         div.innerHTML = `
-            <label class="cursor-pointer relative flex items-center h-full">
-                <input type="checkbox" id="pin_${pin}" value="${pin}" class="peer sr-only">
-                <div class="rounded-md border border-border-dark bg-surface-dark px-3 py-2 w-full text-center text-sm font-medium text-slate-300 transition-all hover:bg-surface-darker peer-focus:ring-2 peer-focus:ring-primary/50">
+            <label class="check-pill" style="display:flex; height:100%;">
+                <input type="checkbox" id="pin_${pin}" value="${pin}">
+                <div class="pill-box" style="width:100%;">
                     ${pin}
                 </div>
             </label>
@@ -120,9 +120,9 @@ async function loadCategories() {
             const div = document.createElement('div');
             div.className = 'check-pill';
             div.innerHTML = `
-                <label class="cursor-pointer relative flex items-center">
-                    <input type="checkbox" id="pf_${pf}" value="${pf}" class="peer sr-only">
-                    <div class="rounded-lg border border-border-dark bg-surface-darker px-4 py-2 text-sm font-medium text-slate-300 transition-all hover:border-primary/50 peer-focus:ring-2 peer-focus:ring-primary/50">
+                <label>
+                    <input type="checkbox" id="pf_${pf}" value="${pf}">
+                    <div class="pill-box">
                         ${pf}
                     </div>
                 </label>
@@ -136,10 +136,10 @@ async function loadCategories() {
         data.categories.forEach(cat => {
             const catId = cat.replace(/[^a-zA-Z0-9]/g, '_');
             const div = document.createElement('label');
-            div.className = 'flex items-center gap-3 p-2 hover:bg-surface-dark rounded cursor-pointer';
+            div.className = 'checkbox-item';
             div.innerHTML = `
-                <input type="checkbox" id="cat_${catId}" value="${cat}" class="rounded border-border-dark bg-surface-dark text-primary focus:ring-primary focus:ring-offset-surface-darker">
-                <span class="text-sm font-mono text-slate-300 break-all">${cat}</span>
+                <input type="checkbox" id="cat_${catId}" value="${cat}">
+                <span>${cat}</span>
             `;
             catContainer.appendChild(div);
         });
@@ -257,10 +257,13 @@ async function handleManualCategoryChange(e) {
 
         // Add Select All Option
         const selectAllDiv = document.createElement('label');
-        selectAllDiv.className = 'flex items-center gap-3 p-2 mb-2 pb-2 border-b border-border-dark hover:bg-surface-dark rounded cursor-pointer';
+        selectAllDiv.className = 'checkbox-item';
+        selectAllDiv.style.borderBottom = '1px solid var(--border-dark)';
+        selectAllDiv.style.marginBottom = '0.5rem';
+        selectAllDiv.style.paddingBottom = '0.5rem';
         selectAllDiv.innerHTML = `
-            <input type="checkbox" id="selectAllManualFiles" class="rounded border-border-dark bg-surface-dark text-primary focus:ring-primary focus:ring-offset-surface-darker">
-            <span class="text-sm font-bold text-primary">✓ Select All ${files.length} Files</span>
+            <input type="checkbox" id="selectAllManualFiles">
+            <span style="font-weight: 700; color: var(--primary);">✓ Select All ${files.length} Files</span>
         `;
         checkboxContainer.appendChild(selectAllDiv);
 
@@ -272,10 +275,10 @@ async function handleManualCategoryChange(e) {
 
         files.forEach((file, index) => {
             const div = document.createElement('label');
-            div.className = 'flex items-center gap-3 p-2 hover:bg-surface-dark rounded cursor-pointer';
+            div.className = 'checkbox-item';
             div.innerHTML = `
-                <input type="checkbox" id="mfile_${index}" class="manual-file-cb rounded border-border-dark bg-surface-dark text-primary focus:ring-primary focus:ring-offset-surface-darker" value="${file}">
-                <span class="text-sm font-mono text-slate-300 break-all">${file}</span>
+                <input type="checkbox" id="mfile_${index}" class="manual-file-cb" value="${file}">
+                <span>${file}</span>
             `;
             checkboxContainer.appendChild(div);
         });
@@ -377,58 +380,55 @@ function renderPlatforms() {
 
 function createPlatformCard(platform) {
     const card = document.createElement('div');
-    card.className = "bg-surface-dark rounded-xl p-5 border border-border-dark flex flex-col gap-4";
+    card.className = "platform-card";
 
     const isRunning = platform.status === 'running';
     const uptimeText = isRunning ? formatUptime(platform.uptime) : '-';
 
-    // Map colors based on platform
-    let bgColor = "bg-slate-500/20";
-    let textColor = "text-slate-500";
-    let statusBg = isRunning ? "bg-emerald-500/10" : "bg-red-500/10";
-    let statusBorder = isRunning ? "border-emerald-500/20" : "border-red-500/20";
-    let statusText = isRunning ? "text-emerald-500" : "text-red-500";
-    let statusDot = isRunning ? "bg-emerald-500" : "bg-red-500";
-
+    const statusClass = isRunning ? "running" : "stopped";
+    const statusText = isRunning ? "Running" : "Stopped";
     const initial = platform.name.charAt(0).toUpperCase();
 
+    // Map Icon bg/text colors directly using inline style based on platform ID
+    let iconBgColor, iconTextColor;
     switch (platform.id) {
-        case 'blinkit': bgColor = "bg-amber-500/20"; textColor = "text-amber-500"; break;
-        case 'dmart': bgColor = "bg-green-600/20"; textColor = "text-green-500"; break;
-        case 'flipkart': bgColor = "bg-blue-500/20"; textColor = "text-blue-500"; break;
-        case 'instamart': bgColor = "bg-orange-500/20"; textColor = "text-orange-500"; break;
-        case 'jiomart': bgColor = "bg-red-600/20"; textColor = "text-red-500"; break;
-        case 'zepto': bgColor = "bg-purple-500/20"; textColor = "text-purple-500"; break;
+        case 'blinkit': iconBgColor = "rgba(245, 158, 11, 0.2)"; iconTextColor = "var(--color-warning)"; break;
+        case 'dmart': iconBgColor = "rgba(22, 163, 74, 0.2)"; iconTextColor = "var(--color-success)"; break;
+        case 'flipkart': iconBgColor = "rgba(59, 130, 246, 0.2)"; iconTextColor = "var(--color-info)"; break;
+        case 'instamart': iconBgColor = "rgba(249, 115, 22, 0.2)"; iconTextColor = "#f97316"; break;
+        case 'jiomart': iconBgColor = "rgba(220, 38, 38, 0.2)"; iconTextColor = "var(--color-danger)"; break;
+        case 'zepto': iconBgColor = "rgba(168, 85, 247, 0.2)"; iconTextColor = "#a855f7"; break;
+        default: iconBgColor = "rgba(100, 116, 139, 0.2)"; iconTextColor = "#64748b"; break;
     }
 
     card.innerHTML = `
-        <div class="flex justify-between items-start">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded flex items-center justify-center font-bold text-xl ${bgColor} ${textColor}">
+        <div class="p-card-header">
+            <div class="p-card-title-group">
+                <div class="p-card-icon" style="background-color: ${iconBgColor}; color: ${iconTextColor};">
                     ${initial}
                 </div>
                 <div>
-                    <h3 class="font-semibold text-slate-100">${platform.name}</h3>
-                    <p class="text-xs text-text-muted">Port :${platform.port}</p>
+                    <h3 class="p-card-name">${platform.name}</h3>
+                    <p class="text-xs text-muted">Port :${platform.port}</p>
                 </div>
             </div>
-            <div class="flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-md border ${statusBg} ${statusBorder} ${statusText}">
-                <div class="w-1.5 h-1.5 rounded-full ${statusDot}"></div>
-                ${isRunning ? 'Running' : 'Stopped'}
+            <div class="status-badge ${statusClass}">
+                <div class="dot"></div>
+                ${statusText}
             </div>
         </div>
         
-        <div class="flex items-center justify-between mt-2 pt-2 border-t border-border-dark">
-            <div class="text-xs text-text-muted">
-                <span class="material-symbols-outlined text-[14px] align-middle mr-1">timer</span>
+        <div class="p-card-footer">
+            <div class="uptime">
+                <span class="material-symbols-outlined">timer</span>
                 ${uptimeText}
             </div>
-            <div class="flex gap-2">
+            <div class="p-actions">
                 ${isRunning ? `
-                    <button class="text-xs px-3 py-1.5 rounded bg-surface-darker hover:bg-red-500/10 hover:text-red-500 transition-colors border border-border-dark" onclick="stopServer('${platform.id}')" title="Stop">Stop</button>
-                    <button class="text-xs px-3 py-1.5 rounded bg-surface-darker hover:bg-primary/10 hover:text-primary transition-colors border border-border-dark" onclick="openServer('${platform.id}')" title="Open URL">Open URL</button>
+                    <button class="btn-action stop" onclick="stopServer('${platform.id}')" title="Stop">Stop</button>
+                    <button class="btn-action open" onclick="openServer('${platform.id}')" title="Open URL">Open URL</button>
                 ` : `
-                    <button class="text-xs px-3 py-1.5 rounded bg-surface-darker hover:bg-emerald-500/10 hover:text-emerald-500 transition-colors border border-border-dark" onclick="startServer('${platform.id}')" title="Start">Start</button>
+                    <button class="btn-action start" onclick="startServer('${platform.id}')" title="Start">Start</button>
                 `}
             </div>
         </div>
@@ -586,11 +586,11 @@ async function fetchLogs() {
                 const timeStr = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
                 const style = getLogStyle(l.type);
 
-                entry.className = `flex gap-3 text-slate-300`;
+                entry.className = "log-entry";
                 entry.innerHTML = `
-                    <span class="text-slate-500 whitespace-nowrap">[${timeStr}]</span>
-                    <span class="${style.color} w-20 shrink-0 font-bold">${style.tag}</span>
-                    <span class="break-words">${l.message}</span>
+                    <span class="log-time">[${timeStr}]</span>
+                    <span class="log-tag ${style.color}">${style.tag}</span>
+                    <span class="log-msg">${l.message}</span>
                 `;
                 logContainer.insertBefore(entry, logContainer.firstChild);
             });
@@ -616,11 +616,11 @@ function addLog(message, type = 'info') {
     });
     const style = getLogStyle(type);
 
-    entry.className = `flex gap-3 text-slate-300 fade-in`;
+    entry.className = "log-entry fade-in";
     entry.innerHTML = `
-        <span class="text-slate-500 whitespace-nowrap">[${time}]</span>
-        <span class="${style.color} w-20 shrink-0 font-bold">${style.tag}</span>
-        <span class="break-words">${message}</span>
+        <span class="log-time">[${time}]</span>
+        <span class="log-tag ${style.color}">${style.tag}</span>
+        <span class="log-msg">${message}</span>
     `;
 
     logContainer.insertBefore(entry, logContainer.firstChild);

@@ -5,13 +5,17 @@
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Load category mappings from JSON file
  */
-function loadCategoryMappings(mappingFilePath = 'd:\\creatosaurus-intership\\quick-commerce-scrappers\\mainserver\\categories_with_urls.json') {
+function loadCategoryMappings(mappingFilePath = path.join(__dirname, 'categories_with_urls.json')) {
     try {
-        const absolutePath = 'd:\\creatosaurus-intership\\quick-commerce-scrappers\\mainserver\\categories_with_urls.json';
+        const absolutePath = path.resolve(mappingFilePath);
         const data = JSON.parse(fs.readFileSync(absolutePath, 'utf8'));
 
         // Build a mapping from URL to category info
