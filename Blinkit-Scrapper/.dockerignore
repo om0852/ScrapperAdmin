@@ -1,0 +1,12 @@
+node_modules/
+npm-debug.log
+.env
+.DS_Store
+*.log
+.git/
+failed_urls.json
+server copy.js
+server.backup.js
+CHANGES_NEEDED.md
+.actor/
+api_dumps/

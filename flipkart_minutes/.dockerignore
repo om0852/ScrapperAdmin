@@ -1,0 +1,12 @@
+node_modules/
+npm-debug.log
+.env
+.DS_Store
+*.log
+scraped_data/
+.git/
+generate_session.js
+RENDER_DEPLOYMENT.md
+Dockerfile
+.dockerignore
+README.md

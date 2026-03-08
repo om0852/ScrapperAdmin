@@ -1,0 +1,7 @@
+	
+Flipkart Minutes
+
+Select location
+Enter location manually
+Use my current location
+Login to see saved addresses

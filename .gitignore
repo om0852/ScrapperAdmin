@@ -5,3 +5,18 @@
 /flipkart_minutes/node_modules
 /DMart-Scrapper/node_modules
 /Zepto-Scrapper/node_modules
+
+# Ignore all scraped data folders
+/scraped_data
+/scraped_data copy
+/Blinkit-Scrapper/BULK_SCRAPE_RESULTS
+/Blinkit-Scrapper/scraped_data
+/instamart-category-scrapper/scraped_data
+/Jiomart-Scrapper/scraped_data
+/DMart-Scrapper/scraped_data
+/Zepto-Scrapper/scraped_data
+/flipkart_minutes/scraped_data
+*.json
+!package.json
+!package-lock.json
+!categories_with_urls.json
