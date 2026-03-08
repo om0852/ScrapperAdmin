@@ -6,26 +6,28 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
     <title>Scraper Orchestrator Dashboard</title>
     <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#13eca4",
-                        "background-light": "#f6f8f7",
-                        "background-dark": "#0B110F",
-                        "surface-dark": "#16221E",
-                        "surface-darker": "#111A17",
-                        "border-dark": "#283933",
-                        "text-muted": "#9db9b0"
+        window.tailwind = {
+            config: {
+                darkMode: "class",
+                theme: {
+                    extend: {
+                        colors: {
+                            "primary": "#13eca4",
+                            "background-light": "#f6f8f7",
+                            "background-dark": "#0B110F",
+                            "surface-dark": "#16221E",
+                            "surface-darker": "#111A17",
+                            "border-dark": "#283933",
+                            "text-muted": "#9db9b0"
+                        },
+                        fontFamily: {
+                            "display": ["Inter", "sans-serif"],
+                            "mono": ["Roboto Mono", "monospace"]
+                        },
+                        borderRadius: { "DEFAULT": "0.625rem", "lg": "0.625rem", "xl": "0.75rem", "full": "9999px" },
                     },
-                    fontFamily: {
-                        "display": ["Inter", "sans-serif"],
-                        "mono": ["Roboto Mono", "monospace"]
-                    },
-                    borderRadius: { "DEFAULT": "0.625rem", "lg": "0.625rem", "xl": "0.75rem", "full": "9999px" },
                 },
-            },
+            }
         }
     </script>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
