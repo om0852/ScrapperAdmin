@@ -41,7 +41,7 @@ const platforms = {
     blinkit: {
         name: 'Blinkit',
         port: 3088,
-        path: '../Blinkit-Scrapper',
+        path: './Blinkit-Scrapper',
         process: null,
         status: 'stopped'
     },
@@ -55,28 +55,28 @@ const platforms = {
     flipkart: {
         name: 'FlipkartMinutes',
         port: 3089,
-        path: '../flipkart_minutes',
+        path: './flipkart_minutes',
         process: null,
         status: 'stopped'
     },
     instamart: {
         name: 'Instamart',
         port: 3090,
-        path: '../instamart-category-scrapper',
+        path: './instamart-category-scrapper',
         process: null,
         status: 'stopped'
     },
     jiomart: {
         name: 'Jiomart',
         port: 3091,
-        path: '../Jiomart-Scrapper',
+        path: './Jiomart-Scrapper',
         process: null,
         status: 'stopped'
     },
     zepto: {
         name: 'Zepto',
         port: 3092,
-        path: '../Zepto-Scrapper',
+        path: './Zepto-Scrapper',
         process: null,
         status: 'stopped'
     }
