@@ -17,6 +17,24 @@ const state = {
     refreshInterval: null
 };
 
+// Pause/Resume control for both scraping and ingestion
+const jobControl = {
+    ingestPaused: false,
+    scrapePaused: false
+};
+
+// Auto-pause ingestion when network goes offline
+window.addEventListener('offline', () => {
+    if (!jobControl.ingestPaused) {
+        jobControl.ingestPaused = true;
+        addLog('⚠️ Network disconnected — ingestion AUTO-PAUSED.', 'error');
+        setIngestPauseUI(true);
+    }
+});
+window.addEventListener('online', () => {
+    addLog('🌐 Network back online. Click Resume when ready.', 'info');
+});
+
 // Initialize app
 const PINCODES = ['122010', '201303', '201014', '122008', '122016', '401202', '400070', '400703', '400706', '401101'];
 
@@ -78,13 +96,107 @@ function setupEventListeners() {
     document.getElementById('stopAllBtn').addEventListener('click', stopAllServers);
     document.getElementById('massScrapeForm').addEventListener('submit', handleMassScrape);
 
+    // Scrape pause/resume button
+    document.getElementById('pauseMassScrapeBtn').addEventListener('click', handleScrapeTogglePause);
+
     // Manual DB Ingestion Listeners
     document.getElementById('manualCategorySelect').addEventListener('change', handleManualCategoryChange);
     document.getElementById('manualIngestForm').addEventListener('submit', handleManualIngest);
+    document.getElementById('pauseIngestBtn').addEventListener('click', handleIngestTogglePause);
 
     // Terminal Toggle Event Listener
     document.getElementById('toggleTerminalBtn').addEventListener('click', toggleTerminal);
 }
+
+// ── Pause/Resume UI Helpers ────────────────────────────────────────────────
+function setIngestPauseUI(isPaused) {
+    const btn = document.getElementById('pauseIngestBtn');
+    const icon = document.getElementById('pauseIngestIcon');
+    const text = document.getElementById('pauseIngestText');
+    if (isPaused) {
+        icon.textContent = 'play_arrow';
+        text.textContent = 'Resume';
+        btn.style.background = 'rgba(34,197,94,0.12)';
+        btn.style.color = '#22c55e';
+        btn.style.border = '1px solid rgba(34,197,94,0.3)';
+    } else {
+        icon.textContent = 'pause';
+        text.textContent = 'Pause';
+        btn.style.background = 'rgba(250,204,21,0.12)';
+        btn.style.color = '#facc15';
+        btn.style.border = '1px solid rgba(250,204,21,0.3)';
+    }
+}
+
+function setScrapePauseUI(isPaused) {
+    const btn = document.getElementById('pauseMassScrapeBtn');
+    const icon = document.getElementById('pauseScrapeIcon');
+    const text = document.getElementById('pauseScrapeText');
+    if (isPaused) {
+        icon.textContent = 'play_arrow';
+        text.textContent = 'Resume';
+        btn.style.background = 'rgba(34,197,94,0.2)';
+        btn.style.color = '#22c55e';
+    } else {
+        icon.textContent = 'pause';
+        text.textContent = 'Pause';
+        btn.style.background = '';
+        btn.style.color = '';
+    }
+}
+
+async function handleIngestTogglePause() {
+    if (!jobControl.ingestPaused) {
+        // Pause
+        jobControl.ingestPaused = true;
+        setIngestPauseUI(true);
+        addLog('⏸ Ingestion PAUSED. Click Resume when ready.', 'warning');
+    } else {
+        // Check connectivity before resuming
+        addLog('🔍 Checking connectivity before resume...', 'info');
+        try {
+            const health = await fetch('/api/health/check').then(r => r.json());
+            if (!health.healthy) {
+                addLog(`❌ Cannot resume: ${!health.internet ? 'No internet' : ''}${!health.internet && !health.mongodb ? ' + ' : ''}${!health.mongodb ? 'MongoDB disconnected' : ''}. Fix and try again.`, 'error');
+                return;
+            }
+        } catch (err) {
+            addLog(`❌ Cannot reach server to check health: ${err.message}`, 'error');
+            return;
+        }
+        jobControl.ingestPaused = false;
+        setIngestPauseUI(false);
+        addLog('▶ Ingestion RESUMED — connectivity confirmed.', 'success');
+    }
+}
+
+async function handleScrapeTogglePause() {
+    if (!jobControl.scrapePaused) {
+        // Send pause to backend
+        jobControl.scrapePaused = true;
+        setScrapePauseUI(true);
+        fetch('/api/job/pause?type=scrape', { method: 'POST' });
+        addLog('⏸ Mass scrape PAUSED. Click Resume when ready.', 'warning');
+    } else {
+        // Ask backend to resume (it checks its own health)
+        addLog('🔍 Checking connectivity before resume...', 'info');
+        try {
+            const res = await fetch('/api/job/resume?type=scrape', { method: 'POST' });
+            const data = await res.json();
+            if (!data.success) {
+                addLog(`❌ Cannot resume: ${data.error}`, 'error');
+                return;
+            }
+        } catch (err) {
+            addLog(`❌ Cannot reach server to resume: ${err.message}`, 'error');
+            return;
+        }
+        jobControl.scrapePaused = false;
+        setScrapePauseUI(false);
+        addLog('▶ Mass scrape RESUMED — connectivity confirmed.', 'success');
+    }
+}
+// ─────────────────────────────────────────────────────────────────────────────
 
 function toggleTerminal() {
     const container = document.getElementById('terminalContainer');
@@ -182,8 +294,13 @@ async function handleMassScrape(e) {
     }
 
     const btn = document.getElementById('startMassScrapeBtn');
+    const pauseBtn = document.getElementById('pauseMassScrapeBtn');
     btn.disabled = true;
     btn.classList.add('loading');
+    jobControl.scrapePaused = false;
+    setScrapePauseUI(false);
+    pauseBtn.style.display = 'inline-flex';
+
     addLog(`Initiating mass scrape for ${selectedPlatforms.length} platforms, ${selectedCategories.length} categories, Auto Ingest: ${autoIngest ? 'ON' : 'OFF'}...`, 'info');
 
     try {
@@ -200,16 +317,29 @@ async function handleMassScrape(e) {
 
         const data = await res.json();
         if (data.success) {
-            addLog(`Mass scrape job started. Watch the backend terminal for detailed progress.`, 'success');
+            addLog(`Mass scrape job started. Pause button is active — use it to pause/resume at any pincode boundary.`, 'success');
         } else {
             addLog(`Failed to start mass scrape: ${data.error}`, 'error');
+            pauseBtn.style.display = 'none';
         }
     } catch (e) {
         addLog(`Error triggering mass scrape: ${e.message}`, 'error');
+        pauseBtn.style.display = 'none';
     } finally {
         setTimeout(() => {
             btn.disabled = false;
             btn.classList.remove('loading');
+            // Poll until scrape job finishes, then hide pause button
+            const pollInterval = setInterval(async () => {
+                try {
+                    const status = await fetch('/api/job/status').then(r => r.json());
+                    if (!status.scrape?.running) {
+                        pauseBtn.style.display = 'none';
+                        jobControl.scrapePaused = false;
+                        clearInterval(pollInterval);
+                    }
+                } catch (_) { /* ignore */ }
+            }, 5000);
         }, 2000);
     }
 }
@@ -303,16 +433,63 @@ async function handleManualIngest(e) {
     }
 
     const btn = document.getElementById('startManualIngestBtn');
+    const pauseBtn = document.getElementById('pauseIngestBtn');
     btn.disabled = true;
     const originalText = btn.innerHTML;
-    btn.innerHTML = '⚙️ Processing Injection...';
 
-    addLog(`Initiating manual DB ingestion for ${selectedFiles.length} files...`, 'info');
+    // Reset pause state and show pause button
+    jobControl.ingestPaused = false;
+    setIngestPauseUI(false);
+    pauseBtn.style.display = 'inline-flex';
 
+    const total = selectedFiles.length;
     let successCount = 0;
     let failCount = 0;
 
-    for (const file of selectedFiles) {
+    addLog(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
+    addLog(`🗂️  Starting batch ingestion — ${total} file${total > 1 ? 's' : ''} queued`, 'info');
+    addLog(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
+
+    for (let i = 0; i < selectedFiles.length; i++) {
+        const file = selectedFiles[i];
+        const current = i + 1;
+
+        // ── Pause Guard ── wait here if paused until resumed + connectivity OK
+        if (jobControl.ingestPaused) {
+            btn.innerHTML = `⏸ Paused (${current}/${total})`;
+            addLog(`⏸ [${current}/${total}] Paused before: ${file}. Click Resume to continue.`, 'warning');
+
+            // Poll until ingestPaused is cleared and connectivity is confirmed
+            await new Promise(resolve => {
+                const interval = setInterval(async () => {
+                    if (!jobControl.ingestPaused) {
+                        // Check connectivity
+                        try {
+                            const health = await fetch('/api/health/check').then(r => r.json());
+                            if (health.healthy) {
+                                addLog(`▶ [${current}/${total}] Connectivity OK — resuming from: ${file}`, 'success');
+                                clearInterval(interval);
+                                resolve();
+                            } else {
+                                const reason = !health.internet ? 'No internet' : 'MongoDB offline';
+                                addLog(`⚠ [${current}/${total}] ${reason} — waiting...`, 'warning');
+                                // Re-pause and wait again
+                                jobControl.ingestPaused = true;
+                                setIngestPauseUI(true);
+                            }
+                        } catch (_) {
+                            addLog(`⚠ [${current}/${total}] Server unreachable — waiting...`, 'warning');
+                        }
+                    }
+                }, 2000);
+            });
+        }
+
+        // Update button to show progress
+        btn.innerHTML = `⚙️ Processing... (${current}/${total})`;
+
+        addLog(`▶ [${current}/${total}] Ingesting: ${file}`, 'info');
+
         try {
             const res = await fetch('/api/manual-ingest', {
                 method: 'POST',
@@ -322,20 +499,31 @@ async function handleManualIngest(e) {
 
             const data = await res.json();
             if (res.ok && data.success) {
-                addLog(`[SUCCESS] Ingested ${file}! New: ${data.stats?.new || 0}, Updated: ${data.stats?.updated || 0}, New Groups: ${data.stats?.newGroups || 0}`, 'success');
+                const s = data.stats || {};
+                addLog(`✅ [${current}/${total}] Done: ${file}`, 'success');
+                addLog(`   📦 New: ${s.new ?? 0}  |  🔄 Updated: ${s.updated ?? 0}  |  🆕 New Groups: ${s.newGroups ?? 0}`, 'success');
                 successCount++;
             } else {
-                addLog(`Failed to strictly ingest ${file}: ${data.error || data.message || 'Unknown error'}`, 'error');
+                addLog(`❌ [${current}/${total}] Failed: ${file}`, 'error');
+                addLog(`   Reason: ${data.error || data.message || 'Unknown error'}`, 'error');
                 failCount++;
             }
         } catch (e) {
-            addLog(`Error triggering manual ingest for ${file}: ${e.message}`, 'error');
+            // Auto-pause on network error
+            addLog(`❌ [${current}/${total}] Network error: ${e.message} — AUTO-PAUSING`, 'error');
+            jobControl.ingestPaused = true;
+            setIngestPauseUI(true);
             failCount++;
         }
     }
 
-    addLog(`Finished batch ingestion. ${successCount} successful, ${failCount} failed.`, 'info');
+    addLog(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
+    addLog(`🏁 Batch complete — ✅ ${successCount} succeeded  |  ❌ ${failCount} failed  |  📁 ${total} total`, successCount > 0 && failCount === 0 ? 'success' : 'info');
+    addLog(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
 
+    // Clean up UI
+    jobControl.ingestPaused = false;
+    pauseBtn.style.display = 'none';
     btn.disabled = false;
     btn.innerHTML = originalText;
 }

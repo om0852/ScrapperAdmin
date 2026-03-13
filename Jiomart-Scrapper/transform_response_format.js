@@ -141,7 +141,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             productImage: productImage,
             productWeight: packSize,
             quantity: packSize,
-            combo: 'N/A',
+            combo: safeString(product.combo || p.combo || 'N/A'),
             deliveryTime: '20 to 30 minutes', // Hardcoded as per user request
             isAd: false,
             rating: 'N/A', // vAttr.popularity is number, not rating

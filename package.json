@@ -6,7 +6,7 @@
   "main": "orchestrator.js",
   "scripts": {
     "start": "xtra run npm run dev",
-    "dev": "nodemon --ignore scraped_data/ --ignore DMart-Scrapper/ --ignore Blinkit-Scrapper/ --ignore flipkart_minutes/ --ignore Instamart-Scrapper/ --ignore Jiomart-Scrapper/ --ignore Zepto-Scrapper/ orchestrator.js"
+    "dev": "nodemon --ignore scraped_data/ --ignore api_dumps/ --ignore DMart-Scrapper/ --ignore Blinkit-Scrapper/ --ignore flipkart_minutes/ --ignore instamart-category-scrapper/ --ignore Jiomart-Scrapper/ --ignore Zepto-Scrapper/ orchestrator.js"
   },
   "keywords": [
     "orchestrator",

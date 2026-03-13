@@ -115,10 +115,16 @@
                             </label>
                         </div>
 
-                        <button type="submit" id="startMassScrapeBtn" class="btn btn-primary-gradient">
-                            <span class="material-symbols-outlined">play_arrow</span>
-                            Start Mass Scrape
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <button type="submit" id="startMassScrapeBtn" class="btn btn-primary-gradient">
+                                <span class="material-symbols-outlined">play_arrow</span>
+                                Start Mass Scrape
+                            </button>
+                            <button type="button" id="pauseMassScrapeBtn" class="btn btn-outline-blue" style="display:none;">
+                                <span class="material-symbols-outlined" id="pauseScrapeIcon">pause</span>
+                                <span id="pauseScrapeText">Pause</span>
+                            </button>
+                        </div>
                     </form>
                 </section>
 
@@ -152,10 +158,16 @@
                             <p class="form-help">Leave blank to use the file's original scrape time.</p>
                         </div>
 
-                        <button type="submit" id="startManualIngestBtn" class="btn btn-outline-blue">
-                            <span class="material-symbols-outlined">data_object</span>
-                            Insert and Group Data
-                        </button>
+                        <div style="display: flex; gap: 0.5rem; align-items: center;">
+                            <button type="submit" id="startManualIngestBtn" class="btn btn-outline-blue">
+                                <span class="material-symbols-outlined">data_object</span>
+                                Insert and Group Data
+                            </button>
+                            <button type="button" id="pauseIngestBtn" class="btn" style="display:none; background: rgba(250,204,21,0.12); color: #facc15; border: 1px solid rgba(250,204,21,0.3);">
+                                <span class="material-symbols-outlined" id="pauseIngestIcon">pause</span>
+                                <span id="pauseIngestText">Pause</span>
+                            </button>
+                        </div>
                     </form>
                 </section>
             </div>

@@ -25,6 +25,20 @@ export const processScrapedData = async ({ pincode, platform, category, products
         return true;
     });
 
+    // ── Calculate Rankings ─────────────────────────────────────────────
+    // Calculate rankings dynamically per subcategory based on order of appearance.
+    // This ensures accurate 1-N ranking even on manual insertion or messy scrape data.
+    const rankCounters = {};
+    for (const prod of uniqueProducts) {
+        const subCat = (prod.officialSubCategory || prod.officalSubCategory || 'Unknown').trim();
+        if (!rankCounters[subCat]) {
+            rankCounters[subCat] = 1;
+        }
+        prod.ranking = rankCounters[subCat];
+        rankCounters[subCat]++;
+    }
+    // ───────────────────────────────────────────────────────────────────
+
     for (const prod of uniqueProducts) {
         // ── Suffix Safety Net ──────────────────────────────────────────────
         // Ensure productId always carries the __<officialSubCategory> suffix.
@@ -53,13 +67,20 @@ export const processScrapedData = async ({ pincode, platform, category, products
 
         if (brandName) {
             const brandId = brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
-            await Brand.findOneAndUpdate(
-                { brandId },
-                {
-                    $setOnInsert: { brandName, enabled: true }
-                },
-                { upsert: true, returnDocument: 'after' }
-            );
+            try {
+                await Brand.findOneAndUpdate(
+                    { brandId },
+                    {
+                        $setOnInsert: { brandName, enabled: true }
+                    },
+                    { upsert: true, returnDocument: 'after' }
+                );
+            } catch (err) {
+                if (err.code !== 11000) {
+                    throw err;
+                }
+                // Ignore E11000 duplicate key error for concurrent brand insertions
+            }
         }
 
         // 2. Map payload to Schema format — sanitize "N/A" strings to null for numeric fields
@@ -117,6 +138,7 @@ export const processScrapedData = async ({ pincode, platform, category, products
             scrapedAt: new Date(resolvedScrapedAt),
 
             productId: prod.id || prod.productId,
+            productUrl: prod.productUrl || prod.url || '',
             productName: prod.name || prod.productName,
             productImage: prod.image || prod.image_url || prod.productImage || '',
             productWeight: prod.weight || prod.productWeight || '',
@@ -129,6 +151,10 @@ export const processScrapedData = async ({ pincode, platform, category, products
             isAd: prod.isAd || false,
             deliveryTime: prod.deliveryTime || '',
             brand: brandName,
+            quantity: prod.quantity || '',
+            combo: prod.combo || '',
+            skuId: prod.skuId || 'N/A',
+            savings: toNum(prod.savings || 0),
 
             new: isNewProduct,
             lastComparedWith: lastSnapshot ? lastSnapshot._id : null
@@ -140,6 +166,24 @@ export const processScrapedData = async ({ pincode, platform, category, products
             if (saveErr.code === 11000) {
                 // Duplicate key — this exact snapshot already exists (same scrapedAt + productId).
                 // Treat as "updated" (already in DB) and continue processing remaining products.
+
+                // If we are re-ingesting the exact same file, patch the newly added `productUrl` and corrected `ranking` field
+                await ProductSnapshot.updateOne(
+                    {
+                        scrapedAt: newSnapshot.scrapedAt,
+                        category: newSnapshot.category,
+                        platform: newSnapshot.platform,
+                        pincode: newSnapshot.pincode,
+                        productId: newSnapshot.productId
+                    },
+                    {
+                        $set: {
+                            productUrl: newSnapshot.productUrl,
+                            ranking: newSnapshot.ranking
+                        }
+                    }
+                );
+
                 if (isNewProduct) {
                     newProductsCount--;      // revert the new count
                     updatedProductsCount++;  // count as updated instead

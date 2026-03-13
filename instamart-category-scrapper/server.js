@@ -1,9 +1,13 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const { chromium, firefox, devices } = require('playwright');
+import express from 'express';
+import bodyParser from 'body-parser';
+import { chromium, firefox, devices } from 'playwright';
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 4400;
@@ -725,8 +729,14 @@ app.post('/instamartcategorywrapper', async (req, res) => {
                 return true;
             });
 
-            // 3. Re-assign rankings after dedup
-            productsToReturn.forEach((p, i) => { p.ranking = i + 1; });
+            // 3. Re-assign rankings per officialSubCategory
+            const subCatRankCounters = new Map();
+            productsToReturn.forEach(p => {
+                const subCat = p.officialSubCategory || '__unknown__';
+                const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                subCatRankCounters.set(subCat, nextRank);
+                p.ranking = nextRank;
+            });
 
             console.log(`[API] Raw: ${allResults.length}, After transform+dedup: ${productsToReturn.length} unique products`);
         } else {
@@ -769,6 +779,17 @@ app.post('/instamartcategorywrapper', async (req, res) => {
     } finally {
         if (browser) await browser.close();
     }
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', service: 'Instamart' });
+});
+
+app.get('/status', (req, res) => {
+    res.json({
+        status: 'ready',
+        uptime: process.uptime()
+    });
 });
 
 const server = app.listen(PORT, () => {

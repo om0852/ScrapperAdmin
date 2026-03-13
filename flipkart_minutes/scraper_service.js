@@ -561,52 +561,11 @@ async function scrapeMultiple(urls, pincode) {
     }
     const sessionFile = sessionRes.sessionFile;
 
-    // 2. Launch Single Browser
+    // 2. Process concurrently with limit and retry
     log(`Starting parallel scrape for ${urls.length} URLs with Pincode: ${pincode}`, 'INFO');
-    const browser = await chromium.launch({
-        headless: true, // Changed to true for stability
-        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--disable-gpu',
-            '--disable-blink-features=AutomationControlled',
-            '--disable-web-security',
-            '--disable-features=IsolateOrigins,site-per-process,InProductHelp',
-            '--disable-site-isolation-trials',
-            '--disable-extensions',
-            '--disable-background-networking',
-            '--disable-background-timer-throttling',
-            '--disable-client-side-phishing-detection',
-            '--disable-sync',
-            '--metrics-recording-only',
-            '--no-first-run',
-            '--no-default-browser-check'
-        ]
-    });
-
-    browser.on('disconnected', () => {
-        log('DEBUG: Browser disconnected!', 'WARN');
-    });
 
     try {
-        // Skipped delivery time extraction as requested
         const globalDeliveryTime = "N/A";
-        // const globalContext = await browser.newContext({
-        //     storageState: sessionFile,
-        //     viewport: { width: 1366, height: 768 },
-        //     userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
-        // });
-        // await globalContext.addInitScript(() => {
-        //     Object.defineProperty(navigator, 'webdriver', { get: () => undefined });
-        // });
-
-        // // 2.5 Extract Delivery Time (Global) - Once per batch
-        // const globalDeliveryTime = await getDeliveryTime(globalContext);
-        // await globalContext.close();
-
-        // 3. Process concurrently with limit and retry
         const CONCURRENCY_LIMIT = 2; // Reduced from 4 to prevent browser crashes
         const results = new Array(urls.length);
         const queue = urls.map((url, index) => ({ url, index }));
@@ -614,6 +573,42 @@ async function scrapeMultiple(urls, pincode) {
         log(`Processing ${urls.length} URLs with concurrency ${CONCURRENCY_LIMIT}...`, 'INFO');
 
         const workers = Array(Math.min(urls.length, CONCURRENCY_LIMIT)).fill().map(async () => {
+            let workerBrowser = null;
+
+            const ensureBrowser = async () => {
+                if (!workerBrowser || !workerBrowser.isConnected()) {
+                    if (workerBrowser) {
+                        try { await workerBrowser.close(); } catch (e) {}
+                    }
+                    workerBrowser = await chromium.launch({
+                        headless: true,
+                        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+                        args: [
+                            '--no-sandbox',
+                            '--disable-setuid-sandbox',
+                            '--disable-dev-shm-usage',
+                            '--disable-gpu',
+                            '--disable-blink-features=AutomationControlled',
+                            '--disable-web-security',
+                            '--disable-features=IsolateOrigins,site-per-process,InProductHelp',
+                            '--disable-site-isolation-trials',
+                            '--disable-extensions',
+                            '--disable-background-networking',
+                            '--disable-background-timer-throttling',
+                            '--disable-client-side-phishing-detection',
+                            '--disable-sync',
+                            '--metrics-recording-only',
+                            '--no-first-run',
+                            '--no-default-browser-check'
+                        ]
+                    });
+                    workerBrowser.on('disconnected', () => {
+                        log('DEBUG: Worker browser disconnected!', 'WARN');
+                    });
+                }
+                return workerBrowser;
+            };
+
             while (queue.length > 0) {
                 const { url, index } = queue.shift();
                 let attempts = 0;
@@ -624,14 +619,12 @@ async function scrapeMultiple(urls, pincode) {
                 while (attempts < maxAttempts && !success) {
                     attempts++;
                     try {
-                        // Small staggered delay to prevent overwhelming browser
+                        // Small staggered delay
                         await new Promise(r => setTimeout(r, index * 1000));
 
-                        if (!browser.isConnected()) {
-                            log(`CRITICAL: Browser disconnected before worker for ${url} could start!`, 'ERROR');
-                            throw new Error('Browser is closed');
-                        }
-                        const context = await browser.newContext({
+                        const currentBrowser = await ensureBrowser();
+
+                        const context = await currentBrowser.newContext({
                             storageState: sessionFile,
                             userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36'
                         });
@@ -647,15 +640,11 @@ async function scrapeMultiple(urls, pincode) {
                         } else {
                             log(`[${url}] Attempt ${attempts} returned 0 products.`, 'WARN');
                             if (attempts < maxAttempts) {
-                                // Try ensuring location on failure in case session expired
                                 log('Attempting location fix during retry...', 'INFO');
                                 const fixPage = await context.newPage();
-                                // Don't block resources for location fix - need full rendering
-                                // await interceptResources(fixPage);
                                 const fixed = await ensureLocation(fixPage, pincode);
                                 if (fixed) {
                                     log('Location fix in worker successful. Saving session...', 'SUCCESS');
-                                    // Save the session state from this context so other workers benefit
                                     await context.storageState({ path: sessionFile });
                                 }
                                 await fixPage.close();
@@ -664,6 +653,11 @@ async function scrapeMultiple(urls, pincode) {
                         await context.close();
                     } catch (e) {
                         log(`[${url}] Attempt ${attempts} failed: ${e.message}`, 'ERROR');
+                        // Force browser recreation on next attempt to recover from fatal hangs/crashes
+                        if (workerBrowser) {
+                            try { await workerBrowser.close(); } catch (err) {}
+                            workerBrowser = null;
+                        }
                     }
                 }
 
@@ -675,24 +669,18 @@ async function scrapeMultiple(urls, pincode) {
 
                 results[index] = products || [];
             }
+
+            // Cleanup worker browser
+            if (workerBrowser) {
+                try { await workerBrowser.close(); } catch (e) {}
+            }
         });
 
         await Promise.all(workers);
-
-        try {
-            await browser.close();
-        } catch (e) {
-            log(`Error closing browser: ${e.message}`, 'WARN');
-        }
         return results;
 
     } catch (e) {
         log(`Fatal error in scrapeMultiple: ${e.message}`, 'ERROR');
-        try {
-            await browser.close();
-        } catch (closeError) {
-            log(`Error closing browser after fatal error: ${closeError.message}`, 'WARN');
-        }
         throw e;
     }
 }

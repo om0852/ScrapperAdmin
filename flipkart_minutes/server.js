@@ -116,8 +116,14 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
                 return true;
             });
 
-            // 3. Re-assign rankings after dedup
-            productsToReturn.forEach((p, i) => { p.ranking = i + 1; });
+            // 3. Re-assign rankings per officialSubCategory
+            const subCatRankCounters = new Map();
+            productsToReturn.forEach(p => {
+                const subCat = p.officialSubCategory || '__unknown__';
+                const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                subCatRankCounters.set(subCat, nextRank);
+                p.ranking = nextRank;
+            });
 
             console.log(`[API] Raw: ${allProducts.length}, After transform+dedup: ${productsToReturn.length} unique products`);
         } else {
@@ -161,6 +167,17 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
             error: error.message
         });
     }
+});
+
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', service: 'FlipkartMinutes' });
+});
+
+app.get('/status', (req, res) => {
+    res.json({
+        status: 'ready',
+        uptime: process.uptime()
+    });
 });
 
 const server = app.listen(PORT, () => {

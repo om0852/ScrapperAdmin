@@ -506,8 +506,14 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
             return true;
         });
 
-        // 3. Re-assign rankings after dedup
-        dedupedProducts.forEach((p, i) => { p.ranking = i + 1; });
+        // 3. Re-assign rankings per officialSubCategory
+        const subCatRankCounters = new Map();
+        dedupedProducts.forEach(p => {
+            const subCat = p.officialSubCategory || '__unknown__';
+            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+            subCatRankCounters.set(subCat, nextRank);
+            p.ranking = nextRank;
+        });
 
         console.log(`✨ Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
 

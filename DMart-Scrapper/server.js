@@ -113,12 +113,22 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
 
                 try {
                     const data = await page.evaluate(async (targetUrl) => {
-                        const res = await fetch(targetUrl, {
-                            method: "GET",
-                            headers: { accept: "application/json, text/plain, */*" }
-                        });
-                        if (!res.ok) throw new Error(res.status);
-                        return res.json();
+                        let attempts = 0;
+                        const maxAttempts = 5;
+                        while (attempts < maxAttempts) {
+                            try {
+                                const res = await fetch(targetUrl, {
+                                    method: "GET",
+                                    headers: { accept: "application/json, text/plain, */*" }
+                                });
+                                if (res.ok) return await res.json();
+                                if (res.status === 404 || res.status === 403) throw new Error(res.status);
+                            } catch (e) {
+                                if (attempts === maxAttempts - 1) throw e;
+                            }
+                            attempts++;
+                            await new Promise(r => setTimeout(r, 2000));
+                        }
                     }, apiUrl);
 
                     const productsList = data.products || (data.data && data.data.products) || [];
@@ -239,25 +249,31 @@ app.post('/dmartcategoryscrapper', async (req, res) => {
             );
         });
 
-        // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+        // 2. Deduplicate AFTER transform
         const seenIds = new Set();
-        const transformed = transformedAll.filter(p => {
+        const dedupedProducts = transformedAll.filter(p => {
             const key = p.productId || p.productName;
             if (!key || seenIds.has(key)) return false;
             seenIds.add(key);
             return true;
         });
 
-        // 3. Re-assign rankings after dedup
-        transformed.forEach((p, i) => { p.ranking = i + 1; });
+        // 3. Re-assign rankings per officialSubCategory
+        const subCatRankCounters = new Map();
+        dedupedProducts.forEach(p => {
+            const subCat = p.officialSubCategory || '__unknown__';
+            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+            subCatRankCounters.set(subCat, nextRank);
+            p.ranking = nextRank;
+        });
 
-        console.log(`DMart: Raw ${rawProducts.length}, After transform+dedup: ${transformed.length} unique products`);
+        console.log(`DMart: Raw ${rawProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
 
         const responsePayload = {
             status: 'success',
             pincode,
-            totalProducts: transformed.length,
-            products: transformed,
+            totalProducts: dedupedProducts.length,
+            products: dedupedProducts,
             meta: {
                 scrapedAt: new Date().toISOString()
             }

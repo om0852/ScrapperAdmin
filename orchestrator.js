@@ -118,6 +118,45 @@ const log = (type, prefix, message) => {
     if (systemLogs.length > 200) systemLogs.shift();
 };
 
+// ── Job Pause/Resume State ─────────────────────────────────────────────────
+// Shared state that backend loops check between iterations to honour pausing.
+const jobState = {
+    scrape: { paused: false, running: false },
+    ingest: { paused: false, running: false }
+};
+
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+/**
+ * Blocks the calling async loop until the specified job is no longer paused.
+ * Before unblocking it will verify internet + MongoDB are healthy.
+ */
+async function awaitResume(type) {
+    if (!jobState[type].paused) return; // fast path
+
+    log('WARNING', 'JobControl', `⏸ ${type} is PAUSED. Waiting for resume signal...`);
+    // Wait until paused flag is cleared
+    while (jobState[type].paused) {
+        await sleep(2000);
+    }
+    // Once unpaused, verify connectivity before continuing
+    log('INFO', 'JobControl', `▶ ${type} resuming — checking connectivity...`);
+    let healthy = false;
+    while (!healthy) {
+        try {
+            await fetch('https://www.google.com', { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+            const mongoReady = mongoose.connection.readyState === 1;
+            if (!mongoReady) throw new Error('MongoDB not ready');
+            healthy = true;
+            log('SUCCESS', 'JobControl', `✅ Network + MongoDB OK — resuming ${type}.`);
+        } catch (err) {
+            log('WARNING', 'JobControl', `Connection check failed: ${err.message}. Retrying in 5s...`);
+            await sleep(5000);
+        }
+    }
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 // --- Helper Functions ---
 
 const startServer = (platformKey) => {
@@ -277,6 +316,56 @@ app.get('/api/logs', (req, res) => {
     res.json(systemLogs);
 });
 
+// Health check: verifies internet + MongoDB
+app.get('/api/health/check', async (req, res) => {
+    let internet = false;
+    try {
+        await fetch('https://www.google.com', { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+        internet = true;
+    } catch (_) { /* offline */ }
+    const mongodb = mongoose.connection.readyState === 1;
+    res.json({ internet, mongodb, healthy: internet && mongodb });
+});
+
+// Job pause/resume control
+app.get('/api/job/status', (req, res) => {
+    res.json(jobState);
+});
+
+app.post('/api/job/pause', (req, res) => {
+    const type = req.query.type;
+    if (!jobState[type]) return res.status(400).json({ error: 'Invalid job type' });
+    jobState[type].paused = true;
+    log('WARNING', 'JobControl', `⏸ ${type} job PAUSED by user`);
+    res.json({ success: true, state: jobState[type] });
+});
+
+app.post('/api/job/resume', async (req, res) => {
+    const type = req.query.type;
+    if (!jobState[type]) return res.status(400).json({ error: 'Invalid job type' });
+
+    // Check connectivity before allowing resume
+    let internet = false;
+    try {
+        await fetch('https://www.google.com', { method: 'HEAD', signal: AbortSignal.timeout(5000) });
+        internet = true;
+    } catch (_) { /* offline */ }
+    const mongodb = mongoose.connection.readyState === 1;
+
+    if (!internet || !mongodb) {
+        return res.status(503).json({
+            success: false,
+            internet,
+            mongodb,
+            error: `Cannot resume: ${!internet ? 'No internet' : ''}${!internet && !mongodb ? ' + ' : ''}${!mongodb ? 'MongoDB disconnected' : ''}`
+        });
+    }
+
+    jobState[type].paused = false;
+    log('SUCCESS', 'JobControl', `▶ ${type} job RESUMED by user`);
+    res.json({ success: true, state: jobState[type] });
+});
+
 app.get('/api/categories', (req, res) => {
     try {
         const filePath = path.join(__dirname, 'categories_with_urls.json');
@@ -319,29 +408,37 @@ app.post('/api/mass-scrape', async (req, res) => {
 
     // Put this in an async IIFE to run in the background
     (async () => {
-        log('INFO', 'MassScrape', `Starting mass scrape for Platforms: ${selectedPlatforms.join(', ')} | Categories: ${selectedCategories.join(', ')} | Pincodes: ${selectedPincodes.join(', ')} | AutoIngest: ${autoIngest ? 'ON' : 'OFF'}`);
+        log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+        log('INFO', 'MassScrape', `Starting mass scrape — ${selectedPlatforms.length} platform(s), ${selectedCategories.length} category(s), ${selectedPincodes.length} pincode(s) | AutoIngest: ${autoIngest ? 'ON' : 'OFF'}`);
+        log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+
+        jobState.scrape.running = true;
+        jobState.scrape.paused = false;
 
         try {
             const filePath = path.join(__dirname, 'categories_with_urls.json');
             const urlData = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 
-            for (const platformKey of selectedPlatforms) {
+            const totalPlatforms = selectedPlatforms.length;
+            for (let pIdx = 0; pIdx < selectedPlatforms.length; pIdx++) {
+                const platformKey = selectedPlatforms[pIdx];
                 const pKeyLower = platformKey.toLowerCase();
                 const platformConfigKey = Object.keys(platforms).find(k => k.toLowerCase() === pKeyLower || platforms[k].name.toLowerCase() === pKeyLower);
 
                 if (!platformConfigKey) {
-                    log('WARNING', 'MassScrape', `Platform config not found for: ${platformKey}`);
+                    log('WARNING', 'MassScrape', `[Platform ${pIdx + 1}/${totalPlatforms}] Config not found for: ${platformKey}`);
                     continue;
                 }
 
                 const pConfig = platforms[platformConfigKey];
+                log('INFO', 'MassScrape', `▶ [Platform ${pIdx + 1}/${totalPlatforms}] Starting: ${pConfig.name}`);
 
                 // Start the server if it's not running
                 if (pConfig.status !== 'running') {
                     try {
                         await startServer(platformConfigKey);
                     } catch (err) {
-                        log('ERROR', 'MassScrape', `Failed to start server ${pConfig.name}: ${err.message}`);
+                        log('ERROR', 'MassScrape', `[Platform ${pIdx + 1}/${totalPlatforms}] Failed to start server ${pConfig.name}: ${err.message}`);
                         continue;
                     }
                 }
@@ -351,7 +448,9 @@ app.post('/api/mass-scrape', async (req, res) => {
                 if (platformConfigKey === 'instamart') endpoint = '/instamartcategorywrapper';
                 if (platformConfigKey === 'flipkart') endpoint = '/scrape-flipkart-minutes';
 
-                for (const category of selectedCategories) {
+                const totalCategories = selectedCategories.length;
+                for (let cIdx = 0; cIdx < selectedCategories.length; cIdx++) {
+                    const category = selectedCategories[cIdx];
                     const safeCategoryName = category.replace(/[^a-zA-Z0-9_\- ]/g, '_').trim();
                     const categoryDirPath = path.join(__dirname, 'scraped_data', safeCategoryName);
                     if (!fs.existsSync(categoryDirPath)) {
@@ -359,24 +458,25 @@ app.post('/api/mass-scrape', async (req, res) => {
                     }
 
                     const platformUrlsData = urlData[platformKey] || urlData[pConfig.name] || [];
-
-                    log('DEBUG', 'MassScrape', `Searching URLs for Platform: ${pConfig.name}, Category: ${category}. Total platform URLs available: ${platformUrlsData.length}`);
-
-                    // Filter URLs for this category
                     const urlsToScrape = platformUrlsData
                         .filter(item => (item.masterCategory === category || item.officalCategory === category || item.category === category) && item.url)
                         .map(item => item.url);
 
                     if (urlsToScrape.length === 0) {
-                        log('WARNING', 'MassScrape', `No URLs found for Platform: ${pConfig.name}, Category: ${category}`);
+                        log('WARNING', 'MassScrape', `  [Cat ${cIdx + 1}/${totalCategories}] No URLs found — ${pConfig.name} / ${category}`);
                         continue;
                     }
 
-                    log('INFO', 'MassScrape', `Found ${urlsToScrape.length} URLs for Platform: ${pConfig.name}, Category: ${category}`);
+                    log('INFO', 'MassScrape', `  [Cat ${cIdx + 1}/${totalCategories}] ${urlsToScrape.length} URLs — ${pConfig.name} / ${category}`);
 
-                    for (const pincode of selectedPincodes) {
+                    const totalPincodes = selectedPincodes.length;
+                    for (let pinIdx = 0; pinIdx < selectedPincodes.length; pinIdx++) {
+                        const pincode = selectedPincodes[pinIdx];
+                        // ── Pause Guard ── check before each pincode
+                        await awaitResume('scrape');
+
                         try {
-                            log('INFO', 'MassScrape', `Requesting Scrape - Platform: ${pConfig.name}, Category: ${category}, Pincode: ${pincode}, URLs: ${urlsToScrape.length}`);
+                            log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Scraping: ${pConfig.name} | ${category} | ${pincode}`);
 
                             const controller = new AbortController();
                             const timeoutId = setTimeout(() => controller.abort(), 900000); // 15 minute timeout
@@ -399,7 +499,7 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                             if (!response.ok) {
                                 const errText = await response.text();
-                                log('ERROR', 'MassScrape', `Scraper API Error (${pConfig.name}): ${errText}`);
+                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Scraper API Error (${pConfig.name}): ${errText}`);
                             } else {
                                 const data = await response.json();
 
@@ -429,7 +529,8 @@ app.post('/api/mass-scrape', async (req, res) => {
                                         });
                                     }
 
-                                    data.products = await Promise.all(data.products.map(async prod => {
+                                    const newProducts = [];
+                                    for (const prod of data.products) {
                                         const url = prod.categoryUrl;
                                         let mapping = null;
 
@@ -477,7 +578,7 @@ app.post('/api/mass-scrape', async (req, res) => {
                                             finalWeight = prod.quantity || 'N/A';
                                         }
 
-                                        return {
+                                        newProducts.push({
                                             ...prod,
                                             productId: updatedProductId,
                                             category: newCategory,
@@ -486,20 +587,24 @@ app.post('/api/mass-scrape', async (req, res) => {
                                             officialSubCategory: newOfficialSubCategory,
                                             productWeight: finalWeight,
                                             new: !lastSnapshot // true if it doesn't exist in DB
-                                        };
-                                    }));
+                                        });
+                                    }
+                                    data.products = newProducts;
                                 }
                                 // ---------------------------------------------
 
                                 fs.writeFileSync(outPath, JSON.stringify(data, null, 2));
 
-                                log('SUCCESS', 'MassScrape', `Scrape complete - Platform: ${pConfig.name}, Category: ${category}, Pincode: ${pincode}. Saved products natively to ${outPath}`);
+                                log('SUCCESS', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ✅ Scrape done — ${pConfig.name} | ${category} | ${pincode} → ${fileName}`);
 
                                 // ---- INGEST INTO BACKEND DB ----
                                 if (autoIngest) {
                                     if (data && data.products && data.products.length > 0) {
+                                        // ── Pause Guard for Ingestion ──
+                                        await awaitResume('ingest');
+
                                         try {
-                                            log('INFO', 'MassScrape', `Ingesting ${data.products.length} products to Backend Database...`);
+                                            log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Ingesting ${data.products.length} products...`);
                                             const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
                                                 method: 'POST',
                                                 headers: { 'Content-Type': 'application/json' },
@@ -513,20 +618,27 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                                             if (ingestRes.ok) {
                                                 const ingestJson = await ingestRes.json();
-                                                log('SUCCESS', 'MassScrape', `Ingestion complete! New: ${ingestJson.stats.new}, Updated: ${ingestJson.stats.updated}`);
+                                                log('SUCCESS', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] 🗄️  Ingested — New: ${ingestJson.stats.new} | Updated: ${ingestJson.stats.updated} | New Groups: ${ingestJson.stats.newGroups}`);
                                             } else {
-                                                log('ERROR', 'MassScrape', `Database Ingestion Failed with Status: ${ingestRes.status}`);
+                                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] DB Ingestion Failed: ${ingestRes.status}`);
                                             }
                                         } catch (ingestErr) {
-                                            log('ERROR', 'MassScrape', `Database Ingestion CRASHED: ${ingestErr.message}`);
+                                            log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] DB Ingestion CRASHED: ${ingestErr.message}`);
                                         }
                                     }
                                 } else {
-                                    log('INFO', 'MassScrape', `Auto Ingestion is disabled. Skipping database operations for this chunk.`);
+                                    log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] AutoIngest OFF — skipping DB.`);
                                 }
                             }
                         } catch (err) {
-                            log('ERROR', 'MassScrape', `Failed to request scrape for ${pConfig.name} (${pincode}): ${err.message}`);
+                            const isNetworkErr = err.name === 'AbortError' || err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.message?.includes('fetch failed');
+                            if (isNetworkErr && !jobState.scrape.paused) {
+                                jobState.scrape.paused = true;
+                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ⚡ Network error — scrape AUTO-PAUSED: ${err.message}`);
+                                log('WARNING', 'MassScrape', `    Waiting for resume signal via /api/job/resume?type=scrape ...`);
+                            } else {
+                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Failed: ${pConfig.name} / ${pincode} — ${err.message}`);
+                            }
                         }
 
                         // Add a small delay between hitting the same scraper for different pincodes
@@ -535,17 +647,23 @@ app.post('/api/mass-scrape', async (req, res) => {
                 }
 
                 // Auto-stop the platform server right after it finishes its job for all categories & pincodes
-                log('INFO', 'MassScrape', `Auto-stopping ${pConfig.name} server as its mass scrape tasks are complete...`);
+                log('INFO', 'MassScrape', `[Platform ${pIdx + 1}/${totalPlatforms}] Auto-stopping ${pConfig.name} server...`);
                 try {
                     await stopServer(platformConfigKey);
+                    log('SUCCESS', 'MassScrape', `[Platform ${pIdx + 1}/${totalPlatforms}] ✅ ${pConfig.name} stopped.`);
                 } catch (e) {
-                    log('ERROR', 'MassScrape', `Failed to auto-stop ${pConfig.name}: ${e.message}`);
+                    log('ERROR', 'MassScrape', `[Platform ${pIdx + 1}/${totalPlatforms}] Failed to stop ${pConfig.name}: ${e.message}`);
                 }
             }
 
-            log('SUCCESS', 'MassScrape', 'Completed all mass scraping tasks.');
+            log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
+            log('SUCCESS', 'MassScrape', `🏁 All mass scraping tasks completed!`);
+            log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
         } catch (error) {
             log('ERROR', 'MassScrape', `Critical Error in Mass Scrape loop: ${error.message}`);
+        } finally {
+            jobState.scrape.running = false;
+            jobState.scrape.paused = false;
         }
     })();
 });
@@ -660,6 +778,9 @@ app.post('/api/manual-ingest', async (req, res) => {
     const { category, file, dateOverride } = req.body;
     if (!category || !file) return res.status(400).json({ error: 'Category and file required' });
 
+    // ── Pause Guard for Ingestion ──
+    await awaitResume('ingest');
+
     const filePath = path.join(__dirname, 'scraped_data', category, file);
     if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
 
@@ -695,7 +816,8 @@ app.post('/api/manual-ingest', async (req, res) => {
 
         // Apply advanced mappings and calculate `new` flag
         if (data.products && Array.isArray(data.products)) {
-            data.products = await Promise.all(data.products.map(async prod => {
+            const newProducts = [];
+            for (const prod of data.products) {
                 // Apply Date Override if provided
                 if (dateOverride) {
                     prod.scrapedAt = new Date(dateOverride).toISOString();
@@ -746,7 +868,7 @@ app.post('/api/manual-ingest', async (req, res) => {
                     category: newCategory.trim()
                 }).lean();
 
-                return {
+                newProducts.push({
                     ...prod,
                     productId: updatedProductId,
                     category: newCategory,
@@ -755,8 +877,9 @@ app.post('/api/manual-ingest', async (req, res) => {
                     officialSubCategory: newOfficialSubCategory,
                     productWeight: finalWeight,
                     new: !lastSnapshot
-                };
-            }));
+                });
+            }
+            data.products = newProducts;
         }
 
         log('INFO', 'Orchestrator', `Manual Ingestion triggered for ${file} with overrideDate: ${dateOverride || 'none'}`);
@@ -780,9 +903,19 @@ app.post('/api/manual-ingest', async (req, res) => {
 
         if (ingestRes.ok) {
             const ingestJson = await ingestRes.json();
+            log('SUCCESS', 'Orchestrator', `Ingestion complete for ${file}! New: ${ingestJson.stats.new}, Updated: ${ingestJson.stats.updated}, New Groups: ${ingestJson.stats.newGroups}`);
             return res.json(ingestJson);
         } else {
-            return res.status(ingestRes.status).json({ error: 'Database ingestion failed internally.' });
+            const errStatus = ingestRes.status;
+            const isConnErr = errStatus === 503 || errStatus === 504;
+            if (isConnErr && !jobState.ingest.paused) {
+                jobState.ingest.paused = true;
+                log('ERROR', 'Orchestrator', `⚡ Ingestion error (Status ${errStatus}) — ingestion AUTO-PAUSED for ${file}`);
+                log('WARNING', 'Orchestrator', `Waiting for resume signal via /api/job/resume?type=ingest ...`);
+            } else {
+                log('ERROR', 'Orchestrator', `Database Ingestion Failed with Status: ${errStatus}`);
+            }
+            return res.status(errStatus).json({ error: 'Database ingestion failed internally.' });
         }
     } catch (err) {
         log('ERROR', 'Orchestrator', `Manual ingest error: ${err.message}`);

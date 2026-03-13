@@ -379,6 +379,34 @@ async function scrapeCategory(context, category, pincode, proxyConfig, deliveryT
                     // Wait for page to load
                     await page.waitForTimeout(3000);
 
+                    // ── Retry "Try Again" button if Blinkit shows an error screen ──
+                    // Blinkit sometimes renders a "Try Again" / "Retry" button when the
+                    // page fails to load products. Click it up to 5 times until products appear.
+                    for (let tryAgainAttempt = 0; tryAgainAttempt < 5; tryAgainAttempt++) {
+                        const tryAgainSelectors = [
+                            'button:has-text("Try Again")',
+                            'button:has-text("Try again")',
+                            'button:has-text("Retry")',
+                            'span:has-text("Try Again")',
+                            'div[class*="error"] button',
+                            'div[class*="Error"] button'
+                        ];
+                        let clicked = false;
+                        for (const sel of tryAgainSelectors) {
+                            try {
+                                const btn = page.locator(sel).first();
+                                if (await btn.isVisible({ timeout: 2000 })) {
+                                    log('warn', logPrefix, `⟳ "Try Again" button found (attempt ${tryAgainAttempt + 1}/5) — clicking...`);
+                                    await btn.click();
+                                    await page.waitForTimeout(3000);
+                                    clicked = true;
+                                    break;
+                                }
+                            } catch (_) { /* not present */ }
+                        }
+                        if (!clicked) break; // no Try Again button; proceed normally
+                    }
+
                     // Click First Product to trigger initial API call
                     try {
                         log('info', logPrefix, 'Clicking first product to trigger API...');
@@ -846,6 +874,14 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
         // === APPLY STANDARDIZED FORMAT ===
 
+        // 0. Strip any stray fields that raw scraper data may have injected
+        //    (subCategory, new, rank, category slug text etc.)
+        //    so they don't pollute the transformed output.
+        allProducts.forEach(p => {
+            delete p.subCategory;
+            delete p.new;
+        });
+
         // 1. Transform and Enrich first (suffix gets added here)
         const transformedProducts = allProducts.map((product, index) => {
             const productCategoryUrl = product.categoryUrl || 'N/A';
@@ -883,6 +919,15 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         dedupedProducts.forEach((p, i) => { p.ranking = i + 1; });
 
         log('info', 'Transform', `Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
+
+        // 4. Assign per-officialSubCategory ranking (resets to 1 for each subcategory)
+        const subCatRankCounters = new Map();
+        dedupedProducts.forEach(p => {
+            const subCat = p.officialSubCategory || '__unknown__';
+            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+            subCatRankCounters.set(subCat, nextRank);
+            p.ranking = nextRank;
+        });
 
         const responsePayload = {
             status: 'success',
