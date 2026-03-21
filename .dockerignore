@@ -18,8 +18,22 @@ README.md
 .xtra
 .xtrarc
 .github
-12marchdata
+
+# Large data directories
+scraped_data/
+scraped_data\ copy/
+12marchdata/
+flipkart_minutes/api_dumps/
+
+# Scraper directories (only node_modules excluded, app code included if needed)
+Blinkit-Scrapper/node_modules/
+DMart-Scrapper/node_modules/
+instamart-category-scrapper/node_modules/
+Jiomart-Scrapper/node_modules/
+Zepto-Scrapper/node_modules/
+
+# Local data files
 test_output_check.txt
 all_cleanup_summary.log
-*.md
-.git
+*.json
+**/*.md

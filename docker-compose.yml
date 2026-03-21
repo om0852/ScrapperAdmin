@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   # Main application server - connects to remote MongoDB
   mainserver:
@@ -59,9 +57,6 @@ services:
       - scrapers
     profiles:
       - dev
-
-volumes:
-  # Removed mongodb_data and mongodb_config since MongoDB is now remote
 
 networks:
   scrapers:
