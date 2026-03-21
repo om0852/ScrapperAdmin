@@ -1,0 +1,43 @@
+# Navigate to project
+cd "D:\creatosaurus-intership\quick-commerce-scrappers\mainserver"
+
+# Install main server dependencies
+npm install
+
+# Install browsers
+npx playwright install chromium firefox
+
+# Install Blinkit
+cd ".\Blinkit-Scrapper"
+npm install
+cd ".."
+
+# Install Instamart
+cd ".\instamart-category-scrapper"
+npm install
+cd ".."
+
+# Install Jiomart
+cd ".\Jiomart-Scrapper"
+npm install
+cd ".."
+
+# Install Flipkart
+cd ".\flipkart_minutes"
+npm install
+cd ".."
+
+# Install Zepto
+cd ".\Zepto-Scrapper"
+npm install
+cd ".."
+
+# Install DMart
+cd ".\DMart-Scrapper"
+npm install
+cd ".."
+
+# Verify
+node --version
+npm --version
+npx playwright --version
