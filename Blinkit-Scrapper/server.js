@@ -753,7 +753,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
     try {
         const launchOptions = {
-            headless: false,
+            headless: true,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',

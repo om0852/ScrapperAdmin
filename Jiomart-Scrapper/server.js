@@ -387,7 +387,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
     // Launch Browser ONE Instance
     // Headless: true with anti-detection args
     const browser = await chromium.launch({
-        headless: false,
+        headless: true,
         args: [
             '--disable-blink-features=AutomationControlled',
             '--no-sandbox',
