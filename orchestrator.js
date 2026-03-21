@@ -504,7 +504,7 @@ app.post('/api/mass-scrape', async (req, res) => {
                             log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Scraping: ${pConfig.name} | ${category} | ${pincode}`);
 
                             const controller = new AbortController();
-                            const timeoutId = setTimeout(() => controller.abort(), 900000); // 15 minute timeout
+                            const timeoutId = setTimeout(() => controller.abort(), 10800000); // 3 hour timeout
 
                             let response;
                             try {
@@ -663,11 +663,15 @@ app.post('/api/mass-scrape', async (req, res) => {
                                 }
                             }
                         } catch (err) {
-                            const isNetworkErr = err.name === 'AbortError' || err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.message?.includes('fetch failed');
+                            const isNetworkErr = err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.message?.includes('fetch failed') || (err.name === 'AbortError' && err.message?.includes('network'));
+                            const isTimeoutErr = err.name === 'AbortError' && (err.message?.includes('timeout') || err.message?.includes('signal'));
+                            
                             if (isNetworkErr && !jobState.scrape.paused) {
                                 jobState.scrape.paused = true;
                                 log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ⚡ Network error — scrape AUTO-PAUSED: ${err.message}`);
                                 log('WARNING', 'MassScrape', `    Waiting for resume signal via /api/job/resume?type=scrape ...`);
+                            } else if (isTimeoutErr) {
+                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ⏱️ Request timeout (large category) — ${pConfig.name} / ${category} / ${pincode} — retrying...`);
                             } else {
                                 log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Failed: ${pConfig.name} / ${pincode} — ${err.message}`);
                             }

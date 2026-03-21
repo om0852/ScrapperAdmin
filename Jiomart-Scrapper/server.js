@@ -59,6 +59,42 @@ const delay = (min = 1000, max = 3000) => {
 };
 
 /**
+ * Set pincode with retry logic and progressive timeout increase
+ * Attempt 1: 10s, Attempt 2: 20s, Attempt 3: 30s
+ */
+async function setPincodeWithRetry(page, pincode, maxRetries = 3) {
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+        try {
+            // Progressive timeout: 10s, 20s, 30s
+            const timeout = 10000 * attempt;
+            console.log(`🔄 Attempt ${attempt}/${maxRetries} to set pincode (timeout: ${timeout}ms)...`);
+            
+            const input = page.locator('input[id="rel_pincode"], input[placeholder*="pincode"], input[type="tel"]').first();
+            await input.waitFor({ state: 'visible', timeout });
+            
+            await input.fill(pincode);
+            await delay(500, 1000);
+            
+            const applyBtn = page.getByText('Apply').first();
+            await applyBtn.click();
+            
+            console.log(`✅ Pincode set successfully on attempt ${attempt}`);
+            return true;
+        } catch (error) {
+            console.warn(`⚠️ Attempt ${attempt}/${maxRetries} failed: ${error.message}`);
+            
+            if (attempt < maxRetries) {
+                const waitTime = 2000 * attempt;
+                console.log(`⏳ Waiting ${waitTime}ms before retry...`);
+                await delay(waitTime, waitTime + 1000);
+            } else {
+                throw error;
+            }
+        }
+    }
+}
+
+/**
  * Helper to parse proxy URL into server, username, password
  */
 const parseProxy = (proxyUrl) => {
@@ -142,14 +178,8 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
             }
         }
 
-        const input = page.locator('input[id="rel_pincode"], input[placeholder*="pincode"], input[type="tel"]').first();
-        await input.waitFor({ state: 'visible', timeout: 10000 });
-
-        await input.fill(pincode);
-        await delay(500, 1000);
-
-        const applyBtn = page.getByText('Apply').first();
-        await applyBtn.click();
+        // ⚡ Use retry logic with progressive timeout increase (10s, 20s, 30s)
+        await setPincodeWithRetry(page, pincode, 3);
 
         await delay(3000, 5000);
 
@@ -175,52 +205,51 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
 async function smartScroll(page, logPrefix) {
     let previousHeight = 0;
     let noChangeCount = 0;
-    const maxScrolls = 250; // Vastly increased to handle long pages
-    const scrollStep = 800; // Smaller steps
+    const maxScrolls = 100; // Reduced from 250 for timeout efficiency
+    const scrollStep = 1500; // Increased from 800 for faster scrolling
+    const scrollDelay = 1500; // Reduced from 2000-4000 for efficiency
 
     for (let i = 0; i < maxScrolls; i++) {
-
-
         // Scroll down incrementally
         await page.evaluate((step) => {
             window.scrollBy(0, step);
         }, scrollStep);
 
-        // Wait for potential content load
-        await delay(2000, 4000);
+        // Wait for potential content load (reduced from 2-4s)
+        await delay(scrollDelay, scrollDelay + 1000);
 
         const newHeight = await page.evaluate('document.body.scrollHeight');
         const atBottom = await page.evaluate(() => (window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50);
 
         if (newHeight === previousHeight) {
             noChangeCount++;
-            console.log(`[${logPrefix}] No height change (${noChangeCount}/12). At bottom: ${atBottom}`);
+            console.log(`[${logPrefix}] No height change (${noChangeCount}/10). At bottom: ${atBottom}`);
 
             // Wiggle logic: Scroll up and down to trigger stubborn lazy loaders
-            if (noChangeCount > 3) {
+            if (noChangeCount > 2) {
                 console.log(`[${logPrefix}] Wiggling to trigger lazy load...`);
-                await page.evaluate(() => window.scrollBy(0, -700));
-                await delay(1000, 1500);
-                await page.evaluate(() => window.scrollBy(0, 700));
-                await delay(1000, 1500);
+                await page.evaluate(() => window.scrollBy(0, -800));
+                await delay(800, 1000);
+                await page.evaluate(() => window.scrollBy(0, 800));
+                await delay(800, 1000);
             }
 
-            if (atBottom || noChangeCount >= 8) {
+            if (atBottom || noChangeCount >= 6) {
                 console.log(`[${logPrefix}] Checking for 'Show More' buttons...`);
 
                 // Try clicking "Show More"
                 try {
                     const showMore = page.locator('button:has-text("Show More"), button:has-text("Load More"), .load-more-btn, text="Show More"').first();
-                    if (await showMore.isVisible()) {
+                    if (await showMore.isVisible({ timeout: 3000 })) {
                         console.log(`[${logPrefix}] Found 'Show More' button, clicking...`);
                         await showMore.click({ force: true });
-                        await delay(3000, 5000);
+                        await delay(2000, 3000);
                         noChangeCount = 0;
                         continue;
                     }
                 } catch (e) { }
 
-                if (noChangeCount >= 12) {
+                if (noChangeCount >= 10) {
                     console.log(`[${logPrefix}] Reached stability limit. Stopping scroll.`);
                     break;
                 }
@@ -231,7 +260,7 @@ async function smartScroll(page, logPrefix) {
             previousHeight = newHeight;
         }
 
-        if (i % 10 === 0) console.log(`[${logPrefix}] Scroll progress: ${i}/${maxScrolls}`);
+        if (i % 20 === 0 && i > 0) console.log(`[${logPrefix}] Scroll progress: ${i}/${maxScrolls}`);
     }
 }
 
@@ -279,7 +308,7 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             // Block heavy resources (DISABLED: causing infinite loading)
             // await page.route('**/*.{png,jpg,jpeg,gif,svg,font,woff,woff2}', route => route.abort());
 
-            console.log(`🚀 [Attempt ${attempt}] processing: ${category.name}`);
+            console.log(`🚀 [Attempt ${attempt}] processing: ${category.name} | URL: ${category.url.substring(0, 100)}...`);
 
             // === API INTERCEPTION SETUP ===
             const capturedItems = [];
@@ -387,7 +416,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
     // Launch Browser ONE Instance
     // Headless: true with anti-detection args
     const browser = await chromium.launch({
-        headless: true,
+        headless: false,
         args: [
             '--disable-blink-features=AutomationControlled',
             '--no-sandbox',
@@ -474,9 +503,17 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
         // === APPLY STANDARDIZED FORMAT ===
 
         // 1. Transform and Enrich first (suffix gets added here)
+        // Extract category name from first successful result
+        let officialCategory = 'Uncategorized';
+        for (let result of results) {
+            if (result && result.success && result.category && result.category !== 'Unknown Category') {
+                officialCategory = result.category;
+                break;
+            }
+        }
+        
         const transformedProducts = allProducts.map((product, index) => {
             const productCategoryUrl = product.categoryUrl || 'N/A';
-            const officialCategory = 'Unknown';
 
             let categoryMapping = null;
             if (productCategoryUrl !== 'N/A') {
@@ -563,7 +600,465 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
     }
 });
 
+// ============ ASYNC POLLING SYSTEM ============
+// In-memory job tracker
+const jobTracker = new Map();
+
+// Generate unique job ID
+function generateJobId() {
+    return `job_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+}
+
+// Save data to scraped_data folder with proper format (with atomic writes)
+async function saveScrapedDataToFolder(data, pincode, categoryName = 'Uncategorized') {
+    try {
+        const dataFolder = path.join(__dirname, '..', 'scraped_data', categoryName);
+        
+        // Create category folder if doesn't exist
+        await fs.mkdir(dataFolder, { recursive: true });
+        
+        // Format: Jiomart_400703_2026-03-21T07-44-29-019Z.json
+        const timestamp = new Date().toISOString().replace(/:/g, '-').replace(/\./g, '-');
+        const filename = `Jiomart_${pincode}_${timestamp}.json`;
+        const filepath = path.join(dataFolder, filename);
+        
+        // Write to temp file first, then rename (atomic operation)
+        const tempPath = filepath + '.tmp';
+        await fs.writeFile(tempPath, JSON.stringify(data, null, 2));
+        await fs.rename(tempPath, filepath); // Atomic rename
+        
+        console.log(`💾 [SAVED] ${categoryName}/${filename} (${data.products?.length || 0} products)`);
+        
+        return { filename, filepath, directory: categoryName };
+    } catch (error) {
+        console.error('❌ Error saving to folder:', error);
+        throw error;
+    }
+}
+
+// Async scraping job with polling
+app.post('/jiomartcategoryscrapper-async', async (req, res) => {
+    const { pincode, categories, urls, proxyUrl = '', maxConcurrentTabs = 3 } = req.body;
+    
+    if (!pincode || (!categories?.length && !urls?.length)) {
+        return res.status(400).json({ 
+            success: false, 
+            message: 'Required: pincode, categories array or urls array' 
+        });
+    }
+    
+    const jobId = generateJobId();
+    console.log(`📋 New job created: ${jobId} for pincode ${pincode}`);
+    
+    // Initialize job state
+    jobTracker.set(jobId, {
+        jobId,
+        pincode,
+        status: 'initializing',
+        progress: 0,
+        totalProducts: 0,
+        products: [],
+        startTime: new Date(),
+        lastSavedTime: new Date(),
+        error: null,
+        category: 'Uncategorized'
+    });
+    
+    // Return immediately to client
+    res.json({ 
+        success: true, 
+        jobId, 
+        message: 'Scraping job started. Use /jiomartcategoryscrapper-status/:jobId to check progress',
+        statusEndpoint: `/jiomartcategoryscrapper-status/${jobId}`
+    });
+    
+    // Run scraper in background (don't await here!)
+    (async () => {
+        const job = jobTracker.get(jobId);
+        let allProducts = []; // Define OUTSIDE try block so catch can access it
+        let browser = null;
+        let targetCategories = [];
+        let checkpointInterval = null; // For periodic saves
+        
+        try {
+            job.status = 'running';
+            
+            targetCategories = [...(categories || [])];
+            if (urls && Array.isArray(urls) && urls.length > 0) {
+                urls.forEach(u => {
+                    targetCategories.push({ name: 'Unknown Category', url: u });
+                });
+            }
+            
+            // Extract actual category name from first target (for file naming)
+            if (targetCategories.length > 0) {
+                const firstCatName = targetCategories[0].name;
+                if (firstCatName && firstCatName !== 'Unknown Category') {
+                    job.category = firstCatName;
+                }
+            }
+            
+            // 🔄 START CHECKPOINT INTERVAL: Save to disk every 10 seconds
+            checkpointInterval = setInterval(async () => {
+                if (allProducts.length > 0) {
+                    try {
+                        const transformedProducts = allProducts.map((product, index) => {
+                            const productCategoryUrl = product.categoryUrl || 'N/A';
+                            let categoryMapping = null;
+                            if (productCategoryUrl !== 'N/A') {
+                                const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
+                                if (enriched.categoryMappingFound) {
+                                    categoryMapping = enriched;
+                                }
+                            }
+                            return transformJiomartProduct(
+                                product,
+                                productCategoryUrl,
+                                job.category || 'Uncategorized',
+                                'N/A',
+                                pincode,
+                                index + 1,
+                                categoryMapping
+                            );
+                        });
+                        
+                        const seenIds = new Set();
+                        const dedupedProducts = transformedProducts.filter(p => {
+                            const key = p.productId || p.productName;
+                            if (!key || seenIds.has(key)) return false;
+                            seenIds.add(key);
+                            return true;
+                        });
+                        
+                        const checkpointPayload = {
+                            status: 'in_progress',
+                            pincode,
+                            totalProducts: dedupedProducts.length,
+                            products: dedupedProducts,
+                            meta: {
+                                scrapedAt: new Date().toISOString(),
+                                checkpoint: true,
+                                progress: job.progress
+                            }
+                        };
+                        
+                        const saved = await saveScrapedDataToFolder(checkpointPayload, pincode, job.category || 'Uncategorized');
+                        job.savedFile = saved.filename;
+                        console.log(`⏸️  [${jobId}] Checkpoint: ${dedupedProducts.length} products saved`);
+                    } catch (err) {
+                        console.error(`⚠️ [${jobId}] Checkpoint save error:`, err.message);
+                    }
+                }
+            }, 10000); // Every 10 seconds
+            
+            browser = await chromium.launch({
+                headless: true,
+                args: [
+                    '--disable-blink-features=AutomationControlled',
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-infobars',
+                    '--window-position=0,0',
+                    '--ignore-certificate-errors',
+                    '--disable-extensions',
+                    '--disable-dev-shm-usage',
+                    '--disable-accelerated-2d-canvas',
+                    '--disable-gpu'
+                ]
+            });
+            
+            // Get pincode session
+            const stateData = await getStorageStateForPincode(browser, pincode, proxyUrl);
+            let contextOptions = {
+                userAgent: USER_AGENTS[0],
+                viewport: { width: 1366, height: 768 },
+                proxy: parseProxy(proxyUrl)
+            };
+            
+            if (stateData) {
+                contextOptions.storageState = stateData;
+            }
+            
+            // Process categories in batches
+            for (let i = 0; i < targetCategories.length; i += maxConcurrentTabs) {
+                const batch = targetCategories.slice(i, i + maxConcurrentTabs);
+                job.progress = Math.round((i / targetCategories.length) * 100);
+                
+                console.log(`📦 [${jobId}] Batch ${Math.floor(i / maxConcurrentTabs) + 1}/${Math.ceil(targetCategories.length / maxConcurrentTabs)}`);
+                
+                try {
+                    const batchPromises = batch.map(cat => scrapeCategory(browser, cat, contextOptions));
+                    const batchResults = await Promise.all(batchPromises);
+                    
+                    // Update job with batch results
+                    batchResults.forEach(r => {
+                        if (r && r.success) {
+                            allProducts.push(...r.products);
+                            // Use category from batch result
+                            if (r.category && r.category !== 'Unknown Category') {
+                                job.category = r.category;
+                            }
+                        }
+                    });
+                } catch (batchError) {
+                    console.warn(`⚠️ [${jobId}] Batch error (continuing with collected data):`, batchError.message);
+                }
+                
+                job.totalProducts = allProducts.length;
+                job.products = allProducts.slice();
+                
+                // Delay between batches
+                if (i + maxConcurrentTabs < targetCategories.length) {
+                    await delay(1000, 3000);
+                }
+            }
+            
+            // Stop checkpoint interval before final save
+            if (checkpointInterval) {
+                clearInterval(checkpointInterval);
+                console.log(`✅ [${jobId}] Checkpoint interval stopped`);
+            }
+            
+            // Final save with all data
+            if (allProducts.length > 0) {
+                console.log(`🎯 [${jobId}] Scraping complete, performing final save...`);
+                
+                const transformedProducts = allProducts.map((product, index) => {
+                    const productCategoryUrl = product.categoryUrl || 'N/A';
+                    let categoryMapping = null;
+                    if (productCategoryUrl !== 'N/A') {
+                        const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
+                        if (enriched.categoryMappingFound) {
+                            categoryMapping = enriched;
+                        }
+                    }
+                    return transformJiomartProduct(
+                        product,
+                        productCategoryUrl,
+                        job.category || 'Uncategorized',
+                        'N/A',
+                        pincode,
+                        index + 1,
+                        categoryMapping
+                    );
+                });
+                
+                const seenIds = new Set();
+                const dedupedProducts = transformedProducts.filter(p => {
+                    const key = p.productId || p.productName;
+                    if (!key || seenIds.has(key)) return false;
+                    seenIds.add(key);
+                    return true;
+                });
+                
+                const subCatRankCounters = new Map();
+                dedupedProducts.forEach(p => {
+                    const subCat = p.officialSubCategory || '__unknown__';
+                    const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                    subCatRankCounters.set(subCat, nextRank);
+                    p.ranking = nextRank;
+                });
+                
+                const finalPayload = {
+                    status: 'success',
+                    pincode,
+                    totalProducts: dedupedProducts.length,
+                    products: dedupedProducts,
+                    meta: {
+                        totalCategories: targetCategories.length,
+                        scrapedAt: new Date().toISOString(),
+                        duration: `${Math.round((Date.now() - job.startTime.getTime()) / 1000)}s`
+                    }
+                };
+                
+                // Final save
+                const saved = await saveScrapedDataToFolder(finalPayload, pincode, job.category);
+                job.savedFile = saved.filename;
+                job.totalProducts = dedupedProducts.length;
+                job.products = dedupedProducts.slice();
+            }
+            
+            job.status = 'completed';
+            job.progress = 100;
+            job.endTime = new Date();
+            console.log(`✨ [${jobId}] Job completed successfully. Products: ${job.totalProducts}`);
+            
+        } catch (error) {
+            console.error(`🔥 [${jobId}] Background job error:`, error.message);
+            
+            // ⚠️ CRITICAL: Stop checkpoint before error save
+            if (checkpointInterval) {
+                clearInterval(checkpointInterval);
+                console.log(`✅ [${jobId}] Checkpoint interval stopped (error recovery)`);
+            }
+            
+            // Save whatever data was collected (checkpoint may have already saved, but do final save anyway)
+            if (allProducts.length > 0) {
+                try {
+                    console.log(`💾 [${jobId}] ERROR RECOVERY: Saving ${allProducts.length} collected products...`);
+                    
+                    const transformedProducts = allProducts.map((product, index) => {
+                        const productCategoryUrl = product.categoryUrl || 'N/A';
+                        let categoryMapping = null;
+                        if (productCategoryUrl !== 'N/A') {
+                            const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
+                            if (enriched.categoryMappingFound) {
+                                categoryMapping = enriched;
+                            }
+                        }
+                        return transformJiomartProduct(
+                            product,
+                            productCategoryUrl,
+                            job.category || 'Uncategorized',
+                            'N/A',
+                            pincode,
+                            index + 1,
+                            categoryMapping
+                        );
+                    });
+                    
+                    const seenIds = new Set();
+                    const dedupedProducts = transformedProducts.filter(p => {
+                        const key = p.productId || p.productName;
+                        if (!key || seenIds.has(key)) return false;
+                        seenIds.add(key);
+                        return true;
+                    });
+                    
+                    const subCatRankCounters = new Map();
+                    dedupedProducts.forEach(p => {
+                        const subCat = p.officialSubCategory || '__unknown__';
+                        const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                        subCatRankCounters.set(subCat, nextRank);
+                        p.ranking = nextRank;
+                    });
+                    
+                    const errorPayload = {
+                        status: 'partial',
+                        pincode,
+                        totalProducts: dedupedProducts.length,
+                        products: dedupedProducts,
+                        meta: {
+                            scrapedAt: new Date().toISOString(),
+                            error: error.message,
+                            errorRecovery: true,
+                            duration: `${Math.round((Date.now() - job.startTime.getTime()) / 1000)}s`
+                        }
+                    };
+                    
+                    const saved = await saveScrapedDataToFolder(errorPayload, pincode, job.category);
+                    job.savedFile = saved.filename;
+                    job.totalProducts = dedupedProducts.length;
+                    job.products = dedupedProducts.slice();
+                    
+                    console.log(`✅ [${jobId}] ERROR RECOVERY SUCCESS: Saved ${dedupedProducts.length} products`);
+                } catch (recoveryError) {
+                    console.error(`❌ [${jobId}] ERROR RECOVERY FAILED:`, recoveryError.message);
+                }
+            }
+            
+            job.status = 'failed';
+            job.error = error.message;
+            job.endTime = new Date();
+            
+        } finally {
+            // Clear checkpoint interval
+            if (checkpointInterval) clearInterval(checkpointInterval);
+            
+            if (browser) {
+                try {
+                    await browser.close();
+                } catch (e) {
+                    console.error(`⚠️ [${jobId}] Error closing browser:`, e.message);
+                }
+            }
+        }
+    })(); // Self-invoking async function - runs in background
+});
+
+// Check job status and get current data
+app.get('/jiomartcategoryscrapper-status/:jobId', (req, res) => {
+    const { jobId } = req.params;
+    const job = jobTracker.get(jobId);
+    
+    if (!job) {
+        return res.status(404).json({ 
+            success: false, 
+            message: `Job ${jobId} not found` 
+        });
+    }
+    
+    res.json({
+        success: true,
+        jobId,
+        status: job.status,
+        progress: job.progress,
+        totalProducts: job.totalProducts,
+        startTime: job.startTime,
+        lastSavedTime: job.lastSavedTime,
+        endTime: job.endTime || null,
+        error: job.error,
+        category: job.category,
+        savedFile: job.savedFile || null,
+        products: job.status === 'completed' ? job.products : [], // Only return full products when completed
+        message: `Job is ${job.status} - ${job.progress}% complete (${job.totalProducts} products collected)`
+    });
+});
+
 const server = app.listen(PORT, () => {
     console.log(`🌍 Jiomart Scraper Server running on http://localhost:${PORT}`);
 });
 server.setTimeout(0); // Unlimited timeout
+
+// ============ GRACEFUL SHUTDOWN - SAVE DATA BEFORE EXIT ============
+async function saveAllPendingJobs() {
+    console.log('\n💾 [SHUTDOWN] Saving all pending jobs before exit...');
+    
+    for (const [jobId, job] of jobTracker.entries()) {
+        if ((job.status === 'running' || job.status === 'initializing') && job.totalProducts > 0) {
+            console.log(`⚠️ [SHUTDOWN] Found running job: ${jobId} with ${job.totalProducts} products`);
+            
+            try {
+                // Force save current state
+                if (job.products.length > 0) {
+                    const savePayload = {
+                        status: 'partial',
+                        pincode: job.pincode,
+                        totalProducts: job.products.length,
+                        products: job.products,
+                        meta: {
+                            scrapedAt: new Date().toISOString(),
+                            shutdownSave: true,
+                            progressPercent: job.progress,
+                            error: 'Process interrupted during scraping'
+                        }
+                    };
+                    
+                    const saved = await saveScrapedDataToFolder(savePayload, job.pincode, job.category);
+                    console.log(`✅ [SHUTDOWN] Saved ${job.products.length} products from job ${jobId}`);
+                }
+            } catch (error) {
+                console.error(`❌ [SHUTDOWN] Failed to save job ${jobId}:`, error.message);
+            }
+        }
+    }
+    
+    console.log('✅ [SHUTDOWN] All pending jobs saved. Exiting gracefully...\n');
+}
+
+// Handle graceful shutdown
+process.on('SIGTERM', async () => {
+    console.log('\n🛑 [SIGTERM] Received shutdown signal. Saving data...');
+    await saveAllPendingJobs();
+    process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+    console.log('\n🛑 [SIGINT] Received interrupt signal. Saving data...');
+    await saveAllPendingJobs();
+    process.exit(0);
+});
+
+process.on('exit', async () => {
+    console.log('🏁 Process exiting...');
+});

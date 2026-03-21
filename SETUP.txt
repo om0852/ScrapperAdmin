@@ -1,5 +1,4 @@
 # Navigate to project
-cd "D:\creatosaurus-intership\quick-commerce-scrappers\mainserver"
 
 # Install main server dependencies
 npm install
