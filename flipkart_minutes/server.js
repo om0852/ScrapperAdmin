@@ -71,6 +71,10 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
         // But for standardization, we pass it. If valid scraper_service doesn't take it, JS ignores extra args.
         const results = await require('./scraper_service').scrapeMultiple(targetUrls, pincode, maxConcurrentTabs);
 
+        // === SAVE RAW API DUMP ===
+        const rawDumpFilename = saveApiDump(pincode, targetUrls.join('|'), results, 'raw_response');
+        console.log(`[DumpDebug] Raw API dump: ${rawDumpFilename}`);
+
         // Flatten results if needed or keep structure. 
         // Original expected a single array of products for single URL.
         // If single URL input, return single array. If multiple, return array of arrays (or flat).
@@ -126,6 +130,10 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
             });
 
             console.log(`[API] Raw: ${allProducts.length}, After transform+dedup: ${productsToReturn.length} unique products`);
+        
+        // === SAVE TRANSFORMED API DUMP ===
+        const transformedDumpFilename = saveApiDump(pincode, targetUrls.join('|'), productsToReturn, 'transformed_response');
+        console.log(`[DumpDebug] Transformed API dump: ${transformedDumpFilename}`);
         } else {
             console.warn('⚠️ Standardization modules not loaded, returning raw data');
             productsToReturn = allProducts;

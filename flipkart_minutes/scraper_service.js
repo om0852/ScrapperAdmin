@@ -949,19 +949,23 @@ function extractProductData(data, id) {
         extractedCategory = data.tracking.category || data.tracking.vertical || 'N/A';
     }
 
+    // NOTE: offerTags (Bank Offer, Special Price, etc.) are regular discounts, NOT ads
+    // isAd should only be true for actual sponsored/promotional products
+    // Flipkart Hyperlocal API doesn't have a specific sponsored indicator, so default to false
+
     return {
         productId: id,
         productName: title,
         productImage: imageUrl,
-        productWeight: extractedQty || subtitle || "N/A", // Keep original subtitle as fallback in Weight if regex fails
-        quantity: extractedQty || "N/A",
+        productWeight: subtitle || "N/A",
+        quantity: subtitle || "N/A",
         deliveryTime: "N/A",
         isAd: false,
         rating: data.rating?.average || 0,
         currentPrice: finalPrice,
         originalPrice: mrp,
         discountPercentage: discount,
-        isOutOfStock: !(data.availability?.displayState === 'IN_STOCK' || !data.availability),
+        inStock: data.availability?.displayState === 'IN_STOCK',
         productUrl: prodUrl,
         platform: "flipkart_minutes",
         categoryName: extractedCategory // Return extracted category

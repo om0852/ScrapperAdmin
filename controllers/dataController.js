@@ -3,6 +3,31 @@ import Brand from '../models/Brand.js';
 import ProductSnapshot from '../models/ProductSnapshot.js';
 import ProductGrouping from '../models/ProductGrouping.js';
 
+/**
+ * Validates productName to ensure it's not a price or invalid value.
+ * Skips products where productName is empty, "N/A", or looks like a price (₹XX, $XX, etc.)
+ */
+const isValidProductName = (productName) => {
+    if (!productName || productName === 'N/A' || productName.trim() === '') {
+        return false;
+    }
+    
+    const trimmed = String(productName).trim();
+    
+    // Check if it looks like a price (currency symbol + numbers)
+    const pricePattern = /^[₹$£€¥₺₽₩₪₫₦]\d+(\.\d{1,2})?$/;
+    if (pricePattern.test(trimmed)) {
+        return false;
+    }
+    
+    // Check if it's purely numeric (like just "62")
+    if (/^\d+(\.\d+)?$/.test(trimmed)) {
+        return false;
+    }
+    
+    return true;
+};
+
 export const processScrapedData = async ({ pincode, platform, category, products }) => {
     // Decode folder-name sanitization: Windows replaces & with _ in directory names.
     // " _ " surrounded by spaces is the tell-tale sign (e.g. "Fruits _ Vegetables").
@@ -40,12 +65,20 @@ export const processScrapedData = async ({ pincode, platform, category, products
     // ───────────────────────────────────────────────────────────────────
 
     for (const prod of uniqueProducts) {
+        // ── Skip products with invalid productName ─────────────────────
+        if (!isValidProductName(prod.productName || prod.name)) {
+            console.warn(`[DataController] Skipping product with invalid productName: "${prod.productName || prod.name}"`);
+            continue;
+        }
+        // ─────────────────────────────────────────────────────────────────
+
         // ── Suffix Safety Net ──────────────────────────────────────────────
         // Ensure productId always carries the __<officialSubCategory> suffix.
         // This runs for every product regardless of where it came from, so
         // scraper bugs or missing orchestrator fixes can't pollute the DB.
         const officialSubCat = prod.officialSubCategory || prod.officalSubCategory || '';
         if (officialSubCat && officialSubCat !== 'N/A') {
+            // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
             const expectedSuffix = '__' + officialSubCat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
             const rawId = String(prod.productId || prod.id || '');
             if (!rawId.endsWith(expectedSuffix)) {
@@ -101,12 +134,29 @@ export const processScrapedData = async ({ pincode, platform, category, products
         const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === platform.toLowerCase()) || platform.toLowerCase();
 
         // 3. Find Last Snapshot (to calculate 'new' and price changes)
-        const lastSnapshot = await ProductSnapshot.findOne({
-            productId: prod.id || prod.productId,
+        // For manual insertions with date override:
+        // 1. Find the LATEST scrape date BEFORE the insertion date for this category
+        // 2. Compare products ONLY with that most recent previous date
+        const resolvedScrapedAt = prod.time || prod.scrapedAt || prod.date || new Date();
+        
+        const latestPreviousDate = await ProductSnapshot.findOne({
             platform: normalizedPlatform,
             pincode: pincode.trim(),
-            category: (prod.category || decodedCategory).trim()
-        }).sort({ scrapedAt: -1 }); // Get the most recent one
+            category: (prod.category || decodedCategory).trim(),
+            scrapedAt: { $lt: new Date(resolvedScrapedAt) }
+        }).sort({ scrapedAt: -1 }); // Get the most recent date BEFORE this insertion
+
+        // Compare product ONLY with the latest previous date, not any other earlier dates
+        let lastSnapshot = null;
+        if (latestPreviousDate) {
+            lastSnapshot = await ProductSnapshot.findOne({
+                productId: prod.id || prod.productId,
+                platform: normalizedPlatform,
+                pincode: pincode.trim(),
+                category: (prod.category || decodedCategory).trim(),
+                scrapedAt: latestPreviousDate.scrapedAt  // ONLY this latest previous date
+            });
+        }
 
         const isNewProduct = !lastSnapshot;
 
@@ -122,11 +172,6 @@ export const processScrapedData = async ({ pincode, platform, category, products
         // Use the product's own category if available (already correctly mapped
         // e.g. "Fruits & Vegetables"), otherwise fall back to the decoded arg.
         const finalCategory = (prod.category || decodedCategory).trim();
-        // Resolve the scrape timestamp — prefer explicit fields over the schema default.
-        // prod.time  = set by orchestrator when a dateOverride is applied
-        // prod.scrapedAt = set by scrapers in the JSON output
-        // prod.date  = legacy fallback field
-        const resolvedScrapedAt = prod.time || prod.scrapedAt || prod.date || new Date();
 
         const newSnapshot = new ProductSnapshot({
             category: finalCategory,
@@ -194,26 +239,73 @@ export const processScrapedData = async ({ pincode, platform, category, products
         }
 
         if (isNewProduct) {
-            const existingGroup = await ProductGrouping.findOne({
-                "products.productId": prod.id || prod.productId,
+            const fullProductId = prod.id || prod.productId;
+            const baseProductId = String(fullProductId).replace(/__.*$/, '');
+            
+            // Step 1: Check if group exists with FULL productId (with suffix)
+            let targetGroup = await ProductGrouping.findOne({
+                "products.productId": fullProductId,
                 category: finalCategory
             });
-
-            if (!existingGroup) {
-                const newGroup = new ProductGrouping({
-                    groupingId: new mongoose.Types.ObjectId().toString(),
-                    category: finalCategory,
-                    primaryName: prod.name || prod.productName,
-                    primaryImage: prod.image || prod.image_url || prod.productImage || '',
-                    primaryWeight: prod.weight || prod.productWeight || prod.quantity || '',
-                    products: [{
+            
+            if (targetGroup) {
+                // Group with full productId found → Add product to it
+                const productExists = targetGroup.products.some(
+                    p => p.productId === fullProductId && p.platform === normalizedPlatform
+                );
+                
+                if (!productExists) {
+                    targetGroup.products.push({
                         platform: normalizedPlatform,
-                        productId: prod.id || prod.productId
-                    }],
-                    totalProducts: 1
+                        productId: fullProductId
+                    });
+                    targetGroup.totalProducts = targetGroup.products.length;
+                    await targetGroup.save();
+                }
+            } else {
+                // Step 2: Find group with BASE productId (suffix removed)
+                // Note: Duplicate groups have been consolidated, so only one should exist per base productId
+                // Pattern matches base ID with or without suffix (including variants without hyphens)
+                const baseGroup = await ProductGrouping.findOne({
+                    category: finalCategory,
+                    "products.productId": {
+                        $regex: `^${baseProductId}(__[a-z0-9]*)?$`  // Match base ID with optional suffix (no hyphens pattern)
+                    }
                 });
-                await newGroup.save();
-                newGroupsCount++;
+                
+                if (baseGroup) {
+                    // Group found with base productId → Add product to it
+                    const productExists = baseGroup.products.some(
+                        p => p.productId === fullProductId && p.platform === normalizedPlatform
+                    );
+                    
+                    if (!productExists) {
+                        baseGroup.products.push({
+                            platform: normalizedPlatform,
+                            productId: fullProductId
+                        });
+                        baseGroup.totalProducts = baseGroup.products.length;
+                        await baseGroup.save();
+                    }
+                } else {
+                    // Step 3: No group found (full or base) → Create new group
+                    const newGroup = new ProductGrouping({
+                        groupingId: new mongoose.Types.ObjectId().toString(),
+                        category: finalCategory,
+                        primaryName: prod.name || prod.productName,
+                        primaryImage: prod.image || prod.image_url || prod.productImage || '',
+                        primaryWeight: prod.weight || prod.productWeight || prod.quantity || '',
+                        brand: prod.brand || '',
+                        brandId: (prod.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '-') || 'N/A',
+                        products: [{
+                            platform: normalizedPlatform,
+                            productId: fullProductId
+                        }],
+                        totalProducts: 1
+                    });
+                    await newGroup.save();
+                    newGroupsCount++;
+                }
             }
         }
     }

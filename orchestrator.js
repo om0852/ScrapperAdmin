@@ -128,6 +128,31 @@ const jobState = {
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
+ * Validates productName to ensure it's not a price or invalid value.
+ * Skips products where productName is empty, "N/A", or looks like a price (₹XX, $XX, etc.)
+ */
+const isValidProductName = (productName) => {
+    if (!productName || productName === 'N/A' || productName.trim() === '') {
+        return false;
+    }
+    
+    const trimmed = String(productName).trim();
+    
+    // Check if it looks like a price (currency symbol + numbers)
+    const pricePattern = /^[₹$£€¥₺₽₩₪₫₦]\d+(\.\d{1,2})?$/;
+    if (pricePattern.test(trimmed)) {
+        return false;
+    }
+    
+    // Check if it's purely numeric (like just "62")
+    if (/^\d+(\.\d+)?$/.test(trimmed)) {
+        return false;
+    }
+    
+    return true;
+};
+
+/**
  * Blocks the calling async loop until the specified job is no longer paused.
  * Before unblocking it will verify internet + MongoDB are healthy.
  */
@@ -531,6 +556,12 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                                     const newProducts = [];
                                     for (const prod of data.products) {
+                                        // ── Skip products with invalid productName ──
+                                        if (!isValidProductName(prod.productName || prod.name)) {
+                                            log('WARNING', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Skipping product with invalid productName: "${prod.productName || prod.name}"`);
+                                            continue;
+                                        }
+
                                         const url = prod.categoryUrl;
                                         let mapping = null;
 
@@ -555,6 +586,7 @@ app.post('/api/mass-scrape', async (req, res) => {
                                         }
 
                                         // Build the officialSubCategory suffix and update productId
+                                        // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
                                         const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
                                             ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
                                             : '';
@@ -818,6 +850,12 @@ app.post('/api/manual-ingest', async (req, res) => {
         if (data.products && Array.isArray(data.products)) {
             const newProducts = [];
             for (const prod of data.products) {
+                // ── Skip products with invalid productName ──
+                if (!isValidProductName(prod.productName || prod.name)) {
+                    log('WARNING', 'ManualIngest', `Skipping product with invalid productName: "${prod.productName || prod.name}"`);
+                    continue;
+                }
+
                 // Apply Date Override if provided
                 if (dateOverride) {
                     prod.scrapedAt = new Date(dateOverride).toISOString();
@@ -847,6 +885,7 @@ app.post('/api/manual-ingest', async (req, res) => {
                 }
 
                 // Build the officialSubCategory suffix and update productId
+                // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
                 const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
                     ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
                     : '';

@@ -46,7 +46,7 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
     try {
         console.log(`Launching browser for DMart (pincode: ${pincode})...`);
         browser = await chromium.launch({
-            headless: false,
+            headless: true,
             args: ["--start-maximized", "--disable-blink-features=AutomationControlled"],
         });
 
@@ -159,6 +159,7 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
                             ...item,
                             // Direct fields used by transformer
                             productImage,           // transformer checks product.productImage first
+                            brand: item.manufacturer || '',  // Brand/manufacturer from API
                             productUrl,             // transformer checks product.productUrl first
                             // SKU-level fields
                             sku: sku.skuUniqueID || 'N/A',

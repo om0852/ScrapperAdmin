@@ -354,7 +354,6 @@ function processCapturedJson(json) {
             const brand = variant.brandName || item.brand || item.brandName || 'N/A';
 
             // isAd: Check if adTrackingContext has a value (indicates sponsored/ad product)
-            const isAdValue = item.adTrackingContext || false;
             const ratingVal = variant.rating?.value || item.rating?.value || item.avg_rating || 0;
 
             const inStock = variant.inventory?.inStock || item.inventory?.in_stock;
@@ -384,7 +383,7 @@ function processCapturedJson(json) {
                 productWeight: weight,
                 quantity: weight,
                 deliveryTime: null,
-                isAd: !!isAdValue,
+                isAd: !!item.adTrackingContext,
                 server: server,
                 rating: ratingVal,
                 currentPrice: currentPrice,
@@ -699,13 +698,14 @@ app.post('/instamartcategorywrapper', async (req, res) => {
             // 1. Transform and Enrich first (suffix gets added here)
             const transformedAll = allResults.map((product, index) => {
                 const productCategoryUrl = product.categoryUrl || 'N/A';
-                const officialCategory = 'Unknown';
-
                 let categoryMapping = null;
+                let officialCategory = 'N/A';
+
                 if (productCategoryUrl !== 'N/A' && enrichProductWithCategoryMapping) {
                     const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
                     if (enriched.categoryMappingFound) {
                         categoryMapping = enriched;
+                        officialCategory = enriched.officialCategory || 'N/A';
                     }
                 }
 

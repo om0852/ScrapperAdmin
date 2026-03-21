@@ -1,15 +1,15 @@
 {
   "projectId": "69a7cffeed38bb77b2ddfa97",
   "environment": "development",
-  "lastSyncedAt": "2026-03-13T02:33:46.330Z",
+  "lastSyncedAt": "2026-03-20T09:30:26.326Z",
   "secrets": {
     "PORT": {
       "hash": "2378926a9bcc79f385034655e9f4e1027eb6ca96cfbfb872dcbb5d09dbbc196e",
-      "updatedAt": "2026-03-13T02:33:46.332Z"
+      "updatedAt": "2026-03-20T09:30:26.333Z"
     },
     "MONGODB_URI": {
       "hash": "e90bc0ef6f492d6d05e7debad7f52e04a3e5a6ccc0336e0d9df251af0b5e3fde",
-      "updatedAt": "2026-03-13T02:33:46.332Z"
+      "updatedAt": "2026-03-20T09:30:26.333Z"
     }
   }
 }

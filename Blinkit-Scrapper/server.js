@@ -98,7 +98,7 @@ function extractProductFromWidget(item) {
         const quantity = cartItem.unit || item.variant?.text || '';
         const isOutOfStock = item.inventory === 0 || cartItem.inventory === 0;
         const deliveryTime = item.eta_tag?.title?.text || '';
-        const combo = item.cta?.button_data?.subtext || '1';
+        const combo = item.cta?.button_data?.subtext || 'N/A';
         const isAd = item.tracking?.common_attributes?.badge === 'AD';
 
         let url = '';
@@ -871,6 +871,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         }
 
         log('success', 'Summary', `Total products extracted: ${allProducts.length}`);
+        console.log('[DEBUG] allProducts sample:', allProducts.slice(0, 2));
 
         // === APPLY STANDARDIZED FORMAT ===
 
@@ -883,28 +884,38 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         });
 
         // 1. Transform and Enrich first (suffix gets added here)
-        const transformedProducts = allProducts.map((product, index) => {
-            const productCategoryUrl = product.categoryUrl || 'N/A';
-            const officialCategory = product.category || 'N/A';
+        let transformedProducts = [];
+        try {
+            transformedProducts = allProducts.map((product, index) => {
+                const productCategoryUrl = product.categoryUrl || 'N/A';
+                const officialCategory = product.category || 'N/A';
 
-            let categoryMapping = null;
-            if (productCategoryUrl !== 'N/A') {
-                const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
-                if (enriched.categoryMappingFound) {
-                    categoryMapping = enriched;
+                let categoryMapping = null;
+                if (productCategoryUrl !== 'N/A') {
+                    const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
+                    if (enriched.categoryMappingFound) {
+                        categoryMapping = enriched;
+                    }
                 }
-            }
 
-            return transformBlinkitProduct(
-                product,
-                productCategoryUrl,
-                officialCategory,
-                'N/A',
-                pincode,
-                index + 1,
-                categoryMapping
-            );
-        });
+                return transformBlinkitProduct(
+                    product,
+                    productCategoryUrl,
+                    officialCategory,
+                    'N/A',
+                    pincode,
+                    index + 1,
+                    categoryMapping
+                );
+            });
+        } catch (transformError) {
+            log('error', 'Transform', `Transformation failed: ${transformError.message}`);
+            console.log('[DEBUG] Transform error:', transformError);
+            throw transformError;
+        }
+
+        console.log('[DEBUG] transformedProducts count:', transformedProducts.length);
+        console.log('[DEBUG] transformedProducts sample:', transformedProducts.slice(0, 2));
 
         // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
         const seenIds = new Set();
@@ -914,6 +925,8 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
             seenIds.add(key);
             return true;
         });
+
+        console.log('[DEBUG] dedupedProducts count:', dedupedProducts.length);
 
         // 3. Re-assign rankings after dedup
         dedupedProducts.forEach((p, i) => { p.ranking = i + 1; });
@@ -941,7 +954,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         };
 
         // === STORAGE LOGIC (NEW) ===
-        if (store === true) {
+        if (store) {
             const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
             const filename = `scraped_data_${pincode}_${timestamp}.json`;
             const storageDir = path.join(__dirname, 'scraped_data');
@@ -957,19 +970,8 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
         res.json(responsePayload);
 
-        // Cleanup API dumps after sending response
-        try {
-            const apiDumpsDir = path.join(process.cwd(), 'api_dumps');
-            if (fs.existsSync(apiDumpsDir)) {
-                const files = fs.readdirSync(apiDumpsDir);
-                files.forEach(file => {
-                    fs.unlinkSync(path.join(apiDumpsDir, file));
-                });
-                log('success', 'Cleanup', `Deleted ${files.length} API dump files`);
-            }
-        } catch (e) {
-            log('warn', 'Cleanup', `Failed to cleanup API dumps: ${e.message}`);
-        }
+        // API dumps are preserved in api_dumps/ directory for analysis
+        log('info', 'Storage', `API dump files saved and retained for analysis`);
 
     } catch (error) {
         log('error', 'API', `Workflow error: ${error.message}`);

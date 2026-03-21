@@ -77,7 +77,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         let currentPrice = 'N/A';
         let originalPrice = 'N/A';
         let discount = 'N/A';
-        let isOutOfStock = false; // Default to in-stock if present
+        let isOutOfStock = false; // Default to in-stock if data not available
 
         // Try direct avg fields first
         if (p.variants && p.variants.length > 0) {
@@ -87,6 +87,14 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             }
             if (vAttr.avg_discount_pct && vAttr.avg_discount_pct.numbers) {
                 discount = safeString(vAttr.avg_discount_pct.numbers[0]) + '%';
+            }
+
+            // Check inventory arrays for out-of-stock status
+            // OUT OF STOCK if: no 1P stores AND (no 3P stores OR only "NA")
+            const stores1p = vAttr.inv_stores_1p?.text || [];
+            const stores3p = vAttr.inv_stores_3p?.text || [];
+            if (stores1p.length === 0 && (stores3p.length === 0 || stores3p[0] === 'NA')) {
+                isOutOfStock = true;
             }
 
             // Parse buybox_mrp for more accurate store-level price/MRP
@@ -105,9 +113,9 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             }
         }
 
-        // Weight/pack size often in title
+        // Weight/pack size often in title (supports decimals like 3.5 kg)
         let packSize = 'N/A';
-        const sizeMatch = productName.match(/(\d+\s*(?:g|kg|ml|l|pc|pcs|pack))/i);
+        const sizeMatch = productName.match(/(\d+\.?\d*\s*(?:g|kg|ml|l|pc|pcs|pack))/i);
         if (sizeMatch) {
             packSize = sizeMatch[0];
         }
@@ -143,7 +151,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             quantity: packSize,
             combo: safeString(product.combo || p.combo || 'N/A'),
             deliveryTime: '20 to 30 minutes', // Hardcoded as per user request
-            isAd: false,
+            isAd: false, // Jiomart API does not provide advertisement flags - all products are organic
             rating: 'N/A', // vAttr.popularity is number, not rating
             currentPrice: cleanPrice(currentPrice),
             originalPrice: cleanPrice(originalPrice),

@@ -75,7 +75,7 @@ export function transformFlipkartProduct(product, categoryUrl, categoryName, sub
         originalPrice: safeString(product.originalPrice),
         discountPercentage: safeString(product.discountPercentage),
         ranking: rank,
-        isOutOfStock: !!product.isOutOfStock,
+        inStock: product.inStock !== undefined ? !!product.inStock : true,
         productUrl: safeString(product.productUrl)
     };
 }

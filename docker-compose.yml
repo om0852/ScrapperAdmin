@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  # Main application server - connects to remote MongoDB
+  mainserver:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    container_name: quickcommerce-mainserver
+    restart: unless-stopped
+    ports:
+      - "7000:7000"      # Main orchestrator
+      - "3088:3088"      # Blinkit
+      - "3089:3089"      # Instamart
+      - "3090:3090"      # Jiomart
+      - "3091:3091"      # Flipkart Minutes
+      - "3092:3092"      # Zepto
+      - "4199:4199"      # DMart
+    environment:
+      NODE_ENV: production
+      PORT: 7000
+      LOG_LEVEL: info
+      # MongoDB URI and other secrets are injected by xtra platform
+      # via: npm start command (which automatically loads .env)
+    volumes:
+      - ./scraped_data:/app/scraped_data
+      - ./flipkart_minutes/api_dumps:/app/flipkart_minutes/api_dumps
+    networks:
+      - scrapers
+
+  # Development service (optional - comment out if not needed)
+  mainserver-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: quickcommerce-mainserver-dev
+    restart: unless-stopped
+    ports:
+      - "7001:7000"      # Run on different port to avoid conflict with production
+      - "3188:3088"
+      - "3189:3089"
+      - "3190:3090"
+      - "3191:3091"
+      - "3192:3092"
+      - "4299:4199"
+    environment:
+      NODE_ENV: development
+      PORT: 7000
+      LOG_LEVEL: debug
+      # MongoDB URI and other secrets are injected by xtra platform
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - ./scraped_data:/app/scraped_data
+      - ./flipkart_minutes/api_dumps:/app/flipkart_minutes/api_dumps
+    networks:
+      - scrapers
+    profiles:
+      - dev
+
+volumes:
+  # Removed mongodb_data and mongodb_config since MongoDB is now remote
+
+networks:
+  scrapers:
+    driver: bridge

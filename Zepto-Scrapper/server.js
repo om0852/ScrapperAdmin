@@ -704,6 +704,25 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
         console.log(`\n✅ Scraping completed in ${duration}s`);
         console.log(`📦 Raw products: ${allProducts.length}`);
 
+        // === SAVE API DUMPS FOR ANALYSIS ===
+        const apiDumpsDir = path.join(__dirname, 'api_dumps');
+        if (!fs.existsSync(apiDumpsDir)) {
+            fs.mkdirSync(apiDumpsDir, { recursive: true });
+        }
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const consolidatedDumpPath = path.join(apiDumpsDir, `api_consolidated_${pincode}_${timestamp}.json`);
+        
+        const apiDumpData = {
+            pincode,
+            timestamp: new Date().toISOString(),
+            totalProducts: allProducts.length,
+            products: allProducts
+        };
+
+        fs.writeFileSync(consolidatedDumpPath, JSON.stringify(apiDumpData, null, 2));
+        console.log(`[API Dump] Saved consolidated dump with ${allProducts.length} products to ${consolidatedDumpPath}`);
+
         // === APPLY STANDARDIZED FORMAT ===
 
         // 1. Transform and Enrich first (suffix gets added here)
@@ -781,6 +800,9 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
         }
 
         res.json(responsePayload);
+
+        // API dumps are preserved in api_dumps/ directory for analysis
+        console.log('[Storage] ✅ API dump files saved and retained for analysis');
 
     } catch (error) {
         console.error(`❌ Error: ${error.message}`);

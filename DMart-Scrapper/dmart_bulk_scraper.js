@@ -183,6 +183,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
               productId: item.productId,
               productName: item.name,
               productImage: imageUrl,
+              brand: item.manufacturer || "",
               productWeight: sku.variantTextValue || "",
               currentPrice: sku.priceSALE ? parseFloat(sku.priceSALE) : 0,
               originalPrice: sku.priceMRP ? parseFloat(sku.priceMRP) : 0,
