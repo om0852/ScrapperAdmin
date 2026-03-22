@@ -164,21 +164,8 @@ async function awaitResume(type) {
     while (jobState[type].paused) {
         await sleep(2000);
     }
-    // Once unpaused, verify connectivity before continuing
-    log('INFO', 'JobControl', `▶ ${type} resuming — checking connectivity...`);
-    let healthy = false;
-    while (!healthy) {
-        try {
-            await fetch('https://www.google.com', { method: 'HEAD', signal: AbortSignal.timeout(5000) });
-            const mongoReady = mongoose.connection.readyState === 1;
-            if (!mongoReady) throw new Error('MongoDB not ready');
-            healthy = true;
-            log('SUCCESS', 'JobControl', `✅ Network + MongoDB OK — resuming ${type}.`);
-        } catch (err) {
-            log('WARNING', 'JobControl', `Connection check failed: ${err.message}. Retrying in 5s...`);
-            await sleep(5000);
-        }
-    }
+    // Once unpaused, resume immediately without connectivity checks
+    log('SUCCESS', 'JobControl', `▶ ${type} resumed.`);
 }
 // ─────────────────────────────────────────────────────────────────────────────
 

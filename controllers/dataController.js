@@ -133,40 +133,9 @@ export const processScrapedData = async ({ pincode, platform, category, products
         const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
         const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === platform.toLowerCase()) || platform.toLowerCase();
 
-        // 3. Find Last Snapshot (to calculate 'new' and price changes)
-        // For manual insertions with date override:
-        // 1. Find the LATEST scrape date BEFORE the insertion date for this category
-        // 2. Compare products ONLY with that most recent previous date
+        // Skip checking for previously scraped product — new field will be set during manual insertion
+        // Resolve the scraped timestamp
         const resolvedScrapedAt = prod.time || prod.scrapedAt || prod.date || new Date();
-        
-        const latestPreviousDate = await ProductSnapshot.findOne({
-            platform: normalizedPlatform,
-            pincode: pincode.trim(),
-            category: (prod.category || decodedCategory).trim(),
-            scrapedAt: { $lt: new Date(resolvedScrapedAt) }
-        }).sort({ scrapedAt: -1 }); // Get the most recent date BEFORE this insertion
-
-        // Compare product ONLY with the latest previous date, not any other earlier dates
-        let lastSnapshot = null;
-        if (latestPreviousDate) {
-            lastSnapshot = await ProductSnapshot.findOne({
-                productId: prod.id || prod.productId,
-                platform: normalizedPlatform,
-                pincode: pincode.trim(),
-                category: (prod.category || decodedCategory).trim(),
-                scrapedAt: latestPreviousDate.scrapedAt  // ONLY this latest previous date
-            });
-        }
-
-        const isNewProduct = !lastSnapshot;
-
-        if (lastSnapshot) {
-            updatedProductsCount++;
-        } else {
-            newProductsCount++;
-        }
-
-        // Normalize platform name to match enum (already computed above).
 
         // 4. Create New Snapshot
         // Use the product's own category if available (already correctly mapped
@@ -201,8 +170,8 @@ export const processScrapedData = async ({ pincode, platform, category, products
             skuId: prod.skuId || 'N/A',
             savings: toNum(prod.savings || 0),
 
-            new: isNewProduct,
-            lastComparedWith: lastSnapshot ? lastSnapshot._id : null
+            new: false
+            // new field will be set to true during manual insertion via updateIsNewField logic
         });
 
         try {
