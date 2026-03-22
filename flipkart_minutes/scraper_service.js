@@ -93,8 +93,7 @@ async function setupSession(pincode) {
 
     log(`Starting Session Setup for Pincode: ${pincode}`, 'INFO');
     const browser = await chromium.launch({
-        headless: true, // Changed to true for stability
-        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+        headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -474,8 +473,7 @@ async function scrape(url, pincode) {
     // 2. Launch Scraper
     log(`Scraping URL: ${url} with Pincode: ${pincode}`, 'INFO');
     const browser = await chromium.launch({
-        headless: true, // Changed to true for stability
-        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
+        headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -582,7 +580,6 @@ async function scrapeMultiple(urls, pincode) {
                     }
                     workerBrowser = await chromium.launch({
                         headless: true,
-                        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
                         args: [
                             '--no-sandbox',
                             '--disable-setuid-sandbox',
