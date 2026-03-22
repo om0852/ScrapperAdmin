@@ -581,17 +581,7 @@ app.post('/api/mass-scrape', async (req, res) => {
                                         const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
                                         const updatedProductId = baseProductId + subCatSuffix;
 
-                                        // Check if product is inherently new by querying DB
-                                        const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
-                                        const normalizedPlatform = PLATFORM_ENUM.find(p => p.toLowerCase() === pConfig.name.toLowerCase()) || pConfig.name.toLowerCase();
-
-                                        const lastSnapshot = await ProductSnapshot.findOne({
-                                            productId: prod.id || prod.productId,
-                                            platform: normalizedPlatform,
-                                            pincode: pincode.trim(),
-                                            category: newCategory.trim() // using mapped category
-                                        }).lean();
-
+                                        // NO DB CHECKS DURING SCRAPING — new field will be set during manual insertion
                                         let finalWeight = prod.productWeight || prod.weight || 'N/A';
                                         if (finalWeight === 'N/A' || finalWeight === '') {
                                             finalWeight = prod.quantity || 'N/A';
@@ -605,7 +595,8 @@ app.post('/api/mass-scrape', async (req, res) => {
                                             officialCategory: newOfficialCategory,
                                             officialSubCategory: newOfficialSubCategory,
                                             productWeight: finalWeight,
-                                            new: !lastSnapshot // true if it doesn't exist in DB
+                                            new: false
+                                            // new field will be set to true during manual insertion only
                                         });
                                     }
                                     data.products = newProducts;
@@ -616,38 +607,9 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                                 log('SUCCESS', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ✅ Scrape done — ${pConfig.name} | ${category} | ${pincode} → ${fileName}`);
 
-                                // ---- INGEST INTO BACKEND DB ----
-                                if (autoIngest) {
-                                    if (data && data.products && data.products.length > 0) {
-                                        // ── Pause Guard for Ingestion ──
-                                        await awaitResume('ingest');
-
-                                        try {
-                                            log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Ingesting ${data.products.length} products...`);
-                                            const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
-                                                method: 'POST',
-                                                headers: { 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({
-                                                    pincode,
-                                                    platform: pConfig.name,
-                                                    category,
-                                                    products: data.products
-                                                })
-                                            });
-
-                                            if (ingestRes.ok) {
-                                                const ingestJson = await ingestRes.json();
-                                                log('SUCCESS', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] 🗄️  Ingested — New: ${ingestJson.stats.new} | Updated: ${ingestJson.stats.updated} | New Groups: ${ingestJson.stats.newGroups}`);
-                                            } else {
-                                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] DB Ingestion Failed: ${ingestRes.status}`);
-                                            }
-                                        } catch (ingestErr) {
-                                            log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] DB Ingestion CRASHED: ${ingestErr.message}`);
-                                        }
-                                    }
-                                } else {
-                                    log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] AutoIngest OFF — skipping DB.`);
-                                }
+                                // ---- SKIP AUTOMATIC INGEST DURING MASS SCRAPING ----
+                                // Files are saved for manual ingestion later to avoid MongoDB timeouts
+                                log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] File saved. Use /api/manual-ingest for MongoDB operations.`);
                             }
                         } catch (err) {
                             const isNetworkErr = err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.message?.includes('fetch failed') || (err.name === 'AbortError' && err.message?.includes('network'));
@@ -890,7 +852,7 @@ app.post('/api/manual-ingest', async (req, res) => {
                     finalWeight = prod.quantity || 'N/A';
                 }
 
-                // Check DB for new flag
+                // Check DB for new flag during manual insertion
                 const lastSnapshot = await ProductSnapshot.findOne({
                     productId: prod.id || prod.productId,
                     platform: normalizedPlatform,
@@ -906,7 +868,7 @@ app.post('/api/manual-ingest', async (req, res) => {
                     officialCategory: newOfficialCategory,
                     officialSubCategory: newOfficialSubCategory,
                     productWeight: finalWeight,
-                    new: !lastSnapshot
+                    new: !lastSnapshot  // TRUE if product is new, FALSE if already exists
                 });
             }
             data.products = newProducts;
