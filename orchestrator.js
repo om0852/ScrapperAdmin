@@ -852,13 +852,29 @@ app.post('/api/manual-ingest', async (req, res) => {
                     finalWeight = prod.quantity || 'N/A';
                 }
 
-                // Check DB for new flag during manual insertion
-                const lastSnapshot = await ProductSnapshot.findOne({
-                    productId: prod.id || prod.productId,
+                // Check DB for new flag during manual insertion - match dataController logic
+                // Resolve the scraped timestamp
+                const resolvedScrapedAt = prod.time || prod.scrapedAt || prod.date || new Date();
+                
+                // Step 1: Find the LATEST scrape date BEFORE the insertion date for this category
+                const latestPreviousDate = await ProductSnapshot.findOne({
                     platform: normalizedPlatform,
                     pincode: (data.pincode || 'Unknown').trim(),
-                    category: newCategory.trim()
-                }).lean();
+                    category: newCategory.trim(),
+                    scrapedAt: { $lt: new Date(resolvedScrapedAt) }
+                }).sort({ scrapedAt: -1 }).lean();
+
+                // Step 2: Compare product ONLY with the latest previous date
+                let lastSnapshot = null;
+                if (latestPreviousDate) {
+                    lastSnapshot = await ProductSnapshot.findOne({
+                        productId: prod.id || prod.productId,
+                        platform: normalizedPlatform,
+                        pincode: (data.pincode || 'Unknown').trim(),
+                        category: newCategory.trim(),
+                        scrapedAt: latestPreviousDate.scrapedAt  // ONLY this latest previous date
+                    }).lean();
+                }
 
                 newProducts.push({
                     ...prod,
