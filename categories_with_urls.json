@@ -745,71 +745,71 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Chips+and+Namkeens&filterId=6822eeebed32000001e25a67&filterName=Bhujia+and+Namkeens&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+3"
     },
     {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "All",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Cookies",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58b&filterName=Cookies&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Top Deals",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa592&filterName=Top+Deals&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Cream Biscuits",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58c&filterName=Cream+Biscuits&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Cakes and Pies",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58a&filterName=Cakes+and+Pies&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Marie and Digestive",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58e&filterName=Marie+and+Digestive&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Salted and Plain",
-    "url": "http://swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa591&filterName=Salted+and+Plain&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Wafers",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa594&filterName=Wafers&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Value Packs",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa593&filterName=Value+Packs&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Newly Added",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58f&filterName=Newly+Added&taxonomyType=All+Listing"
-  },
-  {
-    "masterCategory": "Bakery & Biscuits",
-    "officialCategory": "Biscuits and Cakes",
-    "officialSubCategory": "Healthy Snacking",
-    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58d&filterName=Healthy+Snacking&taxonomyType=All+Listing"
-  },
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "All",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cookies",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58b&filterName=Cookies&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Top Deals",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa592&filterName=Top+Deals&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cream Biscuits",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58c&filterName=Cream+Biscuits&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cakes and Pies",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58a&filterName=Cakes+and+Pies&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Marie and Digestive",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58e&filterName=Marie+and+Digestive&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Salted and Plain",
+      "url": "http://swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa591&filterName=Salted+and+Plain&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Wafers",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa594&filterName=Wafers&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Value Packs",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa593&filterName=Value+Packs&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Newly Added",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58f&filterName=Newly+Added&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Healthy Snacking",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58d&filterName=Healthy+Snacking&taxonomyType=All+Listing"
+    },
     {
       "officalCategory": "Home and Furnishing",
       "officalSubCategory": "Bedsheets",
@@ -2068,6 +2068,132 @@
     }
   ],
   "Zepto": [
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Base Tints",
+      "url": "https://www.zepto.com/cn/face/base-tints/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/d76b2bc9-4287-4c20-a6fb-153ba1919bc1"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Conceal & Correct",
+      "url": "https://www.zepto.com/cn/face/conceal-correct/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/61b246f9-9b11-4eca-aaca-51ef7afdc157"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Fix & Remove",
+      "url": "https://www.zepto.com/cn/face/fix-remove/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/5d9be0bd-9393-42cf-868e-597ede5d3db6"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Powders",
+      "url": "https://www.zepto.com/cn/face/powders/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/0d778cf0-0550-46c4-8ef4-c96c35e85a98"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Primers",
+      "url": "https://www.zepto.com/cn/face/primers/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/9e92b66f-2da0-4662-b24e-5ddbfcf8a888"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip & Cheek Tint",
+      "url": "https://www.zepto.com/cn/face/lip-cheek-tint/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/43b67c20-a53a-470a-8f42-d7e1fc35883f"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Kajal",
+      "url": "https://www.zepto.com/cn/eyes/kajal/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/aab002a3-e958-4066-b492-c67f803af737"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eye Liner",
+      "url": "https://www.zepto.com/cn/eyes/eye-liner/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/d458b0b4-3e33-43d7-8061-63e6f517645b"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Mascara",
+      "url": "https://www.zepto.com/cn/eyes/mascara/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/f0b374d6-144f-4638-a4eb-b1eb939927ff"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eye Shadow",
+      "url": "https://www.zepto.com/cn/eyes/eye-shadow/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/81528148-9507-4875-8d80-f4ec04e20f0d"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eyebrow Enhancer",
+      "url": "https://www.zepto.com/cn/eyes/eyebrow-enhancer/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/8c2b7925-6450-471f-9e9a-8f6f927268c4"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eyelash Essentials",
+      "url": "https://www.zepto.com/cn/eyes/eyelash-essentials/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/a3d91938-ebb9-42f4-8575-56a6970bdca2"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Liquid Lipstick",
+      "url": "https://www.zepto.com/cn/lips/liquid-lipstick/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/155e55b2-ffb8-4cda-85c4-2404cad2c862"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lipsticks",
+      "url": "https://www.zepto.com/cn/lips/lipsticks/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/f9b83893-043a-4c9e-ba3c-1e1d201aead7"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Liner",
+      "url": "https://www.zepto.com/cn/lips/lip-liner/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/50361c18-ba91-49c3-9d51-af6de5a8c79c"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip & Cheek Tint",
+      "url": "https://www.zepto.com/cn/lips/lip-cheek-tint/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/c3465680-30b6-4f00-ab9e-e837b661e8ca"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Crayon",
+      "url": "https://www.zepto.com/cn/lips/lip-crayon/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/36e1d46a-d3d7-4be7-bf6d-1b26cb83a27f"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Oil & Palette",
+      "url": "https://www.zepto.com/cn/lips/lip-oil-pallette/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/84d36b7a-81fd-403a-a86e-1b3656a1d1dd"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Hair Tools & Brushes",
+      "url": "https://www.zepto.com/cn/tools/hair-tools-brushes/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/50ac430a-0f24-4aaa-8792-0937a1454947"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Hair Accessories",
+      "url": "https://www.zepto.com/cn/tools/hair-accessories/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/026ede12-b9a5-4772-9cb7-3620aebe1347"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Nail Care",
+      "url": "https://www.zepto.com/cn/tools/nail-care/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/439197e1-6aca-488a-805a-63b28d33779d"
+    },
     {
       "masterCategory": "School, Office & Stationery",
       "officialCategory": "School Supplies",
