@@ -745,47 +745,71 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Chips+and+Namkeens&filterId=6822eeebed32000001e25a67&filterName=Bhujia+and+Namkeens&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+3"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cakes & Pies",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b15&filterName=Cakes+%26+Pies&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cookies",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b16&filterName=Cookies&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cream Biscuits",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b17&filterName=Cream+Biscuits&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Marie & Digestive",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b18&filterName=Marie+%26+Digestive&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Salted & Plain",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b19&filterName=Salted+%26+Plain&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Wafers",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b1b&filterName=Wafers&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Rusk",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b1c&filterName=Rusk&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "All",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Cookies",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58b&filterName=Cookies&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Top Deals",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa592&filterName=Top+Deals&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Cream Biscuits",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58c&filterName=Cream+Biscuits&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Cakes and Pies",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58a&filterName=Cakes+and+Pies&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Marie and Digestive",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58e&filterName=Marie+and+Digestive&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Salted and Plain",
+    "url": "http://swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa591&filterName=Salted+and+Plain&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Wafers",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa594&filterName=Wafers&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Value Packs",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa593&filterName=Value+Packs&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Newly Added",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58f&filterName=Newly+Added&taxonomyType=All+Listing"
+  },
+  {
+    "masterCategory": "Bakery & Biscuits",
+    "officialCategory": "Biscuits and Cakes",
+    "officialSubCategory": "Healthy Snacking",
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58d&filterName=Healthy+Snacking&taxonomyType=All+Listing"
+  },
     {
       "officalCategory": "Home and Furnishing",
       "officalSubCategory": "Bedsheets",
@@ -2044,6 +2068,84 @@
     }
   ],
   "Zepto": [
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Gift Set",
+      "url": "https://www.zepto.com/cn/school-supplies/gift-set/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/4ff0a16c-2124-4c06-b4d8-409ced7f792e"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Scale, Eraser & More",
+      "url": "https://www.zepto.com/cn/school-supplies/scale-eraser-more/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/fd07d23b-5415-456d-bf63-a9e4211f3050"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Geometry Box",
+      "url": "https://www.zepto.com/cn/school-supplies/geometry-box/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/80f454f6-6ef3-4d20-9205-b3ff5c0604ef"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "School Bag & Bottle",
+      "url": "https://www.zepto.com/cn/school-supplies/school-bag-bottle/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/5e424290-a361-42af-913c-5870bf8552b9"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Exam Pad & Whiteboard",
+      "url": "https://www.zepto.com/cn/school-supplies/exam-pad-whiteboard/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/50518f0a-00be-490e-987c-e944d904a965"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Chart, Painting & Other Paper",
+      "url": "https://www.zepto.com/cn/school-supplies/chart-painting-other-paper/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/2e5d4c5b-a0c0-41e4-8f30-d53ab24ee28c"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "A4 Paper",
+      "url": "https://www.zepto.com/cn/office-supplies/a4-paper/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/012a8d13-c55c-4ad5-ae89-1141413ae847"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Pen Stand & More",
+      "url": "https://www.zepto.com/cn/office-supplies/pen-stand-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/b4d030c6-d2bc-4ada-ae1c-d1b0dcdb601b"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "File, Folder & More",
+      "url": "https://www.zepto.com/cn/office-supplies/file-folder-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/534bab16-ddef-4cee-b6ad-46d3f8443859"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Calendar & Journal",
+      "url": "https://www.zepto.com/cn/office-supplies/calendar-journal/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/46a236cd-306a-49df-8373-46ce0550ffc1"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Calculator & Stapler",
+      "url": "https://www.zepto.com/cn/office-supplies/calculator-stapler/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/c33039ad-aba6-442f-b8cb-719ffa82685a"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Punching Machine & More",
+      "url": "https://www.zepto.com/cn/office-supplies/punching-machine-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/af5bc61e-b7ac-4ce9-a2d1-7cfbe9d4ad70"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Sticky Notes",
+      "url": "https://www.zepto.com/cn/office-supplies/sticky-notes/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/5eec61d5-2be1-46d3-973f-86f8842c1526"
+    },
     {
       "url": "https://www.zepto.com/cn/baby-care/baby-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/b998e39c-6948-42f2-84bb-947f07f2ceca",
       "officialCategory": "Baby Care",
