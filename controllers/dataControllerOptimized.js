@@ -47,10 +47,14 @@ const normalizePlatform = (platform) => {
  * Process products in batch with Redis caching and bulk operations
  * ✅ 20-50x FASTER than sequential processing
  */
-export const processScrapedDataOptimized = async ({ pincode, platform, category, products }) => {
+export const processScrapedDataOptimized = async ({ pincode, platform, category, products, dateOverride }) => {
   const startTime = Date.now();
   const decodedCategory = category.replace(/ _ /g, ' & ');
   const normalizedPlatform = normalizePlatform(platform);
+
+  if (dateOverride) {
+    console.log(`⏰ Using date override: ${new Date(dateOverride).toISOString()}`);
+  }
 
   console.log(`🔄 Mapping categories for ${products.length} products from ${platform}...`);
 
@@ -90,7 +94,8 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   // ═══════════════════════════════════════════════════════════════════
   // STEP 3: CACHE LATEST SNAPSHOT DATE FOR CATEGORY
   // ═══════════════════════════════════════════════════════════════════
-  const resolvedScrapedAt = uniqueProducts[0]?.time || uniqueProducts[0]?.scrapedAt || new Date();
+  const resolvedScrapedAt = dateOverride ? new Date(dateOverride) : (uniqueProducts[0]?.time || uniqueProducts[0]?.scrapedAt || new Date());
+  console.log(`📅 Using scrapedAt: ${resolvedScrapedAt.toISOString()}`);
   let latestPreviousSnapshot = await redisCache.getCategoryLatestDate(normalizedPlatform, pincode, decodedCategory);
 
   if (!latestPreviousSnapshot) {

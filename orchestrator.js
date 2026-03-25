@@ -898,6 +898,24 @@ app.post('/api/manual-ingest', async (req, res) => {
             ? data.products[0].category
             : category.replace(/ _ /g, ' & ');
 
+        // Convert datetime-local format to ISO8601 if dateOverride provided
+        let isoDateOverride = null;
+        if (dateOverride) {
+            try {
+                // Frontend sends: "2026-03-24T08:00" (datetime-local format)
+                // Convert to ISO8601: "2026-03-24T08:00:00Z"
+                const dateObj = new Date(dateOverride + ':00Z');
+                if (!isNaN(dateObj.getTime())) {
+                    isoDateOverride = dateObj.toISOString();
+                    log('INFO', 'Orchestrator', `Converting dateOverride: ${dateOverride} → ${isoDateOverride}`);
+                } else {
+                    log('WARN', 'Orchestrator', `Invalid dateOverride format: ${dateOverride}`);
+                }
+            } catch (e) {
+                log('WARN', 'Orchestrator', `Error parsing dateOverride: ${e.message}`);
+            }
+        }
+
         const ingestRes = await fetch(`http://localhost:${PORT}/api/data/ingest`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -905,7 +923,8 @@ app.post('/api/manual-ingest', async (req, res) => {
                 pincode: data.pincode || 'Unknown',
                 platform: normalizedPlatform,
                 category: resolvedCategory,
-                products: data.products
+                products: data.products,
+                dateOverride: isoDateOverride  // ✅ NOW PASSING DATE OVERRIDE!
             })
         });
 

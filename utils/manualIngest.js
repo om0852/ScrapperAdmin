@@ -15,7 +15,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
  * Process a single JSON file for ingestion
  * Properly maps categories before sending to optimizer
  */
-export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMapping = false) {
+export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMapping = false, dateOverride = null) {
   try {
     console.log(`📂 Reading file: ${filePath}`);
     
@@ -98,7 +98,8 @@ export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMa
       pincode,
       platform,
       category,
-      products: productsToIngest
+      products: productsToIngest,
+      dateOverride
     });
 
     return {
@@ -123,7 +124,7 @@ export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMa
 /**
  * Batch ingest all JSON files in a directory
  */
-export async function ingestDirectory(dirPath, skipCategoryMapping = false) {
+export async function ingestDirectory(dirPath, skipCategoryMapping = false, dateOverride = null) {
   try {
     if (!fs.existsSync(dirPath)) {
       throw new Error(`Directory not found: ${dirPath}`);
@@ -145,7 +146,7 @@ export async function ingestDirectory(dirPath, skipCategoryMapping = false) {
       console.log(`\n[${i + 1}/${files.length}] Processing: ${file}`);
       console.log(`${'─'.repeat(60)}`);
       
-      const result = await ingestJsonFile(filePath, null, null, skipCategoryMapping);
+      const result = await ingestJsonFile(filePath, null, null, skipCategoryMapping, dateOverride);
       results.push(result);
 
       // Small delay between files to avoid overload

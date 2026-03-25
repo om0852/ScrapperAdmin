@@ -6,14 +6,14 @@ const router = express.Router();
 
 router.post('/ingest', async (req, res) => {
     try {
-        const { pincode, platform, category, products } = req.body;
+        const { pincode, platform, category, products, dateOverride } = req.body;
 
         if (!pincode || !platform || !category || !products || !Array.isArray(products)) {
             return res.status(400).json({ error: 'Missing required fields or invalid products array' });
         }
 
         // ✅ Use optimized controller with Redis caching & bulk operations
-        const result = await processScrapedDataOptimized({ pincode, platform, category, products });
+        const result = await processScrapedDataOptimized({ pincode, platform, category, products, dateOverride });
         res.status(200).json(result);
     } catch (error) {
         console.error('Error in /ingest route:', error);
@@ -24,18 +24,21 @@ router.post('/ingest', async (req, res) => {
 /**
  * Manual ingestion from file
  * POST /api/data/ingest-file
- * Body: { filePath: '/path/to/file.json', platform?: 'blinkit', pincode?: '110001' }
+ * Body: { filePath: '/path/to/file.json', platform?: 'blinkit', pincode?: '110001', dateOverride?: '2026-03-25T10:00:00Z' }
  */
 router.post('/ingest-file', async (req, res) => {
     try {
-        const { filePath, platform, pincode } = req.body;
+        const { filePath, platform, pincode, dateOverride } = req.body;
 
         if (!filePath) {
             return res.status(400).json({ error: 'filePath is required' });
         }
 
         console.log(`\n📂 Manual ingestion request for: ${filePath}`);
-        const result = await ingestJsonFile(filePath, pincode, platform);
+        if (dateOverride) {
+            console.log(`⏰ Date override: ${dateOverride}`);
+        }
+        const result = await ingestJsonFile(filePath, pincode, platform, false, dateOverride);
 
         if (!result.success) {
             return res.status(500).json({ error: result.error, file: result.file });
@@ -51,18 +54,21 @@ router.post('/ingest-file', async (req, res) => {
 /**
  * Batch ingest directory
  * POST /api/data/ingest-directory
- * Body: { dirPath: '/path/to/dir' }
+ * Body: { dirPath: '/path/to/dir', dateOverride?: '2026-03-25T10:00:00Z' }
  */
 router.post('/ingest-directory', async (req, res) => {
     try {
-        const { dirPath } = req.body;
+        const { dirPath, dateOverride } = req.body;
 
         if (!dirPath) {
             return res.status(400).json({ error: 'dirPath is required' });
         }
 
         console.log(`\n📂 Batch ingestion request for: ${dirPath}`);
-        const result = await ingestDirectory(dirPath);
+        if (dateOverride) {
+            console.log(`⏰ Date override: ${dateOverride}`);
+        }
+        const result = await ingestDirectory(dirPath, false, dateOverride);
 
         res.status(200).json(result);
     } catch (error) {
