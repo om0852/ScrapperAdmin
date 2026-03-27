@@ -212,7 +212,8 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
 
     // Create snapshot
     const isNewProduct = !snapshotMap.has(fullProductId);
-    const finalCategory = (prod.category || decodedCategory).trim();
+    // ✅ Use masterCategory from categories_with_urls.json mapping
+    const finalCategory = prod.masterCategory;
     const finalOfficialCategory = (prod.officialCategory || prod.officalCategory || 'N/A').trim();
     const finalOfficialSubCategory = (prod.officialSubCategory || prod.officalSubCategory || 'N/A').trim();
 

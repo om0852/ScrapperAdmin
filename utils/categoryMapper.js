@@ -14,6 +14,51 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 let CATEGORY_CACHE = null;
 
 /**
+ * Master category mapping for categoryName → masterCategory
+ * Used when URL matching is not available
+ */
+const CATEGORY_NAME_MAPPING = {
+  'Chocolates': 'Sweet Cravings',
+  'Dark Chocolates': 'Sweet Cravings',
+  'Biscuits': 'Bakery & Biscuits',
+  'Cookies': 'Bakery & Biscuits',
+  'Cakes': 'Bakery & Biscuits',
+  'Wafers': 'Bakery & Biscuits',
+  'Snacks': 'Breakfast & Sauces',
+  'Cereal': 'Breakfast & Sauces',
+  'Muesli': 'Breakfast & Sauces',
+  'Pasta': 'Packaged Food',
+  'Noodles': 'Packaged Food',
+  'Instant Food': 'Packaged Food',
+  'Soups': 'Packaged Food',
+  'Sauces': 'Packaged Food',
+  'Condiments': 'Packaged Food',
+  'Tea': 'Tea, Coffee & More',
+  'Coffee': 'Tea, Coffee & More',
+  'Beverages': 'Cold Drinks & Juices',
+  'Energy Drinks': 'Cold Drinks & Juices',
+  'Juice': 'Cold Drinks & Juices',
+  'Water': 'Cold Drinks & Juices',
+  'Ice Cream': 'Ice Creams & More',
+  'Frozen Desserts': 'Ice Creams & More',
+  'Honey': 'Health & Wellness',
+  'Protein': 'Health & Wellness',
+  'Vitamins': 'Health & Wellness',
+  'Supplements': 'Health & Wellness',
+  'Fresh Vegetables': 'Fruits & Vegetables',
+  'Fresh Fruits': 'Fruits & Vegetables',
+  'Dairy': 'Dairy, Bread & Eggs',
+  'Milk': 'Dairy, Bread & Eggs',
+  'Bread': 'Dairy, Bread & Eggs',
+  'Eggs': 'Dairy, Bread & Eggs',
+  'Rice': 'Atta, Rice, Oil & Dals',
+  'Atta': 'Atta, Rice, Oil & Dals',
+  'Dal': 'Atta, Rice, Oil & Dals',
+  'Oil': 'Atta, Rice, Oil & Dals',
+  'Dals': 'Atta, Rice, Oil & Dals'
+};
+
+/**
  * Load category mappings from JSON file
  */
 function loadCategoryMappings() {
@@ -35,6 +80,24 @@ function loadCategoryMappings() {
 /**
  * Extract category from URL by comparing with mappings
  */
+/**
+ * Normalize URL for comparison (handles encoding differences)
+ * Preserves domain and path but handles space/special char encoding variations
+ */
+function normalizeUrlForComparison(url) {
+  if (!url) return '';
+  // Decode then re-encode consistently to handle %20 vs + vs space differences
+  try {
+    // Decode any existing encoding
+    let decoded = decodeURIComponent(url);
+    // Re-encode to standard format (space as %20)
+    return encodeURI(decoded).toLowerCase().trim();
+  } catch {
+    // If decoding fails, just use as-is
+    return url.toLowerCase().trim();
+  }
+}
+
 function extractCategoryFromUrl(categoryUrl, platform = 'Instamart') {
   if (!categoryUrl || categoryUrl === 'N/A') {
     return {
@@ -46,74 +109,46 @@ function extractCategoryFromUrl(categoryUrl, platform = 'Instamart') {
   }
 
   const mappings = loadCategoryMappings();
-  const platformMappings = mappings[platform] || [];
+  
+  // 🔧 FIX: Case-insensitive platform lookup
+  const platformKey = Object.keys(mappings).find(
+    key => key.toLowerCase() === (platform || '').toLowerCase()
+  );
+  
+  if (!platformKey) {
+    console.warn(`⚠️  Platform "${platform}" not found in category mappings`);
+    return {
+      category: 'Unknown',
+      officialCategory: 'Unknown',
+      officialSubCategory: 'Unknown',
+      masterCategory: 'Unknown'
+    };
+  }
+  
+  const platformMappings = mappings[platformKey] || [];
+  const normalizedInput = normalizeUrlForComparison(categoryUrl);
 
-  // Normalize URL for comparison (remove query params variations)
-  const normalizedUrl = categoryUrl.split('?')[0];
-
-  // Try exact match first
-  let match = platformMappings.find(m => {
-    if (!m.url) return false;
-    const mappingUrlBase = m.url.split('?')[0];
-    return mappingUrlBase === normalizedUrl;
+  // ✅ STEP 1: TRY EXACT URL MATCH FIRST (with normalization for encoding)
+  const exactMatch = platformMappings.find(m => {
+    const dbUrl = (m.url || '').toLowerCase().trim();
+    // Try both normalized and direct comparison
+    const directMatch = dbUrl === categoryUrl.toLowerCase().trim();
+    const normalizedMatch = normalizeUrlForComparison(m.url) === normalizedInput;
+    return directMatch || normalizedMatch;
   });
 
-  // Try matching base URL + query params intelligently
-  if (!match) {
-    match = platformMappings.find(m => {
-      if (!m.url) return false;
-      
-      // Extract key parts from both URLs
-      const urlParams = new URLSearchParams(categoryUrl.split('?')[1] || '');
-      const mappingParams = new URLSearchParams(m.url.split('?')[1] || '');
-      
-      // Match on categoryName at minimum
-      const urlCategoryName = urlParams.get('categoryName');
-      const mappingCategoryName = mappingParams.get('categoryName');
-      
-      if (urlCategoryName && mappingCategoryName && urlCategoryName === mappingCategoryName) {
-        // Additional check: if there's a filterName, try to match it
-        const urlFilterName = urlParams.get('filterName');
-        const mappingFilterName = mappingParams.get('filterName');
-        
-        if (urlFilterName && mappingFilterName) {
-          return urlFilterName === mappingFilterName;
-        }
-        
-        // If no filterName in URL, any entry with same categoryName works
-        return !mappingFilterName;
-      }
-      
-      return false;
-    });
-  }
-
-  if (match) {
+  if (exactMatch) {
     return {
-      category: match.masterCategory || 'Unknown',
-      officialCategory: match.officalCategory || match.officialCategory || 'Unknown',
-      officialSubCategory: match.officalSubCategory || match.officialSubCategory || 'Unknown',
-      masterCategory: match.masterCategory || 'Unknown'
+      category: exactMatch.masterCategory || 'Unknown',
+      officialCategory: exactMatch.officalCategory || exactMatch.officialCategory || 'Unknown',
+      officialSubCategory: exactMatch.officalSubCategory || exactMatch.officialSubCategory || 'Unknown',
+      masterCategory: exactMatch.masterCategory || 'Unknown'
     };
   }
 
-  // Fallback: try to extract from categoryName parameter
-  try {
-    const urlParams = new URLSearchParams(categoryUrl.split('?')[1] || '');
-    const categoryName = urlParams.get('categoryName');
-    
-    if (categoryName) {
-      return {
-        category: decodeURIComponent(categoryName),
-        officialCategory: decodeURIComponent(categoryName),
-        officialSubCategory: 'Unknown',
-        masterCategory: decodeURIComponent(categoryName)
-      };
-    }
-  } catch (e) {
-    console.warn('⚠️ Failed to extract category from URL params:', categoryUrl);
-  }
-
+  console.warn(`⚠️  No URL match found for: ${categoryUrl.substring(0, 80)}...`);
+  
+  // No match: return Unknowns
   return {
     category: 'Unknown',
     officialCategory: 'Unknown',

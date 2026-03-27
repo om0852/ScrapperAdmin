@@ -7,6 +7,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { categoryMapper } from '../utils/categoryMapper.js';
+import { enhanceProductForManualInsertion } from '../utils/manualInsertionHelper.js';
 import processScrapedDataOptimized from '../controllers/dataControllerOptimized.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -73,20 +74,64 @@ export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMa
     }
 
     // ═══════════════════════════════════════════════════════════════════
-    // Map products before ingestion
+    // Map products before ingestion - USE MANUAL INSERTION HELPER
     // ═══════════════════════════════════════════════════════════════════
     let productsToIngest = data.products;
 
     if (!skipCategoryMapping) {
-      console.log(`🔄 Mapping categories for ${productsToIngest.length} products...`);
-      productsToIngest = categoryMapper.batchMapProductCategories(productsToIngest, platform);
+      console.log(`🔄 Enhancing products for manual insertion (folder + URL mapping)...`);
       
-      // Log sample of mapped categories
+      // Get folder path for manual insertion helper context
+      const folderPath = path.dirname(filePath);
+      
+      // Enhance each product with full context (folder name + categoryUrl)
+      productsToIngest = productsToIngest.map(product => 
+        enhanceProductForManualInsertion(product, folderPath, platform)
+      );
+      
+      // ═══════════════════════════════════════════════════════════════════
+      // STEP 2: Assign ranking based on officialSubCategory
+      // ═══════════════════════════════════════════════════════════════════
+      console.log(`📊 Assigning rankings based on officialSubCategory...`);
+      const groupedBySubCategory = {};
+      
+      productsToIngest.forEach((product, index) => {
+        const subCatKey = product.officialSubCategory || 'Unknown';
+        if (!groupedBySubCategory[subCatKey]) {
+          groupedBySubCategory[subCatKey] = [];
+        }
+        groupedBySubCategory[subCatKey].push(index);
+      });
+      
+      // Assign ranking within each subcategory
+      productsToIngest = productsToIngest.map((product, index) => {
+        const subCatKey = product.officialSubCategory || 'Unknown';
+        const ranking = groupedBySubCategory[subCatKey].indexOf(index) + 1;
+        return {
+          ...product,
+          ranking
+        };
+      });
+      
+      // ═══════════════════════════════════════════════════════════════════
+      // STEP 5: Override scrapedAt timestamp if provided
+      // ═══════════════════════════════════════════════════════════════════
+      if (dateOverride) {
+        console.log(`⏰ Applying dateOverride: ${dateOverride}`);
+        productsToIngest = productsToIngest.map(product => ({
+          ...product,
+          scrapedAt: dateOverride
+        }));
+      }
+      
+      // Log sample of enhanced products
       const sample = productsToIngest.slice(0, 3);
       sample.forEach((p, i) => {
         console.log(`  [${i + 1}] ${p.productName || 'Unknown'}`);
         console.log(`      Category: ${p.category}`);
         console.log(`      Official: ${p.officialCategory} > ${p.officialSubCategory}`);
+        console.log(`      ProductId: ${p.productId}`);
+        console.log(`      Ranking: ${p.ranking}`);
       });
     }
 
@@ -98,8 +143,7 @@ export async function ingestJsonFile(filePath, pincode, platform, skipCategoryMa
       pincode,
       platform,
       category,
-      products: productsToIngest,
-      dateOverride
+      products: productsToIngest
     });
 
     return {

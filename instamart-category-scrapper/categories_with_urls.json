@@ -32,13 +32,19 @@
     },
     {
       "officalCategory": "Fruits & Vegetables",
+      "officalSubCategory": "Bouquet & Plants",
+      "masterCategory": "Fruits & Vegetables",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aaa&filterName=Bouquet+%26+Plants&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+    },
+    {
+      "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Cuts & Sprouts",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aa6&filterName=Cuts+and+sprouts&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
     {
       "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Certified Organics",
+      "officalSubCategory": "Cuts & Sprouts",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aa8&filterName=Certified+Organics&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
@@ -53,18 +59,6 @@
       "officalSubCategory": "Cut Fruits & Juices",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aac&filterName=Cut+Fruits+and+Juices&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-     {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Combos",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=6822eeeded32000001e25aa9&filterName=Combos&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Frozen Vegetables",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Fresh+Vegetables&filterId=68243edc0c0f930001b2188d&filterName=Frozen+Vegetables&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
     {
       "officalCategory": "Fruits & Vegetables",
@@ -498,30 +492,83 @@
       "masterCategory": "Tea, Coffee & More",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad9&filterName=Hot+Beverages&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
-    {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Tea",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b26&filterName=Tea&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Instant Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b27&filterName=Instant+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Filter & Ground Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b28&filterName=Filter+%26+Ground+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Cold Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b2a&filterName=Cold+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
+   {
+    "url": "https://www.swiggy.com/instamart/city/delhi/sc/tea-coffee-and-more/bestsellers-682496711f249300018d774e",
+    "category": "Bestsellers",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Bestsellers",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/city/delhi/sc/tea-coffee-and-more/tea-68249b5d56df9b0001250150",
+    "category": "Tea",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Tea",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7754&filterName=Instant+Coffee&taxonomyType=All+Listing",
+    "category": "Instant Coffee",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Instant Coffee",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7751&filterName=Filter & Ground Coffee",
+    "category": "Filter & Ground Coffee",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Filter & Ground Coffee",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7753&filterName=Green+and+Herbal+Tea&taxonomyType=All+Listing",
+    "category": "Green and Herbal Tea",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Green and Herbal Tea",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7752&filterName=Fruit+Syrups+and+Powders&taxonomyType=All+Listing",
+    "category": "Fruit Syrups and Powders",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Fruit Syrups and Powders",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d774f&filterName=Choco+Syrups+%26+Powders&taxonomyType=All+Listing",
+    "category": "Choco Syrups & Powders",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Choco Syrups & Powders",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7750&filterName=Drink+Mixes&taxonomyType=All+Listing",
+    "category": "Drink Mixes",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Drink Mixes",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d774d&filterName=Adult+Nutrition&taxonomyType=All+Listing",
+    "category": "Adult Nutrition",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Adult Nutrition",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=68249b5d56df9b000125014f&filterName=Protein+Powders&taxonomyType=All+Listing",
+    "category": "Protein Powders",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Protein Powders",
+    "masterCategory": "Tea, Coffee & More"
+  },
+  {
+    "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7756&filterName=Premixes&taxonomyType=All+Listing",
+    "category": "Premixes",
+    "officialCategory": "Tea, Coffee and More",
+    "officialSubCategory": "Premixes",
+    "masterCategory": "Tea, Coffee & More"
+  },
     {
       "officalCategory": "Ice Creams & Frozen Desserts",
       "officalSubCategory": "Tubs & Party Packs",
@@ -575,6 +622,102 @@
       "officalSubCategory": "Beauty Supplements",
       "masterCategory": "Health & Wellness",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Skincare&filterId=6824a99856df9b0001250153&filterName=Beauty+Supplements&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Supermarket"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc1&filterName=Stomach+Care&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Stomach Care",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health%20and%20Pharma&storeId=1393574&offset=0&filterName=&taxonomyType=Supermarket&showAgeConsent=false",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc3&filterName=Wound+Care+%26+Pain+Relief&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Wound Care & Pain Relief",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc5&filterName=Newly+Added&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Newly Added",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc4&filterName=Oral%2FDental+Care&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Oral/Dental Care",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc6&filterName=Derma+Care&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Derma Care",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc7&filterName=ENT+Care&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "ENT Care",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bc9&filterName=Digestives&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Digestives",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bca&filterName=Masks+%26+Sanitizers&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Masks & Sanitizers",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bcb&filterName=Pregnancy+Test+Kit&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Pregnancy Test Kit",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bcc&filterName=Medical+Devices&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Medical Devices",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bcd&filterName=Adult+Diapers&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Adult Diapers",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bce&filterName=Handwash&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Handwash",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bcf&filterName=Daily+Wellness&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Daily Wellness",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bd0&filterName=Protein+%26+Sports+Nutrition&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Protein & Sports Nutrition",
+      "masterCategory": "Health & Wellness"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Health+and+Pharma&filterId=6822eeefed32000001e25bd1&filterName=Boosters&offset=0&showAgeConsent=false&storeId=1393574&taxonomyType=Supermarket",
+      "officialCategory": "Health and Pharma",
+      "officialSubCategory": "Boosters",
+      "masterCategory": "Health & Wellness"
     },
     {
       "officalCategory": "Makeup",
@@ -655,46 +798,70 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Chips+and+Namkeens&filterId=6822eeebed32000001e25a67&filterName=Bhujia+and+Namkeens&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+3"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cakes & Pies",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b15&filterName=Cakes+%26+Pies&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "All",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cookies",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b16&filterName=Cookies&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cookies",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58b&filterName=Cookies&taxonomyType=All+Listing"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Cream Biscuits",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b17&filterName=Cream+Biscuits&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Top Deals",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa592&filterName=Top+Deals&taxonomyType=All+Listing"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Marie & Digestive",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b18&filterName=Marie+%26+Digestive&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cream Biscuits",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58c&filterName=Cream+Biscuits&taxonomyType=All+Listing"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Salted & Plain",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b19&filterName=Salted+%26+Plain&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Cakes and Pies",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58a&filterName=Cakes+and+Pies&taxonomyType=All+Listing"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Wafers",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b1b&filterName=Wafers&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Marie and Digestive",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58e&filterName=Marie+and+Digestive&taxonomyType=All+Listing"
     },
     {
-      "officalCategory": "Biscuits & Cakes",
-      "officalSubCategory": "Rusk",
       "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=6822eeeded32000001e25b1c&filterName=Rusk&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Salted and Plain",
+      "url": "http://swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa591&filterName=Salted+and+Plain&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Wafers",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa594&filterName=Wafers&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Value Packs",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa593&filterName=Value+Packs&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Newly Added",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58f&filterName=Newly+Added&taxonomyType=All+Listing"
+    },
+    {
+      "masterCategory": "Bakery & Biscuits",
+      "officialCategory": "Biscuits and Cakes",
+      "officialSubCategory": "Healthy Snacking",
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Biscuits+and+Cakes&filterId=681f386909ab2e00019aa58d&filterName=Healthy+Snacking&taxonomyType=All+Listing"
     },
     {
       "officalCategory": "Home and Furnishing",
@@ -1955,6 +2122,525 @@
   ],
   "Zepto": [
     {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Base Tints",
+      "url": "https://www.zepto.com/cn/face/base-tints/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/d76b2bc9-4287-4c20-a6fb-153ba1919bc1"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Conceal & Correct",
+      "url": "https://www.zepto.com/cn/face/conceal-correct/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/61b246f9-9b11-4eca-aaca-51ef7afdc157"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Fix & Remove",
+      "url": "https://www.zepto.com/cn/face/fix-remove/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/5d9be0bd-9393-42cf-868e-597ede5d3db6"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Powders",
+      "url": "https://www.zepto.com/cn/face/powders/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/0d778cf0-0550-46c4-8ef4-c96c35e85a98"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Primers",
+      "url": "https://www.zepto.com/cn/face/primers/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/9e92b66f-2da0-4662-b24e-5ddbfcf8a888"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip & Cheek Tint",
+      "url": "https://www.zepto.com/cn/face/lip-cheek-tint/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/43b67c20-a53a-470a-8f42-d7e1fc35883f"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Kajal",
+      "url": "https://www.zepto.com/cn/eyes/kajal/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/aab002a3-e958-4066-b492-c67f803af737"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eye Liner",
+      "url": "https://www.zepto.com/cn/eyes/eye-liner/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/d458b0b4-3e33-43d7-8061-63e6f517645b"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Mascara",
+      "url": "https://www.zepto.com/cn/eyes/mascara/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/f0b374d6-144f-4638-a4eb-b1eb939927ff"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eye Shadow",
+      "url": "https://www.zepto.com/cn/eyes/eye-shadow/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/81528148-9507-4875-8d80-f4ec04e20f0d"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eyebrow Enhancer",
+      "url": "https://www.zepto.com/cn/eyes/eyebrow-enhancer/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/8c2b7925-6450-471f-9e9a-8f6f927268c4"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Eyelash Essentials",
+      "url": "https://www.zepto.com/cn/eyes/eyelash-essentials/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/a3d91938-ebb9-42f4-8575-56a6970bdca2"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Liquid Lipstick",
+      "url": "https://www.zepto.com/cn/lips/liquid-lipstick/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/155e55b2-ffb8-4cda-85c4-2404cad2c862"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lipsticks",
+      "url": "https://www.zepto.com/cn/lips/lipsticks/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/f9b83893-043a-4c9e-ba3c-1e1d201aead7"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/crazy-deals/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/f9305f91-6fe3-454c-8001-51fab1816353",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Crazy Deals",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/bedsheets/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/76303a2f-1be5-4a85-8fb5-a08b96414da8",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Bedsheets",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/pillows-ortho-cushions/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/d444f451-1463-4456-a8b9-1442aed88dc4",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Pillows Ortho Cushions",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/blankets-layers/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/3e341c64-c999-4e0e-a952-336431bd5fa3",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Blankets Layers",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/bath-linen/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/76cc3d64-8e4c-492b-8045-705ed4d9efb0",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Bath Linen",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/mats-carpets-rugs/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/07c90642-3585-4bdc-a142-0a8722a62f62",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Mats Carpets Rugs",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/cushion-pillow-covers/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/b69f87c9-59c1-497b-942c-36d91911abd1",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Cushion Pillow Covers",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/curtain/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/6f6f874c-598a-43ab-93d1-2bbf7d1f4ac0",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Curtain",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/table-covers-runners-mats/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/9e8d79d5-e815-4472-a9ae-1484d6dd5cad",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Table Covers Runners Mats",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/mattress-mattress-protector/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/a586108b-f339-44c3-8643-ce46ef68c8a3",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Mattress Mattress Protector",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-furnishing/appliance-covers/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/6253ecc6-2af7-468d-be7d-022f97f0b3e3",
+      "officialCategory": "Home Furnishing",
+      "officialSubCategory": "Appliance Covers",
+      "masterCategory": "Home Needs"
+    },
+
+    {
+      "url": "https://www.zepto.com/cn/home-decor/crazy-deals/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/fe035bf7-da3c-446b-a556-bdef4edd6043",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Crazy Deals",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/candles/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/2cfb5afc-2172-43be-91ed-d2574867e585",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Candles",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/diffusers-potpourri/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/88664e23-3efc-46dd-a0d5-0e04abbe825e",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Diffusers Potpourri",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/wall-clocks/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/133b1e1e-40cb-4ab3-aff7-f33afee72fac",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Wall Clocks",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/paintings-posters/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/21badac3-8de8-4103-b436-be3c35026903",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Paintings Posters",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/showpiece-vase/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/4a6af381-af2b-4d91-b00b-0c3cbb958757",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Showpiece Vase",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/wall-papers-stickers/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/15cbc22a-44a2-4486-ac83-882c270dc69a",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Wall Papers Stickers",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-decor/artificial-plants-flowers/cid/69b50c86-3048-4db2-94ea-d485f1ddc650/scid/d242a411-026e-4d36-8d41-4426b2ba3430",
+      "officialCategory": "Home Decor",
+      "officialSubCategory": "Artificial Plants Flowers",
+      "masterCategory": "Home Needs"
+    },
+
+    {
+      "url": "https://www.zepto.com/cn/home-utility/crazy-deals/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/2df98ad8-0580-47ea-bb51-a78b37cbfedb",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Crazy Deals",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/assorted-must-haves/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/d02eab5a-93ab-4e7a-affb-08484066549d",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Assorted Must Haves",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/umbrella/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/3310c88d-74b9-4034-aab7-3880e1329e82",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Umbrella",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/hooks-hangers/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/3f23fdf4-92fd-4437-8c89-bd7ddc386c64",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Hooks Hangers",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/cloth-clip-rope/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/115a4928-24b4-4f23-b3a1-c38ee7b571ce",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Cloth Clip Rope",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/locks/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/b5e5dccb-3cab-4b6b-97bb-911aa97a2d04",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Locks",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/ironing-needs/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/f09affe7-b96e-4674-9efb-135263b15f62",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Ironing Needs",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/laundry-basket/cid/1eb3a9db-2bc4-4278-a149-e54ffce7a37e/scid/96bed0fb-1f5b-4c6c-a97f-b5c760a0e9a1",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Laundry Basket",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/home-utility/cloth-drying-needs/",
+      "officialCategory": "Home Utility",
+      "officialSubCategory": "Cloth Drying Needs",
+      "masterCategory": "Home Needs"
+    },
+
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/crazy-deals/",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Crazy Deals",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/garbage-bag-dustbins/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/2b32329a-c091-458d-b2ce-4b2ac8c17347",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Garbage Bag Dustbins",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/brooms-dust-pan/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/06371753-7a96-4ecf-baf4-963267d8378d",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Brooms Dust Pan",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/mop/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/8c941cba-99c9-4803-b5d1-e198f938ea90",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Mop",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/tissues/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/d08aaca6-b936-47cb-9fa0-be75fcb8f54a",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Tissues",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/toilet-rolls-more/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/91a832f8-6205-47a6-95de-9d4eb469a35a",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Toilet Rolls More",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/foils-wraps-cooking-paper/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/da55ac08-ca49-446c-832b-5b5d0a697c97",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Foils Wraps Cooking Paper",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/wipes-wipers/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/4477e337-47bb-4105-af30-ed247ff8f8b1",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Wipes Wipers",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/toilet-bathroom-essentials/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/b8df5d09-9c23-404f-97f8-9aed88b86b7b",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Toilet Bathroom Essentials",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/disposable-cup-plate/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/3f3238d4-2126-46c7-8d75-f3daac004345",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Disposable Cup Plate",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/disposable-cutlery/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/dc5fb1f9-d414-4af5-bb55-b77f65aac32e",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Disposable Cutlery",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "url": "https://www.zepto.com/cn/cleaning-aids/other-cleaning-essentials/cid/6d369f21-9882-46cb-9125-0a1219d8e95b/scid/a37eb415-5a81-4d6c-9eef-743d2465ce81",
+      "officialCategory": "Cleaning Aids",
+      "officialSubCategory": "Other Cleaning Essentials",
+      "masterCategory": "Home Needs"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Liner",
+      "url": "https://www.zepto.com/cn/lips/lip-liner/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/50361c18-ba91-49c3-9d51-af6de5a8c79c"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip & Cheek Tint",
+      "url": "https://www.zepto.com/cn/lips/lip-cheek-tint/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/c3465680-30b6-4f00-ab9e-e837b661e8ca"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Crayon",
+      "url": "https://www.zepto.com/cn/lips/lip-crayon/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/36e1d46a-d3d7-4be7-bf6d-1b26cb83a27f"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Lip Oil & Palette",
+      "url": "https://www.zepto.com/cn/lips/lip-oil-pallette/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/84d36b7a-81fd-403a-a86e-1b3656a1d1dd"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Hair Tools & Brushes",
+      "url": "https://www.zepto.com/cn/tools/hair-tools-brushes/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/50ac430a-0f24-4aaa-8792-0937a1454947"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Hair Accessories",
+      "url": "https://www.zepto.com/cn/tools/hair-accessories/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/026ede12-b9a5-4772-9cb7-3620aebe1347"
+    },
+    {
+      "masterCategory": "Beauty",
+      "officialCategory": "Makeup & Beauty",
+      "officialSubCategory": "Nail Care",
+      "url": "https://www.zepto.com/cn/tools/nail-care/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/439197e1-6aca-488a-805a-63b28d33779d"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Gift Set",
+      "url": "https://www.zepto.com/cn/school-supplies/gift-set/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/4ff0a16c-2124-4c06-b4d8-409ced7f792e"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Scale, Eraser & More",
+      "url": "https://www.zepto.com/cn/school-supplies/scale-eraser-more/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/fd07d23b-5415-456d-bf63-a9e4211f3050"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Geometry Box",
+      "url": "https://www.zepto.com/cn/school-supplies/geometry-box/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/80f454f6-6ef3-4d20-9205-b3ff5c0604ef"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "School Bag & Bottle",
+      "url": "https://www.zepto.com/cn/school-supplies/school-bag-bottle/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/5e424290-a361-42af-913c-5870bf8552b9"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Exam Pad & Whiteboard",
+      "url": "https://www.zepto.com/cn/school-supplies/exam-pad-whiteboard/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/50518f0a-00be-490e-987c-e944d904a965"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "School Supplies",
+      "officialSubCategory": "Chart, Painting & Other Paper",
+      "url": "https://www.zepto.com/cn/school-supplies/chart-painting-other-paper/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/2e5d4c5b-a0c0-41e4-8f30-d53ab24ee28c"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "A4 Paper",
+      "url": "https://www.zepto.com/cn/office-supplies/a4-paper/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/012a8d13-c55c-4ad5-ae89-1141413ae847"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Pen Stand & More",
+      "url": "https://www.zepto.com/cn/office-supplies/pen-stand-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/b4d030c6-d2bc-4ada-ae1c-d1b0dcdb601b"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "File, Folder & More",
+      "url": "https://www.zepto.com/cn/office-supplies/file-folder-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/534bab16-ddef-4cee-b6ad-46d3f8443859"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Calendar & Journal",
+      "url": "https://www.zepto.com/cn/office-supplies/calendar-journal/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/46a236cd-306a-49df-8373-46ce0550ffc1"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Calculator & Stapler",
+      "url": "https://www.zepto.com/cn/office-supplies/calculator-stapler/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/c33039ad-aba6-442f-b8cb-719ffa82685a"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Punching Machine & More",
+      "url": "https://www.zepto.com/cn/office-supplies/punching-machine-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/af5bc61e-b7ac-4ce9-a2d1-7cfbe9d4ad70"
+    },
+    {
+      "masterCategory": "School, Office & Stationery",
+      "officialCategory": "Office Supplies",
+      "officialSubCategory": "Sticky Notes",
+      "url": "https://www.zepto.com/cn/office-supplies/sticky-notes/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/5eec61d5-2be1-46d3-973f-86f8842c1526"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/b998e39c-6948-42f2-84bb-947f07f2ceca",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Care",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-skin-hair-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/3b386054-f215-4dfb-97f1-ac2a4c1d369e",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Skin & Hair Care",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-wipes/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/2b24bfa9-6ef9-41a4-8bf9-694ef4d01a44",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Wipes",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-feeding/cid/0118c4f5-750c-4929-a734-b4ef454e265b",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Feeding",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-oral-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Oral Care",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-hygiene/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/88c0c306-f192-4387-bfb1-3e7c810a7af0",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Hygiene",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-mom-gifting/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/67e4dc8d-b2dc-4ae3-bf90-ff00ea1d5149",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby & Mom Gifting",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/mom-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/26f826a6-a1a3-4b87-b33f-4f80781077fc",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Mom Care",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-health/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/8ec78ab7-9493-4bf8-aca8-fc4ee691acff",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Health",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-nursery/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/06bd4eb6-05cb-4937-9334-11317471f881",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Nursery",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/infant-clothing/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/b0941916-af2f-4ee7-b94b-261c28f3dc56",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Infant Clothing",
+      "masterCategory": "Baby Care"
+    },
+    {
+      "url": "https://www.zepto.com/cn/baby-care/baby-gear/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/f1af24d2-e5ea-4de5-a577-bfb332dda2ea",
+      "officialCategory": "Baby Care",
+      "officialSubCategory": "Baby Gear",
+      "masterCategory": "Baby Care"
+    },
+    {
       "officalCategory": "Fruits Vegetables",
       "officalSubCategory": "All",
       "masterCategory": "Fruits & Vegetables",
@@ -2013,12 +2699,6 @@
       "officalSubCategory": "Cuts Sprouts",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.zepto.com/cn/fruits-vegetables/cuts-sprouts/cid/64374cfe-d06f-4a01-898e-c07c46462c36/scid/6eb7a384-5edf-4a68-aa99-a1c2b30c2f19"
-    },
-    {
-      "officalCategory": "Fruits Vegetables",
-      "officalSubCategory": "Frozen Veggies Pulp",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://www.zepto.com/cn/fruits-vegetables/frozen-veggies-pulp/cid/64374cfe-d06f-4a01-898e-c07c46462c36/scid/287a523f-f6c5-4f0c-b00a-4d872c837b80"
     },
     {
       "officalCategory": "Dairy Bread Eggs",
@@ -2930,18 +3610,6 @@
   "Blinkit": [
     {
       "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Exotics & Premium",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/exotics-premium/cid/1487/278"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Freshly Cut & Sprouts",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/freshly-cut-sprouts/cid/1487/395"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
       "officalSubCategory": "Gourmet Mushroom",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://blinkit.com/cn/gourmet-mushroom/cid/1487/482"
@@ -2978,39 +3646,9 @@
     },
     {
       "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Frozen Indian Breads",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/frozen-indian-breads/cid/1487/116"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Frozen Veg",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/frozen-veg/cid/1487/157"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
       "officalSubCategory": "Fresh Vegetables",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://blinkit.com/cn/fresh-vegetables/cid/1487/1489"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Frozen Peas & Corn",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/frozen-peas-corn/cid/1487/172"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Frozen Potato Snacks",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/frozen-potato-snacks/cid/1487/122"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Other Frozen Vegetables",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/other-frozen-vegetables/cid/1487/222"
     },
     {
       "officalCategory": "Vegetables & Fruits",
@@ -3023,12 +3661,6 @@
       "officalSubCategory": "Leafies & Herbs",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://blinkit.com/cn/leafies-herbs/cid/1487/1871"
-    },
-    {
-      "officalCategory": "Vegetables & Fruits",
-      "officalSubCategory": "Other Frozen Snacks",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://blinkit.com/cn/other-frozen-snacks/cid/1487/125"
     },
     {
       "officalCategory": "Dairy, Bread & Eggs",
@@ -5422,12 +6054,6 @@
     },
     {
       "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Frozen Vegetables",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/jcen/pr?sid=hloc%2F0072%2Fjcen&marketplace=HYPERLOCAL&pageUID=1766499285460"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Seasonal Fruits",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.flipkart.com/hyperlocal/hloc/7113/pr?sid=hloc%2F0071%2F7113&marketplace=HYPERLOCAL&pageUID=1766500173190"
@@ -6435,12 +7061,6 @@
       "officalSubCategory": "Vegetables",
       "masterCategory": "Fruits & Vegetables",
       "url": "https://www.dmart.in/category/vegetables-aesc-vegetables"
-    },
-    {
-      "officalCategory": "Fruits & Vegetables",
-      "officalSubCategory": "Frozen Vegetables",
-      "masterCategory": "Fruits & Vegetables",
-      "url": "https://www.dmart.in/category/frozen-vegetable"
     },
     {
       "officalCategory": "Fruits & Vegetables",

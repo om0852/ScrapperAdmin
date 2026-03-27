@@ -4,6 +4,7 @@ import ProductSnapshot from '../models/ProductSnapshot.js';
 import ProductGrouping from '../models/ProductGrouping.js';
 import redisCache from '../utils/redisCache.js';
 import { categoryMapper } from '../utils/categoryMapper.js';
+import { enhanceProductForManualInsertion } from '../utils/manualInsertionHelper.js';
 
 /**
  * Validates productName ensuring it's not a price or invalid value
@@ -186,7 +187,8 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
 
     // ─ Create snapshot document
     const isNewProduct = !snapshotMap.has(fullProductId);
-    const finalCategory = (prod.category || decodedCategory).trim();
+    // ✅ Use masterCategory from categories_with_urls.json mapping
+    const finalCategory = (prod.masterCategory || prod.category || decodedCategory).trim();
     const finalOfficialCategory = (prod.officialCategory || prod.officalCategory || 'N/A').trim();
     const finalOfficialSubCategory = (prod.officialSubCategory || prod.officalSubCategory || 'N/A').trim();
 
