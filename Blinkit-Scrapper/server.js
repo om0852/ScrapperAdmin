@@ -1,4 +1,4 @@
-import express from 'express';
+﻿import express from 'express';
 import { chromium } from 'playwright';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -63,12 +63,12 @@ const log = (type, prefix, message) => {
     let color = colors.reset;
 
     switch (type) {
-        case 'info': icon = 'ℹ️'; color = colors.cyan; break;
-        case 'success': icon = '✅'; color = colors.green; break;
-        case 'warn': icon = '⚠️'; color = colors.yellow; break;
-        case 'error': icon = '❌'; color = colors.red; break;
-        case 'debug': icon = '🐛'; color = colors.dim; break;
-        case 'start': icon = '🚀'; color = colors.magenta; break;
+        case 'info': icon = 'â„¹ï¸'; color = colors.cyan; break;
+        case 'success': icon = 'âœ…'; color = colors.green; break;
+        case 'warn': icon = 'âš ï¸'; color = colors.yellow; break;
+        case 'error': icon = 'âŒ'; color = colors.red; break;
+        case 'debug': icon = 'ðŸ›'; color = colors.dim; break;
+        case 'start': icon = 'ðŸš€'; color = colors.magenta; break;
     }
 
     // Format: [12:00:00] [Prefix] Icon Message
@@ -77,18 +77,61 @@ const log = (type, prefix, message) => {
 
 // --- API Data Processing Functions ---
 
-function extractProductFromWidget(item) {
+function getCartItemFromNode(node) {
+    if (!node || typeof node !== 'object') return null;
+    return (
+        node.atc_action?.add_to_cart?.cart_item ||
+        node.rfc_action?.remove_from_cart?.cart_item ||
+        node.cart_item ||
+        null
+    );
+}
+
+function toNumericPrice(value, fallback = 0) {
+    if (typeof value === 'number' && Number.isFinite(value)) return value;
+    if (typeof value === 'string') {
+        const cleaned = value.replace(/[^0-9.]/g, '');
+        if (!cleaned) return fallback;
+        const num = Number(cleaned);
+        if (Number.isFinite(num)) return num;
+    }
+    return fallback;
+}
+
+function extractBrandName(item, cartItem) {
+    const candidateValues = [
+        cartItem?.brand_name,
+        cartItem?.brand,
+        cartItem?.brandName,
+        cartItem?.seller_name,
+        item?.brand_name?.text,
+        item?.brand_name,
+        item?.brand?.text,
+        item?.brand?.name,
+        typeof item?.brand === 'string' ? item.brand : '',
+        item?.seller_name
+    ];
+
+    for (const value of candidateValues) {
+        const cleaned = String(value || '').trim();
+        if (cleaned) return cleaned;
+    }
+
+    return 'N/A';
+}
+
+function extractProductsWithVariants(item) {
     try {
         // Blinkit API structure: product data is in atc_action.add_to_cart.cart_item
-        const cartItem = item.atc_action?.add_to_cart?.cart_item;
-        if (!cartItem) return null;
+        const cartItem = getCartItemFromNode(item);
+        if (!cartItem) return [];
 
         const id = cartItem.product_id?.toString() || '';
         const name = cartItem.product_name || cartItem.display_name || '';
         const image = cartItem.image_url || item.image?.url || '';
 
-        const price = cartItem.price || 0;
-        const originalPrice = cartItem.mrp || price;
+        const price = toNumericPrice(cartItem.price, 0);
+        const originalPrice = toNumericPrice(cartItem.mrp, price);
 
         let discount = '';
         if (originalPrice > price) {
@@ -97,8 +140,19 @@ function extractProductFromWidget(item) {
 
         const quantity = cartItem.unit || item.variant?.text || '';
         const isOutOfStock = item.inventory === 0 || cartItem.inventory === 0;
-        const deliveryTime = item.eta_tag?.title?.text || '';
-        const combo = item.cta?.button_data?.subtext || 'N/A';
+        
+        // ðŸ” Format delivery time - extract just the time part
+        let deliveryTime = item.eta_tag?.title?.text || '';
+        if (deliveryTime && deliveryTime.includes('mins')) {
+            // Extract time like "14 mins" from "14 minsAmul Gold Full Cream Milk500 mlâ‚¹35ADD"
+            const match = deliveryTime.match(/(\d+\s*mins?)/i);
+            if (match) {
+                deliveryTime = match[1];
+            }
+        }
+
+        const brand = extractBrandName(item, cartItem);
+
         const isAd = item.tracking?.common_attributes?.badge === 'AD';
 
         let url = '';
@@ -107,7 +161,19 @@ function extractProductFromWidget(item) {
             url = `https://blinkit.com/prn/${slug}/prid/${id}`;
         }
 
-        return {
+        const familyKey = String(
+            cartItem.group_id ||
+            item.group_id ||
+            item.meta?.group_id ||
+            cartItem.category_id ||
+            item.category_id ||
+            'unknown'
+        );
+
+        const makeProductId = (pid, weight) => `${String(pid)}__${familyKey}__${weight}`;
+
+        // Base product info
+        const baseProduct = {
             id,
             name,
             url,
@@ -117,13 +183,147 @@ function extractProductFromWidget(item) {
             discount,
             quantity,
             deliveryTime,
-            combo,
+            brand,
+            brandName: brand,
             isOutOfStock,
             isAd
         };
+
+        // Collect possible variant nodes from all known Blinkit locations
+        const variantNodes = [];
+        if (Array.isArray(item.options)) variantNodes.push(...item.options);
+        if (Array.isArray(cartItem.variants)) variantNodes.push(...cartItem.variants);
+        if (Array.isArray(item.variant_list)) variantNodes.push(...item.variant_list);
+
+        // Always include current product as main.
+        const products = [];
+        const seenProductIds = new Set();
+        const productWeight = extractProductWeight(quantity);
+        const mainProductId = makeProductId(id, productWeight);
+        const mainProduct = {
+            ...baseProduct,
+            productId: mainProductId,
+            productWeight,
+            combo: 1,
+            isVariant: false,
+            variantOf: null,
+            comboOf: null
+        };
+        products.push(mainProduct);
+        seenProductIds.add(mainProductId);
+
+        // Add variant rows (supports variant_list entries where each node has .data)
+        variantNodes.forEach((variantNode, idx) => {
+            try {
+                const variantData = variantNode?.data || variantNode;
+                const variantCartItem = getCartItemFromNode(variantData) || variantNode?.cart_item || null;
+
+                const variantId = String(
+                    variantCartItem?.product_id ||
+                    variantData?.identity?.id ||
+                    variantNode?.product_id ||
+                    `${id}-var-${idx}`
+                );
+
+                const variantName = (
+                    variantCartItem?.product_name ||
+                    variantCartItem?.display_name ||
+                    variantData?.name?.text ||
+                    variantData?.display_name?.text ||
+                    baseProduct.name
+                );
+
+                const variantQuantity = (
+                    variantCartItem?.unit ||
+                    variantData?.variant?.text ||
+                    variantNode?.unit ||
+                    variantNode?.display_string ||
+                    quantity
+                );
+
+                const variantWeight = extractProductWeight(variantQuantity);
+                const variantProductId = makeProductId(variantId, variantWeight);
+
+                if (seenProductIds.has(variantProductId)) {
+                    return;
+                }
+
+                const variantPrice = toNumericPrice(
+                    variantCartItem?.price ?? variantNode?.price ?? variantNode?.product_price,
+                    price
+                );
+                const variantOriginalPrice = toNumericPrice(
+                    variantCartItem?.mrp ?? variantNode?.mrp ?? variantNode?.original_price,
+                    originalPrice
+                );
+
+                let variantDiscount = '';
+                if (variantOriginalPrice > variantPrice) {
+                    variantDiscount = Math.round(((variantOriginalPrice - variantPrice) / variantOriginalPrice) * 100) + '%';
+                }
+
+                const variantBrand = extractBrandName(variantData, variantCartItem) || baseProduct.brand;
+                const variantDelivery = variantData?.eta_tag?.title?.text || baseProduct.deliveryTime;
+                const variantOutOfStock = variantData?.is_sold_out === true || variantData?.inventory === 0 || variantCartItem?.inventory === 0;
+                const slug = String(variantName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+                const variantUrl = variantId && slug ? `https://blinkit.com/prn/${slug}/prid/${variantId}` : baseProduct.url;
+
+                const variantProduct = {
+                    ...baseProduct,
+                    id: variantId,
+                    name: variantName || baseProduct.name,
+                    url: variantUrl,
+                    price: String(variantPrice),
+                    originalPrice: String(variantOriginalPrice),
+                    discount: variantDiscount,
+                    quantity: variantQuantity,
+                    productId: variantProductId,
+                    productWeight: variantWeight,
+                    deliveryTime: variantDelivery,
+                    brand: variantBrand,
+                    brandName: variantBrand,
+                    isOutOfStock: variantOutOfStock,
+                    isVariant: true,
+                    variantOf: mainProductId,
+                    comboOf: mainProductId
+                };
+
+                products.push(variantProduct);
+                seenProductIds.add(variantProductId);
+            } catch (e) {
+                // Skip malformed variants
+            }
+        });
+
+        const comboSize = products.length;
+        products.forEach((product) => {
+            product.combo = comboSize;
+            if (!product.isVariant) {
+                product.comboOf = null;
+            }
+        });
+
+        return products;
+
     } catch (e) {
-        return null;
+        return [];
     }
+}
+
+// Helper function to extract weight/size from quantity string
+function extractProductWeight(quantityStr) {
+    if (!quantityStr) return 'default';
+    
+    // Try to extract numeric weight with unit
+    // e.g., "500 g" -> "500g", "2 x 1 kg" -> "2kg"
+    const match = quantityStr.match(/(\d+(?:\.\d+)?)\s*(kg|g|ml|l|pc|pcs|pack)?/i);
+    if (match) {
+        const number = match[1];
+        const unit = (match[2] || '').toLowerCase();
+        return `${number}${unit}`;
+    }
+    
+    return quantityStr.toLowerCase().replace(/\s+/g, '');
 }
 
 function processApiData(apiResponses, logPrefix) {
@@ -139,14 +339,20 @@ function processApiData(apiResponses, logPrefix) {
                 snippets.forEach(snippet => {
                     // Each snippet has data object with product info
                     if (snippet.data) {
-                        const product = extractProductFromWidget(snippet.data);
-                        if (product && product.id && product.name) {
-                            if (!productsMap.has(product.id)) {
-                                product.rank = totalProcessed + 1;
-                                productsMap.set(product.id, product);
-                                totalProcessed++;
+                        // ðŸ” NEW: Extract variants - returns array of products
+                        const products = extractProductsWithVariants(snippet.data);
+                        
+                        products.forEach(product => {
+                            if (product && product.id && product.name) {
+                                // Use productId as key to avoid duplicates (includes weight now)
+                                const key = product.productId || product.id;
+                                if (!productsMap.has(key)) {
+                                    product.rank = totalProcessed + 1;
+                                    productsMap.set(key, product);
+                                    totalProcessed++;
+                                }
                             }
-                        }
+                        });
                     }
                 });
             }
@@ -155,7 +361,7 @@ function processApiData(apiResponses, logPrefix) {
         }
     });
 
-    log('success', logPrefix, `Extracted ${totalProcessed} products from ${apiResponses.length} API responses`);
+    log('success', logPrefix, `Extracted ${totalProcessed} products (including variants) from ${apiResponses.length} API responses`);
     return Array.from(productsMap.values());
 }
 
@@ -310,13 +516,14 @@ async function setupLocation(context, pincode, logPrefix = 'Setup') {
     return false;
 }
 
-// ** MODIFIED: Accepts 'context' directly **
-async function scrapeCategory(context, category, pincode, proxyConfig, deliveryTime = '', maxRetries = 2) {
+// ** MODIFIED: Uses in-browser fetch pagination instead of scrolling **
+async function scrapeCategory(context, category, pincode, proxyConfig, deliveryTime = '', maxRetries = 4) {
     const logPrefix = category.name || category.url.split('/').pop() || 'Unknown';
+    const listingEndpoint = 'https://blinkit.com/v1/layout/listing_widgets';
 
     // Stagger start time
-    const randomDelay = Math.floor(Math.random() * 2000) + 500;
-    await sleep(randomDelay);
+    const delayTime = Math.floor(Math.random() * 2000) + 500;
+    await sleep(delayTime);
 
     let products = [];
     let attempts = 0;
@@ -328,42 +535,55 @@ async function scrapeCategory(context, category, pincode, proxyConfig, deliveryT
 
             products = await Promise.race([
                 (async () => {
-                    // API Interception Setup
-                    const capturedApiData = [];
-
                     // Create api_dumps directory
                     const apiDumpsDir = path.join(process.cwd(), 'api_dumps');
                     if (!fs.existsSync(apiDumpsDir)) {
                         fs.mkdirSync(apiDumpsDir, { recursive: true });
                     }
 
-                    // Intercept API responses
-                    page.on('response', async (response) => {
-                        const url = response.url();
-                        if (url.includes('/v1/layout/listing_widgets')) {
-                            try {
-                                const json = await response.json();
-                                capturedApiData.push(json);
+                    const capturedHeaders = {};
+                    let capturedRequestBody = null;
+                    const wantedHeaders = [
+                        'auth_key',
+                        'session_uuid',
+                        'device_id',
+                        'lat',
+                        'lon',
+                        'access_token',
+                        'app_client',
+                        'app_version',
+                        'web_app_version',
+                        'rn_bundle_version',
+                        'platform',
+                        'x-age-consent-granted',
+                        'authorization',
+                        'cookie'
+                    ];
 
-                                // Save individual API dump
-                                const timestamp = Date.now();
-                                const apiIndex = capturedApiData.length;
-                                const filename = `api_${logPrefix.replace(/[^a-z0-9]/gi, '_')}_${apiIndex}_${timestamp}.json`;
-                                const filepath = path.join(apiDumpsDir, filename);
+                    const captureTemplateFromRequest = (request) => {
+                        const requestUrl = request.url();
+                        if (!requestUrl.includes('/v1/layout/listing_widgets')) return;
 
-                                fs.writeFileSync(filepath, JSON.stringify({
-                                    url: url,
-                                    timestamp: new Date().toISOString(),
-                                    responseIndex: apiIndex,
-                                    data: json
-                                }, null, 2));
-
-                                log('info', logPrefix, `📡 API #${apiIndex} captured & saved`);
-                            } catch (e) {
-                                log('warn', logPrefix, `Failed to parse API response: ${e.message}`);
+                        const h = request.headers();
+                        for (const key of wantedHeaders) {
+                            if (h[key] !== undefined && h[key] !== '') {
+                                capturedHeaders[key] = h[key];
                             }
                         }
-                    });
+
+                        if (!capturedRequestBody) {
+                            try {
+                                const postData = request.postData();
+                                if (postData && postData.length > 2) {
+                                    capturedRequestBody = postData;
+                                }
+                            } catch (_) {
+                                // Keep fallback body
+                            }
+                        }
+                    };
+
+                    page.on('request', captureTemplateFromRequest);
 
                     // Block unnecessary resources for speed
                     await page.route('**/*', (route) => {
@@ -374,73 +594,234 @@ async function scrapeCategory(context, category, pincode, proxyConfig, deliveryT
                         return route.continue();
                     });
 
+                    // Extract category IDs from URL (e.g., /cid/1487/1489)
+                    const categoryMatch = category.url.match(/\/cid\/(\d+)\/(\d+)/);
+                    const l0_cat = categoryMatch ? categoryMatch[1] : '1487';
+                    const l1_cat = categoryMatch ? categoryMatch[2] : '1489';
+                    log('info', logPrefix, `Category IDs extracted: l0_cat=${l0_cat}, l1_cat=${l1_cat}`);
+
+                    // Prepare warmup capture before navigation so we don't miss first request
+                    const initialRequestPromise = page.waitForRequest(
+                        (request) => {
+                            if (!request.url().includes('/v1/layout/listing_widgets')) return false;
+                            captureTemplateFromRequest(request);
+                            return true;
+                        },
+                        { timeout: 25000 }
+                    );
+
+                    const initialResponsePromise = page.waitForResponse(
+                        (response) => response.url().includes('/v1/layout/listing_widgets') && response.status() === 200,
+                        { timeout: 25000 }
+                    );
+
+                    // Navigate to category and capture initial payload
                     await page.goto(category.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
-
-                    // Wait for page to load
-                    await page.waitForTimeout(3000);
-
-                    // ── Retry "Try Again" button if Blinkit shows an error screen ──
-                    // Blinkit sometimes renders a "Try Again" / "Retry" button when the
-                    // page fails to load products. Click it up to 5 times until products appear.
-                    for (let tryAgainAttempt = 0; tryAgainAttempt < 5; tryAgainAttempt++) {
-                        const tryAgainSelectors = [
-                            'button:has-text("Try Again")',
-                            'button:has-text("Try again")',
-                            'button:has-text("Retry")',
-                            'span:has-text("Try Again")',
-                            'div[class*="error"] button',
-                            'div[class*="Error"] button'
-                        ];
-                        let clicked = false;
-                        for (const sel of tryAgainSelectors) {
-                            try {
-                                const btn = page.locator(sel).first();
-                                if (await btn.isVisible({ timeout: 2000 })) {
-                                    log('warn', logPrefix, `⟳ "Try Again" button found (attempt ${tryAgainAttempt + 1}/5) — clicking...`);
-                                    await btn.click();
-                                    await page.waitForTimeout(3000);
-                                    clicked = true;
-                                    break;
-                                }
-                            } catch (_) { /* not present */ }
-                        }
-                        if (!clicked) break; // no Try Again button; proceed normally
+                    const [initialRequest, initialResponse] = await Promise.all([initialRequestPromise, initialResponsePromise]);
+                    if (initialRequest) {
+                        captureTemplateFromRequest(initialRequest);
                     }
 
-                    // Click First Product to trigger initial API call
+                    let initialData = null;
                     try {
-                        log('info', logPrefix, 'Clicking first product to trigger API...');
-                        const firstProduct = page.locator('div[role="button"][id]').first();
-                        if (await firstProduct.isVisible({ timeout: 5000 })) {
-                            await firstProduct.click();
-                            await page.waitForTimeout(2000);
-                            await page.keyboard.press('Escape');
-                            await page.waitForTimeout(1000);
-                            log('success', logPrefix, 'First product clicked');
-                        }
+                        initialData = await initialResponse.json();
                     } catch (e) {
-                        log('warn', logPrefix, `Click-first-product failed: ${e.message}`);
+                        throw new Error(`Failed to parse initial listing response: ${e.message}`);
                     }
 
-                    // Scroll to trigger paginated API calls
-                    log('info', logPrefix, 'Scrolling to load all products via API...');
-                    await autoScroll(page, logPrefix);
+                    const initialSnippets = initialData?.response?.snippets || [];
+                    log('info', logPrefix, `Initial response captured with ${initialSnippets.length} items`);
 
-                    // Wait for final API calls
-                    await page.waitForTimeout(3000);
+                    const allApiResponses = [initialData];
+                    const debugLog = [];
 
-                    // Process API data (NO DOM SCRAPING)
-                    const products = processApiData(capturedApiData, logPrefix);
+                    const requestBodyObject = (() => {
+                        if (!capturedRequestBody) return {};
+                        try {
+                            return JSON.parse(capturedRequestBody);
+                        } catch (_) {
+                            return {};
+                        }
+                    })();
 
-                    // Add category and delivery time to each product
-                    products.forEach(p => {
+                    const extraHeaders = {};
+                    const headerTemplate = {
+                        access_token: capturedHeaders.access_token || 'null',
+                        app_client: capturedHeaders.app_client || 'consumer_web',
+                        app_version: capturedHeaders.app_version || '1010101010',
+                        auth_key: capturedHeaders.auth_key || '',
+                        device_id: capturedHeaders.device_id || '',
+                        lat: capturedHeaders.lat || '28.5355',
+                        lon: capturedHeaders.lon || '77.3910',
+                        session_uuid: capturedHeaders.session_uuid || '',
+                        web_app_version: capturedHeaders.web_app_version || '1008010016',
+                        rn_bundle_version: capturedHeaders.rn_bundle_version || '1009003012',
+                        platform: capturedHeaders.platform || 'mobile_web',
+                        'x-age-consent-granted': capturedHeaders['x-age-consent-granted'] || 'true',
+                        'cache-control': 'no-cache',
+                        pragma: 'no-cache'
+                    };
+
+                    for (const [k, v] of Object.entries(headerTemplate)) {
+                        if (v !== undefined && v !== null && v !== '') extraHeaders[k] = v;
+                    }
+
+                    const resolveRequestUrl = (urlOrPath) => {
+                        if (!urlOrPath) return null;
+                        if (urlOrPath.startsWith('http://') || urlOrPath.startsWith('https://')) return urlOrPath;
+                        if (urlOrPath.startsWith('/')) return `https://blinkit.com${urlOrPath}`;
+                        if (urlOrPath.startsWith('?')) return `${listingEndpoint}${urlOrPath}`;
+                        return `${listingEndpoint}?${urlOrPath}`;
+                    };
+
+                    const normalizeUrl = (urlOrPath) => {
+                        const absolute = resolveRequestUrl(urlOrPath);
+                        if (!absolute) return '';
+                        try {
+                            const parsed = new URL(absolute);
+                            const entries = Array.from(parsed.searchParams.entries()).sort((a, b) => {
+                                const ak = `${a[0]}=${a[1]}`;
+                                const bk = `${b[0]}=${b[1]}`;
+                                return ak.localeCompare(bk);
+                            });
+                            return `${parsed.origin}${parsed.pathname}?${new URLSearchParams(entries).toString()}`;
+                        } catch (_) {
+                            return absolute;
+                        }
+                    };
+
+                    let nextUrl = initialData?.response?.pagination?.next_url || null;
+                    let pageCount = 1;
+                    let totalCollected = initialSnippets.length;
+                    const visitedUrls = new Set();
+
+                    if (nextUrl) {
+                        visitedUrls.add(normalizeUrl(nextUrl));
+                    }
+
+                    debugLog.push(`Starting pagination from next_url: ${nextUrl || 'none'}`);
+
+                    while (nextUrl && pageCount < 80) {
+                        const requestUrl = resolveRequestUrl(nextUrl);
+                        if (!requestUrl) break;
+
+                        let result = null;
+                        for (let retry = 1; retry <= 3; retry += 1) {
+                            result = await page.evaluate(
+                                async ({ requestUrl, extraHeaders, requestBodyObject }) => {
+                                    try {
+                                        const res = await fetch(requestUrl, {
+                                            method: 'POST',
+                                            credentials: 'include',
+                                            headers: {
+                                                'content-type': 'application/json',
+                                                accept: '*/*',
+                                                ...extraHeaders
+                                            },
+                                            body: JSON.stringify(requestBodyObject)
+                                        });
+
+                                        const raw = await res.text();
+                                        let data = null;
+                                        if (raw) {
+                                            try {
+                                                data = JSON.parse(raw);
+                                            } catch (_) {
+                                                data = null;
+                                            }
+                                        }
+
+                                        return {
+                                            ok: res.ok,
+                                            status: res.status,
+                                            requestUrl: res.url || requestUrl,
+                                            data,
+                                            error: res.ok ? null : raw.slice(0, 240)
+                                        };
+                                    } catch (error) {
+                                        return {
+                                            ok: false,
+                                            status: 0,
+                                            requestUrl,
+                                            data: null,
+                                            error: error.message
+                                        };
+                                    }
+                                },
+                                { requestUrl, extraHeaders, requestBodyObject }
+                            );
+
+                            if (result.ok && result.data) break;
+
+                            const retriable = result.status === 0 || result.status === 429 || result.status >= 500;
+                            if (!retriable || retry === 3) break;
+                            await sleep(400 * (2 ** (retry - 1)));
+                        }
+
+                        if (!result || !result.ok || !result.data) {
+                            debugLog.push(`Pagination stopped: fetch failed (${result?.status || 0}) ${result?.error || 'unknown'}`);
+                            break;
+                        }
+
+                        const snippets = result.data?.response?.snippets || [];
+                        allApiResponses.push(result.data);
+                        pageCount += 1;
+                        totalCollected += snippets.length;
+                        debugLog.push(`Page ${pageCount}: snippets=${snippets.length}`);
+
+                        const candidateNext = result.data?.response?.pagination?.next_url || null;
+                        if (!candidateNext) break;
+
+                        const loopGuard = normalizeUrl(candidateNext);
+                        if (visitedUrls.has(loopGuard)) {
+                            debugLog.push('Pagination stopped: repeated next_url detected');
+                            break;
+                        }
+
+                        visitedUrls.add(loopGuard);
+                        nextUrl = candidateNext;
+                        await sleep(Math.floor(Math.random() * 350) + 200);
+                    }
+
+                    log('success', logPrefix, `Fetched ${allApiResponses.length} API pages with ${totalCollected} snippets`);
+                    debugLog.forEach((msg) => log('info', logPrefix, `Pagination: ${msg}`));
+
+                    // Extract products from full API responses
+                    const extracted = processApiData(allApiResponses, logPrefix);
+
+                    // Add category and delivery time
+                    extracted.forEach(p => {
                         p.category = logPrefix;
-                        p.categoryUrl = category.url; // Use the specific category URL being scraped
-                        p.deliveryTime = deliveryTime || p.deliveryTime; // Use homepage delivery time if available
+                        p.categoryUrl = category.url;
+                        if (typeof deliveryTime === 'string' && deliveryTime.trim()) {
+                            p.deliveryTime = deliveryTime.trim();
+                        }
                     });
 
-                    // Save consolidated API dump
-                    if (capturedApiData.length > 0) {
+                    // Check if we have products
+                    if (extracted.length > 0) {
+                        // Save raw API response sample (for analysis)
+                        if (allApiResponses.length > 0) {
+                            const sampleRawFilename = `raw_api_sample_${logPrefix.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.json`;
+                            const sampleRawPath = path.join(apiDumpsDir, sampleRawFilename);
+
+                            const sampleRawResponses = allApiResponses.slice(0, 2);
+                            fs.writeFileSync(sampleRawPath, JSON.stringify({
+                                metadata: {
+                                    category: logPrefix,
+                                    url: category.url,
+                                    pincode: pincode,
+                                    timestamp: new Date().toISOString(),
+                                    note: 'Raw API responses - inspect for variant data in snippets[].data structure'
+                                },
+                                totalRawResponses: allApiResponses.length,
+                                sampleResponses: sampleRawResponses
+                            }, null, 2));
+
+                            log('info', logPrefix, `Saved raw API sample: ${sampleRawFilename}`);
+                        }
+
+                        // Save consolidated API dump
                         const consolidatedFilename = `api_consolidated_${logPrefix.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.json`;
                         const consolidatedPath = path.join(apiDumpsDir, consolidatedFilename);
 
@@ -450,253 +831,68 @@ async function scrapeCategory(context, category, pincode, proxyConfig, deliveryT
                                 url: category.url,
                                 pincode: pincode,
                                 timestamp: new Date().toISOString(),
-                                scrapedAt: new Date().toLocaleString()
+                                method: 'in-browser-fetch-next-url',
+                                attempt: attempts + 1
                             },
-                            apiData: {
-                                totalResponses: capturedApiData.length,
-                                responses: capturedApiData
-                            },
-                            products: products
+                            totalApiResponses: allApiResponses.length,
+                            totalExtracted: extracted.length,
+                            products: extracted
                         }, null, 2));
 
-                        log('success', logPrefix, `💾 Saved consolidated dump with ${products.length} products`);
+                        log('success', logPrefix, `Saved ${extracted.length} products`);
+                        return extracted;
                     }
 
-                    // Check for errors
-                    if (products.length === 0) {
-                        log('warn', logPrefix, `No products extracted from API. Check API dumps.`);
-                        const failedPath = path.resolve('failed_urls.json');
-                        let failed = [];
-                        try {
-                            const data = fs.readFileSync(failedPath, 'utf-8');
-                            failed = JSON.parse(data);
-                        } catch (e) { }
-                        if (!failed.includes(category.url)) {
-                            failed.push(category.url);
-                            fs.writeFileSync(failedPath, JSON.stringify(failed, null, 2));
-                        }
-                        attempts = maxRetries + 1;
-                        return [];
-                    }
-
-                    return products;
+                    throw new Error('No products extracted from this category');
                 })(),
-                new Promise((_, reject) => setTimeout(() => reject(new Error('Scraping operation timed out after 2 minutes')), 120000))
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Scraping operation timed out after 3 minutes')), 180000))
             ]);
 
             if (products.length > 0) {
-                const missingImages = products.filter(p => !p.image).length;
-                log('success', logPrefix, `Extracted ${products.length} products. (Missing imgs: ${missingImages})`);
+                log('success', logPrefix, `Extracted ${products.length} products`);
                 return products;
-            } else {
-                throw new Error("No products extracted");
             }
 
+            throw new Error('No products extracted');
         } catch (e) {
-            log('error', logPrefix, `Error scraping: ${e.message}`);
+            log('error', logPrefix, `Attempt ${attempts + 1} failed: ${e.message}`);
         } finally {
-            // ** MODIFIED: Close PAGE only, not context **
-            if (!page.isClosed()) await page.close();
+            // Always close the page
+            try {
+                if (!page.isClosed()) await page.close();
+            } catch (err) {
+                log('warn', logPrefix, `Error closing page: ${err.message}`);
+            }
         }
 
         attempts++;
+
+        // Retry logic with exponential backoff
         if (attempts <= maxRetries) {
-            log('info', logPrefix, `Retrying in 2s...`);
-            await sleep(2000);
+            const backoffDelay = Math.pow(2, attempts) * 1000 + Math.random() * 2000; // 2s, 4s, 8s + random
+            log('warn', logPrefix, `Retrying in ${(backoffDelay / 1000).toFixed(1)}s... (Attempt ${attempts + 1}/${maxRetries + 1})`);
+            await sleep(backoffDelay);
         }
     }
-    // Record URL as failed after all retries
+
+    // All retries exhausted - record as failed
     const failedPath = path.resolve('failed_urls.json');
     let failed = [];
     try {
         const data = fs.readFileSync(failedPath, 'utf-8');
         failed = JSON.parse(data);
-    } catch (e) {
-        // ignore
-    }
+    } catch (e) { }
+
     if (!failed.includes(category.url)) {
         failed.push(category.url);
         fs.writeFileSync(failedPath, JSON.stringify(failed, null, 2));
     }
-    log('error', logPrefix, `Failed to extract products after retries.`);
+
+    log('error', logPrefix, `Failed after ${maxRetries + 1} attempts. Category URL: ${category.url}`);
     return [];
 }
-
-async function forceImageLoad(page, logPrefix) {
-    log('info', logPrefix, `Sweeping page for lazy images...`);
-    await page.evaluate(async () => {
-        const container = document.querySelector('#plpContainer') || document.body;
-        const totalHeight = container.scrollHeight;
-        const viewportHeight = window.innerHeight;
-        // Scroll down in chunks
-        for (let position = 0; position < totalHeight; position += viewportHeight) {
-            window.scrollTo(0, position);
-            // Also try scrolling container if it's the scrollable one
-            if (container !== document.body) container.scrollTop = position;
-            await new Promise(resolve => setTimeout(resolve, 100));
-        }
-        // Scroll back up quickly to be safe
-        window.scrollTo(0, 0);
-    });
-    // Give a final moment for network requests
-    await page.waitForTimeout(2000);
-}
-
-async function autoScroll(page, logPrefix) {
-    log('info', logPrefix, `Auto-scrolling...`);
-    const selector = '#plpContainer';
-
-    let lastItemCount = 0;
-    let noChangeCount = 0;
-    const maxNoChange = 8; // ** MODIFIED: Reduced from 15 to 8 **
-
-    while (noChangeCount < maxNoChange) {
-        const result = await page.evaluate(async (sel) => {
-            const container = document.querySelector(sel);
-            if (!container) return { status: 'no_container' };
-
-            let parent = container.parentElement;
-            while (parent) {
-                if (parent.scrollTop > 0) parent.scrollTop = 0;
-                parent = parent.parentElement;
-            }
-            window.scrollTo(0, 0);
-
-            const prevTop = container.scrollTop;
-            container.scrollTop = container.scrollHeight;
-
-            return {
-                status: 'scrolled',
-                scrollHeight: container.scrollHeight,
-                scrollTop: container.scrollTop,
-                prevTop: prevTop,
-                itemCount: document.querySelectorAll('div[role="button"].tw-flex-col').length
-            };
-        }, selector);
-
-        if (result.status === 'no_container') {
-            await page.evaluate(() => window.scrollBy(0, 1000));
-            await page.waitForTimeout(500);
-            continue;
-        }
-
-        await page.waitForTimeout(1500 + Math.random() * 1000);
-
-        const currentItemCount = await page.evaluate(() => document.querySelectorAll('div[role="button"].tw-flex-col').length);
-
-        if (currentItemCount > lastItemCount) {
-            // log('info', logPrefix, `Items loaded: ${currentItemCount} (+${currentItemCount - lastItemCount})`);
-            noChangeCount = 0;
-            lastItemCount = currentItemCount;
-        } else {
-            noChangeCount++;
-            // log('debug', logPrefix, `No change (${noChangeCount}/${maxNoChange}). Items: ${currentItemCount}`);
-
-            if (noChangeCount >= 2) {
-                // log('debug', logPrefix, `Wiggle...`);
-                await page.evaluate((sel) => {
-                    const c = document.querySelector(sel);
-                    if (c) c.scrollTop = Math.max(0, c.scrollTop - 300);
-                }, selector);
-                await page.waitForTimeout(800);
-            }
-        }
-    }
-    log('info', logPrefix, `Scroll finished. Found ${lastItemCount} items.`);
-}
-
-async function extractProducts(page, logPrefix) {
-
-    return await page.evaluate((logPrefix) => {
-        const items = [];
-        const getText = (parent, selector) => {
-            const el = parent.querySelector(selector);
-            return el ? (el.innerText || el.textContent || '').trim() : '';
-        };
-        const getAttr = (parent, selector, attr) => {
-            const el = selector ? parent.querySelector(selector) : parent;
-            return el ? (el.getAttribute(attr) || '') : '';
-        };
-
-        let productCards = Array.from(document.querySelectorAll('div[id][role="button"].tw-flex-col'));
-        if (productCards.length === 0) {
-            productCards = Array.from(document.querySelectorAll('div[role="button"].tw-flex-col'));
-        }
-
-        productCards.forEach((card, index) => {
-            try {
-                const id = card.getAttribute('id') || `generated-${index}`;
-
-                let name = getText(card, 'div.tw-text-300.tw-font-semibold');
-                // Fallback name
-                if (!name) name = getText(card, 'div[class*="tw-text-300"][class*="tw-font-semibold"]');
-
-                let url = '';
-                if (id && name) {
-                    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-                    url = `https://blinkit.com/prn/${slug}/prid/${id}`;
-                }
-
-                let image = getAttr(card, 'img', 'src');
-                if (!image) {
-                    image = getAttr(card, 'img', 'data-src');
-                }
-
-                // Removed debug logging for clean production output
-
-                let priceText = getText(card, 'div.tw-text-200.tw-font-semibold');
-                let price = priceText.replace(/[^\d.]/g, '');
-
-                let origPriceText = getText(card, 'div.tw-line-through');
-                let origPrice = origPriceText.replace(/[^\d.]/g, '');
-
-                let discount = '';
-                if (price && origPrice) {
-                    const p = parseFloat(price);
-                    const op = parseFloat(origPrice);
-                    if (op > p) {
-                        discount = Math.round(((op - p) / op) * 100) + '%';
-                    }
-                }
-
-                let quantity = getText(card, 'div.tw-text-200.tw-font-medium');
-                let deliveryTime = getText(card, 'div.tw-text-050.tw-font-bold.tw-uppercase');
-
-                const cardText = (card.innerText || '').toLowerCase();
-                const isOutOfStock = cardText.includes('out of stock');
-
-                let combo = '1';
-                const optionsNode = card.querySelector('div.tw-text-050.tw-font-050');
-                if (optionsNode) {
-                    const optionsText = (optionsNode.innerText || '').trim();
-                    const match = optionsText.match(/(\d+)\s+options?/i);
-                    if (match) {
-                        combo = match[1];
-                    }
-                }
-
-                const hasAdImage = !!card.querySelector('img[src*="ad_without_bg.png"]');
-                const hasAdBadge = Array.from(card.querySelectorAll('div')).some(div => {
-                    const s = div.style;
-                    return (s.position === 'absolute' && s.top === '6px' && s.right === '6px');
-                });
-                const isAd = hasAdImage || hasAdBadge;
-
-                if (name && (price || isOutOfStock)) {
-                    items.push({
-                        rank: items.length + 1,
-                        id, name, url, image, price, discount, originalPrice: origPrice,
-                        quantity, deliveryTime, combo, isOutOfStock, isAd, category: logPrefix
-                    });
-                }
-            } catch (err) {
-                // Silent error in production
-            }
-        });
-
-        return items;
-    }, logPrefix);
-}
+// Helper: Random delay for human-like behavior
+const randomDelay = (min, max) => sleep(Math.floor(Math.random() * (max - min + 1)) + min);
 
 // --- API Endpoints ---
 
@@ -705,7 +901,7 @@ app.get('/health', (req, res) => {
 });
 
 app.post('/blinkitcategoryscrapper', async (req, res) => {
-    const { url, urls, pincode, categories, maxConcurrentTabs = 4, proxyUrl, store } = req.body;
+    const { url, urls, pincode, categories, maxConcurrentTabs = 2, proxyUrl, store } = req.body;
 
     if (!pincode || (!url && (!urls || urls.length === 0) && (!categories || categories.length === 0))) {
         return res.status(400).json({ error: 'Invalid input. Pincode and either url, urls array, or categories array are required.' });
@@ -753,7 +949,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
     try {
         const launchOptions = {
-            headless: true,
+            headless: false,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
@@ -801,13 +997,13 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
                     }
                     contextOptions.storageState = sessionData;
                     sessionLoaded = true;
-                    log('info', 'Session', `✅ Loaded existing session for ${pincode}`);
+                    log('info', 'Session', `âœ… Loaded existing session for ${pincode}`);
                 }
             } catch (e) {
                 log('warn', 'Session', `Error loading session: ${e.message}. Will create new one.`);
             }
         } else {
-            log('info', 'Session', `⚠️ No session found for ${pincode}. Initiating pincode setup...`);
+            log('info', 'Session', `âš ï¸ No session found for ${pincode}. Initiating pincode setup...`);
         }
 
         if (proxyConfig && proxyConfig.username && proxyConfig.password) {
@@ -826,12 +1022,14 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         // If session was loaded, this checks if it's still valid.
         // If session was NOT loaded, this performs the pincode entry.
         log('info', 'Setup', `Verifying location configuration...`);
-        let deliveryTime = await setupLocation(context, pincode, 'Setup');
+        const setupResult = await setupLocation(context, pincode, 'Setup');
+        const setupSucceeded = Boolean(setupResult);
+        const deliveryTime = (typeof setupResult === 'string') ? setupResult.trim() : '';
 
         // If setupLocation returned a valid result (meaning we are at the right location)
         // AND we didn't have a session loaded originally (or it was invalid and setupLocation fixed it)
         // then we save the new state.
-        if (deliveryTime) {
+        if (setupSucceeded) {
             const newState = await context.storageState();
             // Check if we need to save (if it was a new session OR if the old one was invalid/updated)
             // For simplicity, we can overwrite if we just performed a setup action that wasn't a "skip".
@@ -843,7 +1041,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
                 try {
                     fs.mkdirSync('sessions', { recursive: true });
                     fs.writeFileSync(sessionPath, JSON.stringify(newState, null, 2));
-                    log('success', 'Session', `💾 Saved NEW session to ${sessionPath}`);
+                    log('success', 'Session', `ðŸ’¾ Saved NEW session to ${sessionPath}`);
                 } catch (e) { log('error', 'Session', `Error saving session: ${e.message}`); }
             } else {
                 // Even if session existed, maybe cookies refreshed? Optional: update it.
@@ -855,19 +1053,31 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
             }
         }
 
-        // 2. Process Categories in Batches
+        // 2. Process Categories SEQUENTIALLY (one at a time) for testing
         const allProducts = [];
-        const chunks = [];
-        for (let i = 0; i < targets.length; i += maxConcurrentTabs) {
-            chunks.push(targets.slice(i, i + maxConcurrentTabs));
-        }
-
-        for (const [index, chunk] of chunks.entries()) {
-            log('info', 'Batch', `Processing batch ${index + 1}/${chunks.length} (${chunk.length} categories)...`);
-            // ** MODIFIED: Pass SHARED 'context' and deliveryTime **
-            const promises = chunk.map(cat => scrapeCategory(context, cat, pincode, proxyConfig, deliveryTime));
-            const results = await Promise.all(promises);
-            results.forEach(res => allProducts.push(...res));
+        
+        log('info', 'Scrape', `Processing ${targets.length} categories sequentially (one at a time)...`);
+        
+        for (let i = 0; i < targets.length; i++) {
+            const category = targets[i];
+            log('info', 'Batch', `[${i + 1}/${targets.length}] Scraping: ${category.name}`);
+            
+            // Scrape ONE category at a time, wait for completion before moving to next
+            const result = await scrapeCategory(context, category, pincode, proxyConfig, deliveryTime);
+            
+            if (result && result.length > 0) {
+                allProducts.push(...result);
+                log('success', 'Batch', `[${i + 1}/${targets.length}] âœ… Got ${result.length} products`);
+            } else {
+                log('warn', 'Batch', `[${i + 1}/${targets.length}] âš ï¸ No products extracted`);
+            }
+            
+            // Small delay between categories to avoid overwhelming the API
+            if (i < targets.length - 1) {
+                const delayMs = Math.random() * 2000 + 3000;  // 3-5 seconds between categories
+                log('info', 'Batch', `Waiting ${(delayMs / 1000).toFixed(1)}s before next category...`);
+                await sleep(delayMs);
+            }
         }
 
         log('success', 'Summary', `Total products extracted: ${allProducts.length}`);
@@ -917,29 +1127,40 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
         console.log('[DEBUG] transformedProducts count:', transformedProducts.length);
         console.log('[DEBUG] transformedProducts sample:', transformedProducts.slice(0, 2));
 
-        // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+        // 2. Deduplicate AFTER transform, but keep same product across different category scopes.
+        // Treat same product in different categoryUrl/officialSubCategory as distinct entries.
         const seenIds = new Set();
-        const dedupedProducts = transformedProducts.filter(p => {
-            const key = p.productId || p.productName;
-            if (!key || seenIds.has(key)) return false;
+        const dedupedProducts = transformedProducts.filter((p) => {
+            const baseKey = p.productId || p.productName || 'unknown_product';
+            const categoryScope = p.categoryUrl || 'N/A';
+            const subCategoryScope = p.officialSubCategory || 'N/A';
+            const key = `${baseKey}||${categoryScope}||${subCategoryScope}`;
+
+            if (seenIds.has(key)) return false;
             seenIds.add(key);
             return true;
         });
 
         console.log('[DEBUG] dedupedProducts count:', dedupedProducts.length);
 
-        // 3. Re-assign rankings after dedup
-        dedupedProducts.forEach((p, i) => { p.ranking = i + 1; });
-
         log('info', 'Transform', `Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
 
-        // 4. Assign per-officialSubCategory ranking (resets to 1 for each subcategory)
+        // 3. Ranking per officialSubCategory, but variants share rank with their main product.
         const subCatRankCounters = new Map();
-        dedupedProducts.forEach(p => {
+        const rankByGroupAndSubCat = new Map();
+
+        dedupedProducts.forEach((p) => {
             const subCat = p.officialSubCategory || '__unknown__';
-            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
-            subCatRankCounters.set(subCat, nextRank);
-            p.ranking = nextRank;
+            const groupProductId = (p.comboOf || p.variantOf || p.productId || p.productName || '__unknown_product__');
+            const groupKey = `${subCat}||${groupProductId}`;
+
+            if (!rankByGroupAndSubCat.has(groupKey)) {
+                const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                subCatRankCounters.set(subCat, nextRank);
+                rankByGroupAndSubCat.set(groupKey, nextRank);
+            }
+
+            p.ranking = rankByGroupAndSubCat.get(groupKey);
         });
 
         const responsePayload = {
@@ -991,3 +1212,4 @@ const server = app.listen(PORT, () => {
     console.log(`${colors.green}Blinkit Scraper API running on port ${PORT}${colors.reset}`);
 });
 server.setTimeout(0);
+

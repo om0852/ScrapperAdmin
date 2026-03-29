@@ -1,4 +1,4 @@
-﻿
+
 import express from 'express';
 import { chromium } from 'playwright';
 import fs from 'fs/promises';
@@ -58,14 +58,6 @@ const delay = (min = 1000, max = 3000) => {
     return new Promise(resolve => setTimeout(resolve, time));
 };
 
-const safeFilePart = (value) => {
-    const cleaned = String(value || 'unknown')
-        .replace(/[^a-z0-9]+/gi, '_')
-        .replace(/^_+|_+$/g, '')
-        .toLowerCase();
-    return cleaned || 'unknown';
-};
-
 /**
  * Set pincode with retry logic and progressive timeout increase
  * Attempt 1: 10s, Attempt 2: 20s, Attempt 3: 30s
@@ -75,7 +67,7 @@ async function setPincodeWithRetry(page, pincode, maxRetries = 3) {
         try {
             // Progressive timeout: 10s, 20s, 30s
             const timeout = 10000 * attempt;
-            console.log(`ðŸ”„ Attempt ${attempt}/${maxRetries} to set pincode (timeout: ${timeout}ms)...`);
+            console.log(`🔄 Attempt ${attempt}/${maxRetries} to set pincode (timeout: ${timeout}ms)...`);
             
             const input = page.locator('input[id="rel_pincode"], input[placeholder*="pincode"], input[type="tel"]').first();
             await input.waitFor({ state: 'visible', timeout });
@@ -86,14 +78,14 @@ async function setPincodeWithRetry(page, pincode, maxRetries = 3) {
             const applyBtn = page.getByText('Apply').first();
             await applyBtn.click();
             
-            console.log(`âœ… Pincode set successfully on attempt ${attempt}`);
+            console.log(`✅ Pincode set successfully on attempt ${attempt}`);
             return true;
         } catch (error) {
-            console.warn(`âš ï¸ Attempt ${attempt}/${maxRetries} failed: ${error.message}`);
+            console.warn(`⚠️ Attempt ${attempt}/${maxRetries} failed: ${error.message}`);
             
             if (attempt < maxRetries) {
                 const waitTime = 2000 * attempt;
-                console.log(`â³ Waiting ${waitTime}ms before retry...`);
+                console.log(`⏳ Waiting ${waitTime}ms before retry...`);
                 await delay(waitTime, waitTime + 1000);
             } else {
                 throw error;
@@ -118,7 +110,7 @@ const parseProxy = (proxyUrl) => {
         }
         return { server: proxyUrl };
     } catch (e) {
-        console.warn('âš ï¸ Invalid proxy URL format, using as-is');
+        console.warn('⚠️ Invalid proxy URL format, using as-is');
         return { server: proxyUrl };
     }
 };
@@ -128,7 +120,7 @@ const parseProxy = (proxyUrl) => {
  */
 async function getStorageStateForPincode(browser, pincode, proxyUrl) {
     if (PRELOADED_SESSIONS[pincode]) {
-        console.log(`âœ… Using preloaded session for ${pincode}`);
+        console.log(`✅ Using preloaded session for ${pincode}`);
         return PRELOADED_SESSIONS[pincode];
     }
 
@@ -142,14 +134,14 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
         const statePath = path.join(SESSIONS_DIR, map[pincode]);
         try {
             await fs.access(statePath);
-            console.log(`âœ… Found existing session for pincode ${pincode}`);
+            console.log(`✅ Found existing session for pincode ${pincode}`);
             return statePath;
         } catch (e) {
-            console.log(`âš ï¸ Map entry exists but file missing for ${pincode}, recreating...`);
+            console.log(`⚠️ Map entry exists but file missing for ${pincode}, recreating...`);
         }
     }
 
-    console.log(`ðŸ”„ Creating new session for pincode ${pincode}`);
+    console.log(`🔄 Creating new session for pincode ${pincode}`);
     const context = await browser.newContext({
         userAgent: USER_AGENTS[0],
         viewport: { width: 1920, height: 1080 },
@@ -186,7 +178,7 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
             }
         }
 
-        // âš¡ Use retry logic with progressive timeout increase (10s, 20s, 30s)
+        // ⚡ Use retry logic with progressive timeout increase (10s, 20s, 30s)
         await setPincodeWithRetry(page, pincode, 3);
 
         await delay(3000, 5000);
@@ -196,11 +188,11 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
         map[pincode] = stateFileName;
         await fs.writeFile(STORAGE_MAP_FILE, JSON.stringify(map, null, 2));
 
-        console.log(`âœ… Session created and saved for ${pincode}`);
+        console.log(`✅ Session created and saved for ${pincode}`);
         return statePath;
 
     } catch (error) {
-        console.error(`âŒ Failed to set pincode ${pincode}:`, error.message);
+        console.error(`❌ Failed to set pincode ${pincode}:`, error.message);
         throw error;
     } finally {
         await context.close();
@@ -279,13 +271,11 @@ async function smartScroll(page, logPrefix) {
  * Scrape a single category using an isolated context with Retry Logic
  */
 async function scrapeCategory(browser, category, contextOptions, maxRetries = 2) {
-    const API_ENDPOINT = 'https://www.jiomart.com/trex/search';
-    const ADS_ENDPOINT = 'https://ads.jiomart.com/ads/ad-server/getAds';
-    const apiDumpsDir = path.join(__dirname, 'api_dumps');
     let attempt = 0;
 
     while (attempt <= maxRetries) {
         let context = null;
+        let page = null;
         try {
             attempt++;
 
@@ -313,521 +303,90 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 );
             });
 
-            const page = await context.newPage();
-            console.log(`Starting direct API scrape [Attempt ${attempt}] for: ${category.name}`);
+            page = await context.newPage();
 
+            // Block heavy resources (DISABLED: causing infinite loading)
+            // await page.route('**/*.{png,jpg,jpeg,gif,svg,font,woff,woff2}', route => route.abort());
+
+            console.log(`🚀 [Attempt ${attempt}] processing: ${category.name} | URL: ${category.url.substring(0, 100)}...`);
+
+            // === API INTERCEPTION SETUP ===
             const capturedItems = [];
             const interceptedIds = new Set();
-            const capturedHeaders = {};
-            const capturedAdHeaders = {};
-            const apiResponses = [];
-            const adResponses = [];
-            let requestTemplateBody = null;
-            let adsRequestTemplateBody = null;
-            const sponsoredProductMap = new Map();
-            const wantedHeaders = [
-                'accept',
-                'accept-language',
-                'content-type',
-                'origin',
-                'referer',
-                'sec-ch-ua',
-                'sec-ch-ua-mobile',
-                'sec-ch-ua-platform',
-                'user-agent'
-            ];
-            const wantedAdHeaders = [
-                'accept',
-                'accept-language',
-                'content-type',
-                'origin',
-                'referer',
-                'sec-ch-ua',
-                'sec-ch-ua-mobile',
-                'sec-ch-ua-platform',
-                'user-agent',
-                'authorization'
-            ];
 
-            const pushResults = (payload, pageNumber = 1) => {
-                if (!payload || !Array.isArray(payload.results)) return 0;
-                let added = 0;
-                for (let idx = 0; idx < payload.results.length; idx += 1) {
-                    const item = payload.results[idx];
-                    if (!item || typeof item !== 'object') continue;
-                    const key = String(item.id || item.product?.name || item.product?.title || `idx_${capturedItems.length}`);
-                    if (interceptedIds.has(key)) continue;
-                    interceptedIds.add(key);
-
-                    // Preserve exact listing order from trex/search.
-                    item.__pageNumber = pageNumber;
-                    item.__positionInPage = idx + 1;
-                    item.__websitePosition = capturedItems.length + 1;
-
-                    capturedItems.push(item);
-                    added += 1;
-                }
-                return added;
-            };
-
-            const extractSponsoredFromAdsPayload = (payload) => {
-                const asi = payload?.result?.asi;
-                if (!asi || typeof asi !== 'object') return 0;
-
-                let newIds = 0;
-                for (const slotData of Object.values(asi)) {
-                    const adsList = slotData?.adsList;
-                    if (!Array.isArray(adsList)) continue;
-
-                    for (const adEntry of adsList) {
-                        const product = adEntry?.product || {};
-                        const productId = String(product.productId || '').trim();
-                        if (!productId) continue;
-
-                        if (!sponsoredProductMap.has(productId)) {
-                            newIds += 1;
-                        }
-
-                        sponsoredProductMap.set(productId, {
-                            tag: product.tag || 'sponsored',
-                            brand: product.brand || 'N/A',
-                            campaignId: adEntry?.config?.c || 'N/A',
-                            adGroupId: adEntry?.config?.adg || 'N/A',
-                            cid: adEntry?.config?.cid || 'N/A'
-                        });
-                    }
-                }
-
-                return newIds;
-            };
-
-            const resolveCandidateProductIds = (item) => {
-                const ids = new Set();
-
-                const addId = (value) => {
-                    const raw = String(value || '').trim();
-                    if (!raw) return;
-                    ids.add(raw);
-                    if (raw.endsWith('_P')) {
-                        ids.add(raw.replace(/_P$/i, ''));
-                    }
-                };
-
-                addId(item?.id);
-
-                const productPathId = String(item?.product?.name || '').split('/').pop();
-                addId(productPathId);
-
-                const variantInfo = item?.product?.attributes?.variant_info?.text;
-                if (Array.isArray(variantInfo)) {
-                    variantInfo.forEach(addId);
-                }
-
-                const rollupVariantIds = item?.variantRollupValues?.variantId;
-                if (Array.isArray(rollupVariantIds)) {
-                    rollupVariantIds.forEach(addId);
-                }
-
-                const variants = Array.isArray(item?.product?.variants) ? item.product.variants : [];
-                for (const variant of variants) {
-                    addId(variant?.id);
-                    const variantPathId = String(variant?.name || '').split('/').pop();
-                    addId(variantPathId);
-                }
-
-                return Array.from(ids);
-            };
-
-            const annotateCapturedItemsWithAds = () => {
-                let adTaggedCount = 0;
-
-                for (const item of capturedItems) {
-                    const candidateIds = resolveCandidateProductIds(item);
-                    const matchedId = candidateIds.find((id) => sponsoredProductMap.has(id));
-
-                    if (matchedId) {
-                        const adMeta = sponsoredProductMap.get(matchedId) || {};
-                        item.__isAd = true;
-                        item.__adTag = adMeta.tag || 'sponsored';
-                        item.__adProductId = matchedId;
-                        item.__adMeta = adMeta;
-                        adTaggedCount += 1;
-                    } else if (typeof item.__isAd !== 'boolean') {
-                        item.__isAd = false;
-                    }
-                }
-
-                return adTaggedCount;
-            };
-
-            const captureTemplateFromRequest = (request) => {
-                const url = request.url();
-                if (request.method() !== 'POST') return;
-
-                if (url.includes('/trex/search')) {
-                    const headers = request.headers();
-                    for (const key of wantedHeaders) {
-                        const value = headers[key];
-                        if (value !== undefined && value !== '') {
-                            capturedHeaders[key] = value;
-                        }
-                    }
-
-                    if (!requestTemplateBody) {
-                        try {
-                            const postData = request.postData();
-                            if (postData && postData.length > 2) {
-                                requestTemplateBody = JSON.parse(postData);
+            page.on('response', async (response) => {
+                const url = response.url();
+                if (url.includes('trex/search') && response.status() === 200) {
+                    try {
+                        const json = await response.json();
+                        // Check for 'results' array (standard Jiomart API structure)
+                        if (json.results && Array.isArray(json.results)) {
+                            let count = 0;
+                            json.results.forEach(item => {
+                                if (item && item.id && !interceptedIds.has(item.id)) {
+                                    interceptedIds.add(item.id);
+                                    capturedItems.push(item);
+                                    count++;
+                                }
+                            });
+                            if (count > 0) {
+                                console.log(`⚡ Intercepted API response: ${count} new items (Total: ${capturedItems.length})`);
                             }
-                        } catch (_) {
-                            requestTemplateBody = null;
                         }
-                    }
-                    return;
-                }
-
-                if (url.includes('/ads/ad-server/getAds')) {
-                    const headers = request.headers();
-                    for (const key of wantedAdHeaders) {
-                        const value = headers[key];
-                        if (value !== undefined && value !== '') {
-                            capturedAdHeaders[key] = value;
-                        }
-                    }
-
-                    if (!adsRequestTemplateBody) {
-                        try {
-                            const postData = request.postData();
-                            if (postData && postData.length > 2) {
-                                adsRequestTemplateBody = JSON.parse(postData);
-                            }
-                        } catch (_) {
-                            adsRequestTemplateBody = null;
-                        }
+                    } catch (e) {
+                        // Ignore JSON parse errors from non-JSON responses
                     }
                 }
-            };
-
-            page.on('request', captureTemplateFromRequest);
-
-            const initialRequestPromise = page.waitForRequest(
-                (request) => request.url().includes('/trex/search') && request.method() === 'POST',
-                { timeout: 25000 }
-            );
-
-            const initialResponsePromise = page.waitForResponse(
-                (response) => response.url().includes('/trex/search') && response.request().method() === 'POST' && response.status() === 200,
-                { timeout: 25000 }
-            );
-            const initialAdsResponsePromise = page.waitForResponse(
-                (response) => response.url().includes('/ads/ad-server/getAds') && response.request().method() === 'POST' && response.status() === 200,
-                { timeout: 5000 }
-            ).catch(() => null);
+            });
 
             await page.goto(category.url, { waitUntil: 'domcontentloaded', timeout: 60000 });
 
-            const [initialRequest, initialResponse] = await Promise.all([initialRequestPromise, initialResponsePromise]);
-            if (initialRequest) {
-                captureTemplateFromRequest(initialRequest);
-            }
-
-            let initialData = null;
+            // Wait for network idle to ensure dynamic content load starts
             try {
-                initialData = await initialResponse.json();
+                await page.waitForLoadState('networkidle', { timeout: 5000 });
             } catch (e) {
-                throw new Error(`Failed to parse initial trex/search response: ${e.message}`);
+                console.log(`⚠️ Network idle timeout (5s) for ${category.name}, proceeding anyway...`);
             }
 
-            const initialAdded = pushResults(initialData, 1);
-            const totalSize = Number(initialData?.totalSize || 0);
-            console.log(`Initial trex/search page captured: +${initialAdded} items${totalSize > 0 ? ` (totalSize=${totalSize})` : ''}`);
-            apiResponses.push({
-                pageNumber: 1,
-                pageTokenUsed: null,
-                response: initialData
-            });
+            // Scroll to trigger more API calls
+            console.log(`📜 scrolling to trigger API calls for ${category.name}...`);
+            await smartScroll(page, category.name);
 
-            const initialAdsResponse = await initialAdsResponsePromise;
-            if (initialAdsResponse) {
-                try {
-                    const adsData = await initialAdsResponse.json();
-                    adResponses.push({
-                        source: 'page-load',
-                        response: adsData
-                    });
-                    const sponsoredFound = extractSponsoredFromAdsPayload(adsData);
-                    if (sponsoredFound > 0) {
-                        console.log(`Captured sponsored ads: +${sponsoredFound} product ids`);
-                    }
-                } catch (e) {
-                    console.warn(`Failed to parse initial ads response: ${e.message}`);
-                }
-            }
-
-            const requestBodyBase = requestTemplateBody && typeof requestTemplateBody === 'object'
-                ? { ...requestTemplateBody }
-                : {};
-
-            if (!requestBodyBase.pageSize || Number(requestBodyBase.pageSize) <= 0) {
-                requestBodyBase.pageSize = 50;
-            }
-
-            const extraHeaders = {
-                'content-type': capturedHeaders['content-type'] || 'application/json',
-                accept: capturedHeaders.accept || '*/*'
-            };
-
-            const optionalHeaderKeys = ['accept-language', 'origin', 'referer', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'user-agent'];
-            for (const key of optionalHeaderKeys) {
-                if (capturedHeaders[key]) {
-                    extraHeaders[key] = capturedHeaders[key];
-                }
-            }
-
-            if (sponsoredProductMap.size === 0 && adsRequestTemplateBody && typeof adsRequestTemplateBody === 'object') {
-                const adsHeaders = {
-                    'content-type': capturedAdHeaders['content-type'] || 'application/json',
-                    accept: capturedAdHeaders.accept || 'application/json'
-                };
-
-                for (const key of optionalHeaderKeys) {
-                    if (capturedAdHeaders[key]) {
-                        adsHeaders[key] = capturedAdHeaders[key];
-                    }
-                }
-                if (capturedAdHeaders.authorization) {
-                    adsHeaders.authorization = capturedAdHeaders.authorization;
-                }
-
-                for (let retry = 1; retry <= 2; retry += 1) {
-                    const adsResult = await page.evaluate(
-                        async ({ endpoint, headers, body }) => {
-                            try {
-                                const res = await fetch(endpoint, {
-                                    method: 'POST',
-                                    credentials: 'include',
-                                    headers,
-                                    body: JSON.stringify(body)
-                                });
-
-                                const raw = await res.text();
-                                let data = null;
-                                if (raw) {
-                                    try {
-                                        data = JSON.parse(raw);
-                                    } catch (_) {
-                                        data = null;
-                                    }
-                                }
-
-                                return {
-                                    ok: res.ok,
-                                    status: res.status,
-                                    data,
-                                    error: res.ok ? null : raw.slice(0, 240)
-                                };
-                            } catch (error) {
-                                return {
-                                    ok: false,
-                                    status: 0,
-                                    data: null,
-                                    error: error.message
-                                };
-                            }
-                        },
-                        { endpoint: ADS_ENDPOINT, headers: adsHeaders, body: adsRequestTemplateBody }
-                    );
-
-                    if (adsResult.ok && adsResult.data) {
-                        adResponses.push({
-                            source: 'direct-call',
-                            response: adsResult.data
-                        });
-                        const sponsoredFound = extractSponsoredFromAdsPayload(adsResult.data);
-                        if (sponsoredFound > 0) {
-                            console.log(`Direct ads API captured: +${sponsoredFound} sponsored product ids`);
-                        }
-                        break;
-                    }
-
-                    const retriable = adsResult.status === 0 || adsResult.status === 429 || adsResult.status >= 500;
-                    if (!retriable || retry === 2) {
-                        console.warn(`Ads API call failed for ${category.name}: ${adsResult.status || 0} ${adsResult.error || 'unknown error'}`);
-                        break;
-                    }
-
-                    await delay(350 * (2 ** (retry - 1)), 450 * (2 ** (retry - 1)));
-                }
-            }
-
-            let nextPageToken = initialData?.nextPageToken || null;
-            const seenTokens = new Set();
-            if (nextPageToken) seenTokens.add(nextPageToken);
-
-            let pageCount = 1;
-            while (nextPageToken && pageCount < 200) {
-                const requestBody = {
-                    ...requestBodyBase,
-                    pageToken: nextPageToken
-                };
-
-                let result = null;
-                for (let retry = 1; retry <= 3; retry += 1) {
-                    result = await page.evaluate(
-                        async ({ endpoint, headers, body }) => {
-                            try {
-                                const res = await fetch(endpoint, {
-                                    method: 'POST',
-                                    credentials: 'include',
-                                    headers,
-                                    body: JSON.stringify(body)
-                                });
-
-                                const raw = await res.text();
-                                let data = null;
-                                if (raw) {
-                                    try {
-                                        data = JSON.parse(raw);
-                                    } catch (_) {
-                                        data = null;
-                                    }
-                                }
-
-                                return {
-                                    ok: res.ok,
-                                    status: res.status,
-                                    data,
-                                    error: res.ok ? null : raw.slice(0, 240)
-                                };
-                            } catch (error) {
-                                return {
-                                    ok: false,
-                                    status: 0,
-                                    data: null,
-                                    error: error.message
-                                };
-                            }
-                        },
-                        { endpoint: API_ENDPOINT, headers: extraHeaders, body: requestBody }
-                    );
-
-                    if (result.ok && result.data) break;
-
-                    const retriable = result.status === 0 || result.status === 429 || result.status >= 500;
-                    if (!retriable || retry === 3) break;
-                    await delay(400 * (2 ** (retry - 1)), 500 * (2 ** (retry - 1)));
-                }
-
-                if (!result || !result.ok || !result.data) {
-                    console.warn(`Pagination stopped for ${category.name}: ${result?.status || 0} ${result?.error || 'unknown error'}`);
-                    break;
-                }
-
-                pageCount += 1;
-                const added = pushResults(result.data, pageCount);
-                console.log(`Page ${pageCount}: +${added} items (total ${capturedItems.length})`);
-                apiResponses.push({
-                    pageNumber: pageCount,
-                    pageTokenUsed: nextPageToken,
-                    response: result.data
-                });
-
-                const candidateToken = result.data?.nextPageToken || null;
-                if (!candidateToken) break;
-                if (seenTokens.has(candidateToken)) {
-                    console.warn(`Pagination loop token detected for ${category.name}, stopping.`);
-                    break;
-                }
-
-                nextPageToken = candidateToken;
-                seenTokens.add(nextPageToken);
-
-                if (totalSize > 0 && capturedItems.length >= totalSize) {
-                    break;
-                }
-
-                await delay(220, 450);
-            }
-
+            // Double check validation
             if (capturedItems.length === 0) {
-                console.warn(`Extracted 0 items via direct API for ${category.name} (Attempt ${attempt})`);
+                console.warn(`⚠️ Extracted 0 items (API) for ${category.name} (Attempt ${attempt})`);
                 if (attempt <= maxRetries) {
-                    throw new Error('Zero products extracted via direct API pagination');
+                    throw new Error("Zero products extracted via API");
                 }
             }
 
-            const adTaggedCount = annotateCapturedItemsWithAds();
-            console.log(`Extracted ${capturedItems.length} items from ${category.name} using direct API pagination.`);
-            console.log(`Sponsored mapping: ${sponsoredProductMap.size} sponsored ids, ${adTaggedCount} items tagged isAd=true`);
+            console.log(`✅ Extracted ${capturedItems.length} items from ${category.name}`);
 
-            capturedItems.forEach((p) => {
+            // Add categoryUrl to each product (helper for transform later)
+            capturedItems.forEach(p => {
                 p.categoryUrl = category.url;
             });
 
-            // Persist direct API responses for debugging/audit.
-            await fs.mkdir(apiDumpsDir, { recursive: true });
-            const ts = new Date().toISOString().replace(/[:.]/g, '-');
-            const catSlug = safeFilePart(category.name || 'unknown_category');
-            const dumpFile = `jiomart_api_dump_${catSlug}_${ts}_${Math.random().toString(36).slice(2, 8)}.json`;
-            const dumpPath = path.join(apiDumpsDir, dumpFile);
-            await fs.writeFile(
-                dumpPath,
-                JSON.stringify(
-                    {
-                        metadata: {
-                            category: category.name || 'Unknown Category',
-                            categoryUrl: category.url,
-                            attempt,
-                            method: 'direct-api-pagination',
-                            endpoint: API_ENDPOINT,
-                            adsEndpoint: ADS_ENDPOINT,
-                            scrapedAt: new Date().toISOString(),
-                            totalApiResponses: apiResponses.length,
-                            totalAdResponses: adResponses.length,
-                            totalItemsCaptured: capturedItems.length,
-                            totalSponsoredIds: sponsoredProductMap.size,
-                            adTaggedItems: adTaggedCount,
-                            totalSize
-                        },
-                        requestTemplate: {
-                            headers: capturedHeaders,
-                            body: requestTemplateBody,
-                            ads: {
-                                headers: capturedAdHeaders,
-                                body: adsRequestTemplateBody
-                            }
-                        },
-                        responses: apiResponses,
-                        adsResponses: adResponses,
-                        sponsoredProducts: Array.from(sponsoredProductMap.entries()).map(([productId, meta]) => ({
-                            productId,
-                            ...meta
-                        }))
-                    },
-                    null,
-                    2
-                )
-            );
-            console.log(`Saved API dump: ${dumpPath}`);
+            return { category: category.name, success: true, products: capturedItems };
 
-            return { category: category.name, success: true, products: capturedItems, apiDumpFile: dumpFile };
         } catch (error) {
-            console.error(`Error scraping ${category.name} (Attempt ${attempt}):`, error.message);
+            console.error(`❌ Error scraping ${category.name} (Attempt ${attempt}):`, error.message);
 
             if (attempt > maxRetries) {
                 return { category: category.name, success: false, error: error.message, products: [] };
             }
-
-            await delay(2000, 2800);
+            // If failed, wait before retrying
+            await delay(2000);
         } finally {
             if (context) {
                 try {
                     await context.close();
-                } catch (_) { }
+                } catch (e) { }
             }
         }
     }
 }
+
 // ==================== ENDPOINTS ====================
 
 app.get('/health', (req, res) => {
@@ -852,7 +411,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
         return res.status(400).json({ success: false, message: 'Invalid input. Required: pincode, and either categories array or urls array' });
     }
 
-    console.log(`ðŸš€ Starting batch job for Pincode: ${pincode}, Categories: ${targetCategories.length}`);
+    console.log(`🚀 Starting batch job for Pincode: ${pincode}, Categories: ${targetCategories.length}`);
 
     // Launch Browser ONE Instance
     // Headless: true with anti-detection args
@@ -893,7 +452,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
 
         for (let i = 0; i < targetCategories.length; i += maxConcurrentTabs) {
             const batch = targetCategories.slice(i, i + maxConcurrentTabs);
-            console.log(`ðŸ“¦ Processing batch ${Math.floor(i / maxConcurrentTabs) + 1}/${Math.ceil(targetCategories.length / maxConcurrentTabs)}`);
+            console.log(`📦 Processing batch ${Math.floor(i / maxConcurrentTabs) + 1}/${Math.ceil(targetCategories.length / maxConcurrentTabs)}`);
 
             // Use independent contexts for each scrape
             const batchPromises = batch.map(cat => scrapeCategory(browser, cat, contextOptions));
@@ -922,10 +481,10 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
                 });
 
                 await fs.writeFile(DATA_FILE, JSON.stringify(existingData, null, 2));
-                console.log(`ðŸ’¾ Saved ${allProducts.length} total products so far to ${DATA_FILE}`);
+                console.log(`💾 Saved ${allProducts.length} total products so far to ${DATA_FILE}`);
 
             } catch (err) {
-                console.error('âš ï¸ Failed to save partial data:', err);
+                console.error('⚠️ Failed to save partial data:', err);
                 // Still update in-memory results if file save fails
                 batchResults.forEach(r => {
                     if (r && r.success && !allProducts.includes(r.products[0])) { // Simple check, though ineffective if dupes
@@ -984,9 +543,16 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
             return true;
         });
 
-        // Keep ranking as website position from trex/search order.
+        // 3. Re-assign rankings per officialSubCategory
+        const subCatRankCounters = new Map();
+        dedupedProducts.forEach(p => {
+            const subCat = p.officialSubCategory || '__unknown__';
+            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+            subCatRankCounters.set(subCat, nextRank);
+            p.ranking = nextRank;
+        });
 
-        console.log(`âœ¨ Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
+        console.log(`✨ Raw: ${allProducts.length}, After transform+dedup: ${dedupedProducts.length} unique products`);
 
         const responsePayload = {
             status: 'success',
@@ -1017,7 +583,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
         res.json(responsePayload);
 
     } catch (error) {
-        console.error('ðŸ”¥ Critical server error:', error);
+        console.error('🔥 Critical server error:', error);
         // Only send error response if headers haven't been sent
         if (!res.headersSent) {
             res.status(500).json({ success: false, error: error.message });
@@ -1027,10 +593,10 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
             try {
                 await browser.close();
             } catch (e) {
-                console.error('âš ï¸ Error closing browser:', e.message);
+                console.error('⚠️ Error closing browser:', e.message);
             }
         }
-        console.log('ðŸ Batch job completed, browser closed');
+        console.log('🏁 Batch job completed, browser closed');
     }
 });
 
@@ -1061,11 +627,11 @@ async function saveScrapedDataToFolder(data, pincode, categoryName = 'Uncategori
         await fs.writeFile(tempPath, JSON.stringify(data, null, 2));
         await fs.rename(tempPath, filepath); // Atomic rename
         
-        console.log(`ðŸ’¾ [SAVED] ${categoryName}/${filename} (${data.products?.length || 0} products)`);
+        console.log(`💾 [SAVED] ${categoryName}/${filename} (${data.products?.length || 0} products)`);
         
         return { filename, filepath, directory: categoryName };
     } catch (error) {
-        console.error('âŒ Error saving to folder:', error);
+        console.error('❌ Error saving to folder:', error);
         throw error;
     }
 }
@@ -1082,7 +648,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
     }
     
     const jobId = generateJobId();
-    console.log(`ðŸ“‹ New job created: ${jobId} for pincode ${pincode}`);
+    console.log(`📋 New job created: ${jobId} for pincode ${pincode}`);
     
     // Initialize job state
     jobTracker.set(jobId, {
@@ -1091,15 +657,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
         status: 'initializing',
         progress: 0,
         totalProducts: 0,
-        products: [], // Only stores last N products for memory efficiency
-        recentProductCount: 0, // Track recent products added
+        products: [],
         startTime: new Date(),
         lastSavedTime: new Date(),
-        lastCheckpointTime: new Date(),
         error: null,
-        category: 'Uncategorized',
-        isCheckpointActive: true, // Flag to prevent saves after completion
-        MAX_STORED_PRODUCTS: 100 // Limit in-memory product store to last 100 for status queries
+        category: 'Uncategorized'
     });
     
     // Return immediately to client
@@ -1136,12 +698,10 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 }
             }
             
-            // ðŸ”„ START CHECKPOINT INTERVAL: Save to disk every 10 seconds
+            // 🔄 START CHECKPOINT INTERVAL: Save to disk every 10 seconds
             checkpointInterval = setInterval(async () => {
-                // Skip if checkpoint is inactive (job completed/errored) or no products
-                if (!job.isCheckpointActive || allProducts.length === 0) return;
-                
-                try {
+                if (allProducts.length > 0) {
+                    try {
                         const transformedProducts = allProducts.map((product, index) => {
                             const productCategoryUrl = product.categoryUrl || 'N/A';
                             let categoryMapping = null;
@@ -1184,10 +744,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                         
                         const saved = await saveScrapedDataToFolder(checkpointPayload, pincode, job.category || 'Uncategorized');
                         job.savedFile = saved.filename;
-                        console.log(`â¸ï¸  [${jobId}] Checkpoint: ${dedupedProducts.length} products saved`);
+                        console.log(`⏸️  [${jobId}] Checkpoint: ${dedupedProducts.length} products saved`);
                     } catch (err) {
-                        console.error(`âš ï¸ [${jobId}] Checkpoint save error:`, err.message);
+                        console.error(`⚠️ [${jobId}] Checkpoint save error:`, err.message);
                     }
+                }
             }, 10000); // Every 10 seconds
             
             browser = await chromium.launch({
@@ -1223,7 +784,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 const batch = targetCategories.slice(i, i + maxConcurrentTabs);
                 job.progress = Math.round((i / targetCategories.length) * 100);
                 
-                console.log(`ðŸ“¦ [${jobId}] Batch ${Math.floor(i / maxConcurrentTabs) + 1}/${Math.ceil(targetCategories.length / maxConcurrentTabs)}`);
+                console.log(`📦 [${jobId}] Batch ${Math.floor(i / maxConcurrentTabs) + 1}/${Math.ceil(targetCategories.length / maxConcurrentTabs)}`);
                 
                 try {
                     const batchPromises = batch.map(cat => scrapeCategory(browser, cat, contextOptions));
@@ -1240,21 +801,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                         }
                     });
                 } catch (batchError) {
-                    console.warn(`âš ï¸ [${jobId}] Batch error (continuing with collected data):`, batchError.message);
+                    console.warn(`⚠️ [${jobId}] Batch error (continuing with collected data):`, batchError.message);
                 }
                 
                 job.totalProducts = allProducts.length;
-                // âœ… MEMORY FIX: Only keep last N products in memory (not full array)
-                // This prevents memory explosion on large jobs (50K+ products)
-                const lastN = job.MAX_STORED_PRODUCTS;
-                if (allProducts.length > lastN) {
-                    job.products = allProducts.slice(-lastN);
-                    job.recentProductCount = lastN;
-                } else {
-                    job.products = allProducts.slice();
-                    job.recentProductCount = allProducts.length;
-                }
-                job.lastSavedTime = new Date();
+                job.products = allProducts.slice();
                 
                 // Delay between batches
                 if (i + maxConcurrentTabs < targetCategories.length) {
@@ -1262,22 +813,15 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 }
             }
             
-            // âš¡ SAFETY: Disable checkpoint before final save to prevent race conditions
-            job.isCheckpointActive = false;
-            
             // Stop checkpoint interval before final save
             if (checkpointInterval) {
                 clearInterval(checkpointInterval);
-                checkpointInterval = null;
-                console.log(`âœ… [${jobId}] Checkpoint interval stopped (success path)`);
+                console.log(`✅ [${jobId}] Checkpoint interval stopped`);
             }
-            
-            // Give pending checkpoint one last chance to complete (max 1 second wait)
-            await new Promise(resolve => setTimeout(resolve, 100));
             
             // Final save with all data
             if (allProducts.length > 0) {
-                console.log(`ðŸŽ¯ [${jobId}] Scraping complete, performing final save...`);
+                console.log(`🎯 [${jobId}] Scraping complete, performing final save...`);
                 
                 const transformedProducts = allProducts.map((product, index) => {
                     const productCategoryUrl = product.categoryUrl || 'N/A';
@@ -1307,7 +851,13 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                     return true;
                 });
                 
-                // Keep ranking as website position from trex/search order.
+                const subCatRankCounters = new Map();
+                dedupedProducts.forEach(p => {
+                    const subCat = p.officialSubCategory || '__unknown__';
+                    const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                    subCatRankCounters.set(subCat, nextRank);
+                    p.ranking = nextRank;
+                });
                 
                 const finalPayload = {
                     status: 'success',
@@ -1325,32 +875,27 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 const saved = await saveScrapedDataToFolder(finalPayload, pincode, job.category);
                 job.savedFile = saved.filename;
                 job.totalProducts = dedupedProducts.length;
-                // âœ… MEMORY: For final result, only store last 100 products in tracker
-                const finalLastN = job.MAX_STORED_PRODUCTS;
-                job.products = dedupedProducts.length > finalLastN 
-                    ? dedupedProducts.slice(-finalLastN) 
-                    : dedupedProducts;
-                job.recentProductCount = job.products.length;
+                job.products = dedupedProducts.slice();
             }
             
             job.status = 'completed';
             job.progress = 100;
             job.endTime = new Date();
-            console.log(`âœ¨ [${jobId}] Job completed successfully. Products: ${job.totalProducts}`);
+            console.log(`✨ [${jobId}] Job completed successfully. Products: ${job.totalProducts}`);
             
         } catch (error) {
-            console.error(`ðŸ”¥ [${jobId}] Background job error:`, error.message);
+            console.error(`🔥 [${jobId}] Background job error:`, error.message);
             
-            // âš ï¸ CRITICAL: Stop checkpoint before error save
+            // ⚠️ CRITICAL: Stop checkpoint before error save
             if (checkpointInterval) {
                 clearInterval(checkpointInterval);
-                console.log(`âœ… [${jobId}] Checkpoint interval stopped (error recovery)`);
+                console.log(`✅ [${jobId}] Checkpoint interval stopped (error recovery)`);
             }
             
             // Save whatever data was collected (checkpoint may have already saved, but do final save anyway)
             if (allProducts.length > 0) {
                 try {
-                    console.log(`ðŸ’¾ [${jobId}] ERROR RECOVERY: Saving ${allProducts.length} collected products...`);
+                    console.log(`💾 [${jobId}] ERROR RECOVERY: Saving ${allProducts.length} collected products...`);
                     
                     const transformedProducts = allProducts.map((product, index) => {
                         const productCategoryUrl = product.categoryUrl || 'N/A';
@@ -1380,7 +925,13 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                         return true;
                     });
                     
-                    // Keep ranking as website position from trex/search order.
+                    const subCatRankCounters = new Map();
+                    dedupedProducts.forEach(p => {
+                        const subCat = p.officialSubCategory || '__unknown__';
+                        const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                        subCatRankCounters.set(subCat, nextRank);
+                        p.ranking = nextRank;
+                    });
                     
                     const errorPayload = {
                         status: 'partial',
@@ -1398,16 +949,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                     const saved = await saveScrapedDataToFolder(errorPayload, pincode, job.category);
                     job.savedFile = saved.filename;
                     job.totalProducts = dedupedProducts.length;
-                    // âœ… MEMORY: Only store last 100 products even on error recovery
-                    const errorLastN = job.MAX_STORED_PRODUCTS;
-                    job.products = dedupedProducts.length > errorLastN 
-                        ? dedupedProducts.slice(-errorLastN) 
-                        : dedupedProducts;
-                    job.recentProductCount = job.products.length;
+                    job.products = dedupedProducts.slice();
                     
-                    console.log(`âœ… [${jobId}] ERROR RECOVERY SUCCESS: Saved ${dedupedProducts.length} products`);
+                    console.log(`✅ [${jobId}] ERROR RECOVERY SUCCESS: Saved ${dedupedProducts.length} products`);
                 } catch (recoveryError) {
-                    console.error(`âŒ [${jobId}] ERROR RECOVERY FAILED:`, recoveryError.message);
+                    console.error(`❌ [${jobId}] ERROR RECOVERY FAILED:`, recoveryError.message);
                 }
             }
             
@@ -1416,25 +962,14 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
             job.endTime = new Date();
             
         } finally {
-            // Clear checkpoint interval and disable
-            job.isCheckpointActive = false;
-            if (checkpointInterval) {
-                clearInterval(checkpointInterval);
-                checkpointInterval = null;
-            }
-            
-            // Memory cleanup: free large array
-            if (allProducts && allProducts.length > 0) {
-                const clearedCount = allProducts.length;
-                allProducts = null;
-                console.log(`[${jobId}] Released memory for ${clearedCount} products`);
-            }
+            // Clear checkpoint interval
+            if (checkpointInterval) clearInterval(checkpointInterval);
             
             if (browser) {
                 try {
                     await browser.close();
                 } catch (e) {
-                    console.error(`âš ï¸ [${jobId}] Error closing browser:`, e.message);
+                    console.error(`⚠️ [${jobId}] Error closing browser:`, e.message);
                 }
             }
         }
@@ -1471,17 +1006,17 @@ app.get('/jiomartcategoryscrapper-status/:jobId', (req, res) => {
 });
 
 const server = app.listen(PORT, () => {
-    console.log(`ðŸŒ Jiomart Scraper Server running on http://localhost:${PORT}`);
+    console.log(`🌍 Jiomart Scraper Server running on http://localhost:${PORT}`);
 });
 server.setTimeout(0); // Unlimited timeout
 
 // ============ GRACEFUL SHUTDOWN - SAVE DATA BEFORE EXIT ============
 async function saveAllPendingJobs() {
-    console.log('\nðŸ’¾ [SHUTDOWN] Saving all pending jobs before exit...');
+    console.log('\n💾 [SHUTDOWN] Saving all pending jobs before exit...');
     
     for (const [jobId, job] of jobTracker.entries()) {
         if ((job.status === 'running' || job.status === 'initializing') && job.totalProducts > 0) {
-            console.log(`âš ï¸ [SHUTDOWN] Found running job: ${jobId} with ${job.totalProducts} products`);
+            console.log(`⚠️ [SHUTDOWN] Found running job: ${jobId} with ${job.totalProducts} products`);
             
             try {
                 // Force save current state
@@ -1500,31 +1035,30 @@ async function saveAllPendingJobs() {
                     };
                     
                     const saved = await saveScrapedDataToFolder(savePayload, job.pincode, job.category);
-                    console.log(`âœ… [SHUTDOWN] Saved ${job.products.length} products from job ${jobId}`);
+                    console.log(`✅ [SHUTDOWN] Saved ${job.products.length} products from job ${jobId}`);
                 }
             } catch (error) {
-                console.error(`âŒ [SHUTDOWN] Failed to save job ${jobId}:`, error.message);
+                console.error(`❌ [SHUTDOWN] Failed to save job ${jobId}:`, error.message);
             }
         }
     }
     
-    console.log('âœ… [SHUTDOWN] All pending jobs saved. Exiting gracefully...\n');
+    console.log('✅ [SHUTDOWN] All pending jobs saved. Exiting gracefully...\n');
 }
 
 // Handle graceful shutdown
 process.on('SIGTERM', async () => {
-    console.log('\nðŸ›‘ [SIGTERM] Received shutdown signal. Saving data...');
+    console.log('\n🛑 [SIGTERM] Received shutdown signal. Saving data...');
     await saveAllPendingJobs();
     process.exit(0);
 });
 
 process.on('SIGINT', async () => {
-    console.log('\nðŸ›‘ [SIGINT] Received interrupt signal. Saving data...');
+    console.log('\n🛑 [SIGINT] Received interrupt signal. Saving data...');
     await saveAllPendingJobs();
     process.exit(0);
 });
 
 process.on('exit', async () => {
-    console.log('ðŸ Process exiting...');
+    console.log('🏁 Process exiting...');
 });
-

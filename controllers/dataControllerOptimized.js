@@ -44,6 +44,22 @@ const normalizePlatform = (platform) => {
   return PLATFORM_ENUM.find(p => p.toLowerCase() === platform.toLowerCase()) || platform.toLowerCase();
 };
 
+const buildProductIdWithSuffix = (product) => {
+  const officialSubCat = product.officialSubCategory || product.officalSubCategory || '';
+  let fullProductId = product.id || product.productId;
+
+  if (officialSubCat && officialSubCat !== 'N/A') {
+    const expectedSuffix = '__' + officialSubCat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+    const rawId = String(fullProductId);
+    if (!rawId.endsWith(expectedSuffix)) {
+      const baseId = rawId.replace(/__.*$/, '');
+      fullProductId = baseId + expectedSuffix;
+    }
+  }
+
+  return fullProductId;
+};
+
 /**
  * Process products in batch with Redis caching and bulk operations
  * ✅ 20-50x FASTER than sequential processing
@@ -131,7 +147,7 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   const brandMap = new Map(existingBrands.map(b => [b.brandName, b]));
 
   // Fetch all last snapshots for these products
-  const productIds = uniqueProducts.map(p => p.id || p.productId);
+  const productIds = uniqueProducts.map(p => buildProductIdWithSuffix(p));
   const lastSnapshots = await ProductSnapshot.find({
     productId: { $in: productIds },
     platform: normalizedPlatform,
@@ -174,16 +190,7 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
     }
 
     // ─ Handle productId suffix
-    const officialSubCat = prod.officialSubCategory || prod.officalSubCategory || '';
-    let fullProductId = prod.id || prod.productId;
-    if (officialSubCat && officialSubCat !== 'N/A') {
-      const expectedSuffix = '__' + officialSubCat.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-      const rawId = String(fullProductId);
-      if (!rawId.endsWith(expectedSuffix)) {
-        const baseId = rawId.replace(/__.*$/, '');
-        fullProductId = baseId + expectedSuffix;
-      }
-    }
+    const fullProductId = buildProductIdWithSuffix(prod);
 
     // ─ Create snapshot document
     const isNewProduct = !snapshotMap.has(fullProductId);

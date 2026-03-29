@@ -134,6 +134,13 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             brandName = safeString(p.brand);
         }
 
+        const adTagRaw = product.__adTag || product.adTag || 'N/A';
+        const adTag = safeString(adTagRaw);
+        const isSponsoredTag = typeof adTagRaw === 'string' && /(sponsor|ad)/i.test(adTagRaw);
+        const isAd = product.__isAd === true || product.isAd === true || isSponsoredTag;
+        const websitePosition = Number(product.__websitePosition || product.websitePosition || rank);
+        const resolvedRank = Number.isFinite(websitePosition) && websitePosition > 0 ? websitePosition : rank;
+
         return {
             category: masterCategory,
             categoryUrl: safeString(categoryUrl),
@@ -151,18 +158,22 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             quantity: packSize,
             combo: safeString(product.combo || p.combo || 'N/A'),
             deliveryTime: '20 to 30 minutes', // Hardcoded as per user request
-            isAd: false, // Jiomart API does not provide advertisement flags - all products are organic
+            isAd,
             rating: 'N/A', // vAttr.popularity is number, not rating
             currentPrice: cleanPrice(currentPrice),
             originalPrice: cleanPrice(originalPrice),
             discountPercentage: discount,
-            ranking: rank,
+            ranking: resolvedRank,
+            websitePosition: resolvedRank,
             isOutOfStock: isOutOfStock,
             productUrl: productUrl
         };
     }
 
     // --- DOM SCRAPED HANDLING (FALLBACK) ---
+    const fallbackPosition = Number(product.websitePosition || product.__websitePosition || rank);
+    const fallbackRank = Number.isFinite(fallbackPosition) && fallbackPosition > 0 ? fallbackPosition : rank;
+
     return {
         category: masterCategory,
         categoryUrl: safeString(categoryUrl),
@@ -185,7 +196,8 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         currentPrice: cleanPrice(product.price || product.sellingPrice),
         originalPrice: cleanPrice(product.originalPrice || product.mrp),
         discountPercentage: safeString(product.discount || product.discountPercentage),
-        ranking: rank,
+        ranking: fallbackRank,
+        websitePosition: fallbackRank,
         isOutOfStock: !!product.isOutOfStock,
         productUrl: safeString(product.url || product.productUrl)
     };

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Blinkit Response Format Transformer
  * Standardizes all Blinkit scraper responses to a consistent format
  * Handles deduplication, field mapping, N/A values, and category enrichment
@@ -60,9 +60,16 @@ function transformBlinkitProduct(product, categoryUrl, officialCategory, officia
     // User Requirement: map officialSubCategory -> officialSubCategory
     const finalOfficialSubCategory = categoryMapping?.officialSubCategory || officialSubCategory || 'N/A';
 
-    const subCatSuffix = (finalOfficialSubCategory && finalOfficialSubCategory !== 'N/A')
-        ? '__' + finalOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-        : '';
+    // ðŸ” NEW: Use productId from extraction (includes weight suffix), fallback to constructed ID
+    let productId = product.productId || product.id || 'N/A';
+    
+    // If productId doesn't have subcategory suffix yet, add it (for backward compatibility)
+    if (productId !== 'N/A' && !productId.includes('__')) {
+        const subCatSuffix = (finalOfficialSubCategory && finalOfficialSubCategory !== 'N/A')
+            ? '__' + finalOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+            : '';
+        productId = productId + subCatSuffix;
+    }
 
     return {
         category: category,
@@ -72,15 +79,16 @@ function transformBlinkitProduct(product, categoryUrl, officialCategory, officia
         pincode: pincode || 'N/A',
         platform: 'Blinkit',
         scrapedAt: product.scrapedAt || new Date().toISOString(),
-        productId: (product.id || product.productId) ? (product.id || product.productId) + subCatSuffix : 'N/A',
+        productId: productId,
         skuId: product.skuId || product.sku || 'N/A',
-        brand: product.brand || 'N/A',
+        brand: product.brand || product.brandName || 'N/A',
+        brandName: product.brandName || product.brand || 'N/A',  // ðŸ” NEW: Brand field
         productName: product.name || product.productName || 'N/A',
         productImage: product.image || product.productImage || 'N/A',
-        productWeight: product.productWeight || product.quantity || 'N/A',
+        productWeight: product.productWeight || product.quantity || 'N/A',  // ðŸ” NEW: Explicit weight field
         quantity: product.quantity || 'N/A',
-        combo: product.combo || 'N/A', // Changed default to N/A as per vague instruction "if any field is not present write N/A", formerly '1'
-        deliveryTime: product.deliveryTime || 'N/A',
+        combo: (product.combo !== undefined && product.combo !== null) ? product.combo : 'N/A',  // ðŸ” NEW: Proper combo count
+        deliveryTime: product.deliveryTime || 'N/A',  // ðŸ” NOW FORMATTED: No extra product info
         isAd: (product.isAd === true || product.isAd === 'true') ? true : false,
         rating: product.rating || 'N/A',
         currentPrice: product.price || product.currentPrice || 'N/A',
@@ -88,7 +96,12 @@ function transformBlinkitProduct(product, categoryUrl, officialCategory, officia
         discountPercentage: product.discountPercentage || calculateDiscount(product.originalPrice, product.price || product.currentPrice),
         ranking: ranking !== null ? ranking : 'N/A',
         isOutOfStock: (product.isOutOfStock === true || product.isOutOfStock === 'true') ? true : false,
-        productUrl: product.url || product.productUrl || 'N/A'
+        productUrl: product.url || product.productUrl || 'N/A',
+        
+        // ðŸ” NEW VARIANT FIELDS
+        isVariant: product.isVariant || false,  // True if this is a variant of a parent product
+        variantOf: product.variantOf || null,   // Parent productId if this is a variant
+        comboOf: product.comboOf || product.variantOf || null // Main productId for variants
     };
 }
 
@@ -132,7 +145,7 @@ function transformBlinkitResponse(rawData, categoryUrl, officialCategory, offici
     } else if (rawData && Array.isArray(rawData.data)) {
         products = rawData.data;
     } else {
-        console.warn('⚠️ Unable to extract products from response');
+        console.warn('âš ï¸ Unable to extract products from response');
         return [];
     }
 
@@ -160,7 +173,7 @@ function transformBlinkitResponse(rawData, categoryUrl, officialCategory, offici
  */
 function transformResultFile(inputFile, outputFile = null, categoryMappingFile = null) {
     try {
-        console.log(`📂 Reading file: ${inputFile}`);
+        console.log(`ðŸ“‚ Reading file: ${inputFile}`);
         const rawData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
 
         // Load category mappings if available
@@ -173,11 +186,11 @@ function transformResultFile(inputFile, outputFile = null, categoryMappingFile =
 
         if (categoryMappingFile && fs.existsSync(categoryMappingFile)) {
             try {
-                console.log(`📂 Loading category mappings...`);
+                console.log(`ðŸ“‚ Loading category mappings...`);
                 categoryMap = loadCategoryMappings(categoryMappingFile);
                 mappingFound = true;
             } catch (e) {
-                console.warn(`⚠️ Could not load category mappings: ${e.message}`);
+                console.warn(`âš ï¸ Could not load category mappings: ${e.message}`);
             }
         }
 
@@ -196,7 +209,7 @@ function transformResultFile(inputFile, outputFile = null, categoryMappingFile =
             // If it's a flat dump, we might need to look up category by URL for EACH product if they have it.
             // But typical usage seems to be per-category scraping.
 
-            console.log(`📦 Processing ${rawData.length} products (Flat Array)...`);
+            console.log(`ðŸ“¦ Processing ${rawData.length} products (Flat Array)...`);
 
             // Deduplicate first
             const dedupedRaw = deduplicateRawProducts(rawData);
@@ -224,7 +237,7 @@ function transformResultFile(inputFile, outputFile = null, categoryMappingFile =
 
         } else if (rawData.products && Array.isArray(rawData.products)) {
             // Structured response with metadata
-            console.log(`📦 Processing ${rawData.products.length} products from structured response...`);
+            console.log(`ðŸ“¦ Processing ${rawData.products.length} products from structured response...`);
 
             const categoryUrl = rawData.categoryUrl || rawData.url || 'N/A';
             const officialCategory = rawData.officialCategory || rawData.category || 'N/A';
@@ -250,16 +263,16 @@ function transformResultFile(inputFile, outputFile = null, categoryMappingFile =
 
         // Save transformed data
         fs.writeFileSync(outputFile, JSON.stringify(transformed, null, 2));
-        console.log(`💾 Saved to: ${outputFile}`);
+        console.log(`ðŸ’¾ Saved to: ${outputFile}`);
 
         // Summary
-        console.log(`✅ Transformation complete`);
+        console.log(`âœ… Transformation complete`);
         console.log(`   - Total products: ${transformed.length}`);
 
         return transformed;
 
     } catch (error) {
-        console.error(`❌ Error transforming file: ${error.message}`);
+        console.error(`âŒ Error transforming file: ${error.message}`);
         throw error;
     }
 }
@@ -269,11 +282,11 @@ function transformResultFile(inputFile, outputFile = null, categoryMappingFile =
  */
 function batchTransform(directory = '.', categoryMappingFile = null) {
     try {
-        console.log(`🔍 Scanning directory: ${directory}`);
+        console.log(`ðŸ” Scanning directory: ${directory}`);
         const files = fs.readdirSync(directory)
             .filter(f => f.match(/blinkit_bulk_results.*\.json$/i) && !f.includes('_transformed'));
 
-        console.log(`📋 Found ${files.length} files to transform`);
+        console.log(`ðŸ“‹ Found ${files.length} files to transform`);
 
         // Resolve absolute path for mapping file if provided
         if (categoryMappingFile) {
@@ -281,7 +294,7 @@ function batchTransform(directory = '.', categoryMappingFile = null) {
                 categoryMappingFile = path.resolve(process.cwd(), categoryMappingFile); // Or relative to directory? Better explicitly resolved.
             }
             if (!fs.existsSync(categoryMappingFile)) {
-                console.warn(`⚠️ Category mapping file not found: ${categoryMappingFile}`);
+                console.warn(`âš ï¸ Category mapping file not found: ${categoryMappingFile}`);
                 categoryMappingFile = null;
             }
         }
@@ -309,16 +322,16 @@ function batchTransform(directory = '.', categoryMappingFile = null) {
         console.log('\n\n========== BATCH TRANSFORMATION SUMMARY ==========');
         results.forEach(r => {
             if (r.status === 'success') {
-                console.log(`✅ ${r.file}: ${r.productsCount} products`);
+                console.log(`âœ… ${r.file}: ${r.productsCount} products`);
             } else {
-                console.log(`❌ ${r.file}: ${r.error}`);
+                console.log(`âŒ ${r.file}: ${r.error}`);
             }
         });
 
         return results;
 
     } catch (error) {
-        console.error(`❌ Batch transformation error: ${error.message}`);
+        console.error(`âŒ Batch transformation error: ${error.message}`);
         throw error;
     }
 }
@@ -343,7 +356,7 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
 
     if (args.length === 0) {
         console.log(`
-📝 Blinkit Response Format Transformer
+ðŸ“ Blinkit Response Format Transformer
 Standardized fields, deduplicated, and mapped.
 
 Usage:
@@ -369,3 +382,4 @@ Examples:
         transformResultFile(file, null, categoryFile);
     }
 }
+

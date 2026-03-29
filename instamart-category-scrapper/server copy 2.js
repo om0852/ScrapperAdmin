@@ -26,8 +26,8 @@ if (!fs.existsSync(API_DUMPS_DIR)) {
 }
 
 // === LOAD STANDARDIZATION MODULES (ESM) ===
-let transformInstamartProduct, deduplicateRawProducts;
-let categoryMapper;
+let transformInstamartProduct, deduplicateRawProducts, loadCategoryMappings, enrichProductWithCategoryMapping;
+let CATEGORY_MAPPINGS;
 
 (async () => {
     try {
@@ -35,11 +35,12 @@ let categoryMapper;
         transformInstamartProduct = transformModule.transformInstamartProduct;
         deduplicateRawProducts = transformModule.deduplicateRawProducts;
 
-        // ✅ USE CORRECT categoryMapper WITH CASE-INSENSITIVE & URL ENCODING FIX
-        const categoryMapperModule = await import('../utils/categoryMapper.js');
-        categoryMapper = categoryMapperModule.default;
+        const enrichModule = await import('../enrich_categories.js');
+        loadCategoryMappings = enrichModule.loadCategoryMappings;
+        enrichProductWithCategoryMapping = enrichModule.enrichProductWithCategoryMapping;
 
-        console.log('✅ Loaded Standardization Modules & Category Mapper');
+        CATEGORY_MAPPINGS = loadCategoryMappings(path.join(__dirname, '..', 'categories_with_urls.json'));
+        console.log('✅ Loaded Standardization Modules & Category Mappings');
     } catch (e) {
         console.error('❌ Failed to load standardization modules:', e);
     }
@@ -698,25 +699,20 @@ app.post('/instamartcategorywrapper', async (req, res) => {
             const transformedAll = allResults.map((product, index) => {
                 const productCategoryUrl = product.categoryUrl || 'N/A';
                 let categoryMapping = null;
+                let officialCategory = 'N/A';
 
-                // ✅ USE categoryMapper.extractCategoryFromUrl() - handles case-insensitive + URL encoding
-                if (productCategoryUrl !== 'N/A' && categoryMapper) {
-                    const extracted = categoryMapper.extractCategoryFromUrl(productCategoryUrl, 'Instamart');
-                    
-                    // Build categoryMapping object compatible with transform function
-                    categoryMapping = {
-                        categoryMappingFound: extracted.officialCategory !== 'Unknown',
-                        masterCategory: extracted.masterCategory,
-                        officialCategory: extracted.officialCategory,
-                        officialSubCategory: extracted.officialSubCategory,
-                        fullUrl: productCategoryUrl
-                    };
+                if (productCategoryUrl !== 'N/A' && enrichProductWithCategoryMapping) {
+                    const enriched = enrichProductWithCategoryMapping({ categoryUrl: productCategoryUrl }, CATEGORY_MAPPINGS);
+                    if (enriched.categoryMappingFound) {
+                        categoryMapping = enriched;
+                        officialCategory = enriched.officialCategory || 'N/A';
+                    }
                 }
 
                 return transformInstamartProduct(
                     product,
                     productCategoryUrl,
-                    categoryMapping?.officialCategory || 'N/A',
+                    officialCategory,
                     'N/A',
                     pincode,
                     index + 1,

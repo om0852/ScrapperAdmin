@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const { scrapeMultiple } = require('./scraper_service');
+const { scrape } = require('./scraper_service');
 const fs = require('fs');
 const path = require('path');
 
@@ -69,7 +69,7 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
         // Assuming scrapeMultiple accepts concurrency as 3rd arg or options object. 
         // Based on previous analysis, scrapeMultiple signature might need check. 
         // But for standardization, we pass it. If valid scraper_service doesn't take it, JS ignores extra args.
-        const results = await scrapeMultiple(targetUrls, pincode, maxConcurrentTabs);
+        const results = await require('./scraper_service').scrapeMultiple(targetUrls, pincode, maxConcurrentTabs);
 
         // === SAVE RAW API DUMP ===
         const rawDumpFilename = saveApiDump(pincode, targetUrls.join('|'), results, 'raw_response');
@@ -111,8 +111,14 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
                 );
             }).filter(p => p !== null); // remove products with invalid names (e.g. numeric-only)
 
-            // 2. Deduplicate AFTER transform using the shared composite-key logic
-            productsToReturn = deduplicateRawProducts(transformedAll);
+            // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+            const seenIds = new Set();
+            productsToReturn = transformedAll.filter(p => {
+                const key = p.productId || p.productName;
+                if (!key || seenIds.has(key)) return false;
+                seenIds.add(key);
+                return true;
+            });
 
             // 3. Re-assign rankings per officialSubCategory
             const subCatRankCounters = new Map();

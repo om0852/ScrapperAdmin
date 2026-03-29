@@ -61,8 +61,8 @@ export function transformZeptoProduct(product, categoryUrl, categoryName, subCat
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.productId) + subCatSuffix,
-        skuId: safeString(product.productSlug || 'N/A'), // Mapping slug to skuId
+        productId: safeString(product.productId || product.skuId || product.productSlug) + subCatSuffix,
+        skuId: safeString(product.skuId || product.productSlug || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.productName),
         productImage: safeString(product.productImage),

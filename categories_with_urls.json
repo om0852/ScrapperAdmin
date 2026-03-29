@@ -384,18 +384,7 @@
       "masterCategory": "Breakfast & Sauces",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad8&filterName=Seeds+and+trail+Mixes&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
-    {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Hot beverages",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad9&filterName=Hot+Beverages&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Juices & Fruit Drinks",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ada&filterName=Juices+%26+Fruit+Drinks&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
+
     {
       "officalCategory": "Cereals & Breakfast",
       "officalSubCategory": "Jams",
@@ -426,12 +415,7 @@
       "masterCategory": "Packaged Food",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Noodles%2C+Pasta%2C+Vermicelli&filterId=6822eeebed32000001e25a80&filterName=Hakka+Noodles&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+3"
     },
-    {
-      "officalCategory": "Noodles, Pasta & Vermicelli",
-      "officalSubCategory": "Cooking pasta",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Noodles%2C+Pasta%2C+Vermicelli&filterId=6822eeebed32000001e25a80&filterName=Hakka+Noodles&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+3"
-    },
+
     {
       "officalCategory": "Noodles, Pasta & Vermicelli",
       "officalSubCategory": "Vermicelli",
@@ -493,28 +477,64 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad9&filterName=Hot+Beverages&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
     },
     {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Tea",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b26&filterName=Tea&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/city/delhi/sc/tea-coffee-and-more/tea-68249b5d56df9b0001250150",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Tea",
+      "masterCategory": "Tea, Coffee & More"
     },
     {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Instant Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b27&filterName=Instant+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7754&filterName=Instant+Coffee&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Instant Coffee",
+      "masterCategory": "Tea, Coffee & More"
     },
     {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Filter & Ground Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b28&filterName=Filter+%26+Ground+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7751&filterName=Filter & Ground Coffee",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Filter & Ground Coffee",
+      "masterCategory": "Tea, Coffee & More"
     },
     {
-      "officalCategory": "Tea & Coffee",
-      "officalSubCategory": "Cold Coffee",
-      "masterCategory": "Tea, Coffee & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Tea%2C+Coffee+and+Milk+drinks&filterId=6822eeeded32000001e25b2a&filterName=Cold+Coffee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7753&filterName=Green+and+Herbal+Tea&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Green and Herbal Tea",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7752&filterName=Fruit+Syrups+and+Powders&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Fruit Syrups and Powders",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d774f&filterName=Choco+Syrups+%26+Powders&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Choco Syrups & Powders",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d7750&filterName=Drink+Mixes&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Drink Mixes",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682496711f249300018d774d&filterName=Adult+Nutrition&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Adult Nutrition",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=68249b5d56df9b000125014f&filterName=Protein+Powders&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Protein Powders",
+      "masterCategory": "Tea, Coffee & More"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=tea-coffee-and-more&filterId=682498a41f249300018d7756&filterName=Premixes&taxonomyType=All+Listing",
+      "officialCategory": "Tea, Coffee and More",
+      "officialSubCategory": "Premixes",
+      "masterCategory": "Tea, Coffee & More"
     },
     {
       "officalCategory": "Ice Creams & Frozen Desserts",
@@ -882,54 +902,7 @@
       "masterCategory": "Home Needs",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Kitchen+and+Dining&filterId=6822eef009ab2e00019aa5fc&filterName=Bakeware+%26+BBQ&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Health+and+Wellness+Stores"
     },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Detergent Powders",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Detergent Liquids",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Fabric Softners",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Floor Cleaner",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Utensils Cleaner",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Kitchen Cleaning",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Disinfectants",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
-    {
-      "officalCategory": "Cleaning Essentials",
-      "officalSubCategory": "Tooilet Cleaner",
-      "masterCategory": "Home Needs",
-      "url": ""
-    },
+ 
     {
       "officalCategory": "Books & Stationary",
       "officalSubCategory": "Pens Pencils Highlighters",
@@ -1170,12 +1143,7 @@
       "masterCategory": "Bath & Body",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Bath+and+Body&filterId=6822eeefed32000001e25b52&filterName=Hand+wash+and+Sanitizers&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Supermarket"
     },
-    {
-      "officalCategory": "Bath & Body",
-      "officalSubCategory": "Shampoo",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Bath+and+Body&filterId=6822eeefed32000001e25b52&filterName=Hand+wash+and+Sanitizers&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Supermarket"
-    },
+   
     {
       "officalCategory": "Bath & Body",
       "officalSubCategory": "Conditioner",
@@ -1376,30 +1344,14 @@
       "masterCategory": "Dairy, Bread & Eggs",
       "url": "https://www.jiomart.com/c/groceries/dairy-bakery/cheese-paneer-tofu/29010"
     },
-    {
-      "officalCategory": "Dairy & Bakery",
-      "officalSubCategory": "Toast & Khari",
-      "masterCategory": "Dairy, Bread & Eggs",
-      "url": "https://www.jiomart.com/c/groceries/dairy-bakery/toast-khari/102"
-    },
-    {
-      "officalCategory": "Dairy & Bakery",
-      "officalSubCategory": "Cakes & Muffins",
-      "masterCategory": "Dairy, Bread & Eggs",
-      "url": "https://www.jiomart.com/c/groceries/dairy-bakery/cakes-muffins/125"
-    },
+
     {
       "officalCategory": "Dairy & Bakery",
       "officalSubCategory": "Breads & Chapatis",
       "masterCategory": "Dairy, Bread & Eggs",
       "url": "https://www.jiomart.com/c/groceries/dairy-bakery/breads-and-chapatis/267"
     },
-    {
-      "officalCategory": "Dairy & Bakery",
-      "officalSubCategory": "Bakery & Snacks",
-      "masterCategory": "Dairy, Bread & Eggs",
-      "url": "https://www.jiomart.com/c/groceries/dairy-bakery/baked-cookies/273"
-    },
+
     {
       "officalCategory": "Cooking Essentials",
       "officalSubCategory": "Atta, Flours & Sooji",
@@ -1490,48 +1442,7 @@
       "masterCategory": "Breakfast & Sauces",
       "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/pickles-chutney-flavouring/29006"
     },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Noodles, Pasta & Vermicelli",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/noodles-pasta-vermicelli/29005"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Ready To Cook & Eat",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/ready-to-cook-eat/29007"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Chips & Namkeens",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/chips-namkeens/29000"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Biscuits & Cookies",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/biscuits-cookies/28998"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Chocolates & Candies",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/chocolates-candies/29001"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Indian Sweets",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/indian-sweets/29004"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Breakfast Cereals",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/breakfast-cereals/28999"
-    },
+
     {
       "officalCategory": "Biscuits, Drinks & Packaged Foods",
       "officalSubCategory": "Noodles, Pasta & Vermicelli",
@@ -1544,18 +1455,7 @@
       "masterCategory": "Packaged Food",
       "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/ready-to-cook-eat/29007"
     },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Spread, Sauces & Ketchup",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/spread-sauces-ketchup/29008"
-    },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Pickles, Chutney & Flavouring",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/pickles-chutney-flavouring/29006"
-    },
+
     {
       "officalCategory": "Biscuits, Drinks & Packaged Foods",
       "officalSubCategory": "Tea & Coffee",
@@ -1580,12 +1480,7 @@
       "masterCategory": "Health & Wellness",
       "url": "https://www.jiomart.com/c/groceries/personal-care/health-wellness/165"
     },
-    {
-      "officalCategory": "Mom & Baby Care",
-      "officalSubCategory": "Health & Wellness",
-      "masterCategory": "Health & Wellness",
-      "url": "https://www.jiomart.com/c/groceries/mom-baby-care/health-wellness/2571"
-    },
+
     {
       "officalCategory": "Biscuits, Drinks & Packaged Foods",
       "officalSubCategory": "Chocolates & Candies",
@@ -1616,12 +1511,7 @@
       "masterCategory": "Snacks & Munchies",
       "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/chips-namkeens/29000"
     },
-    {
-      "officalCategory": "Biscuits, Drinks & Packaged Foods",
-      "officalSubCategory": "Biscuits & Cookies",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.jiomart.com/c/groceries/biscuits-drinks-packaged-foods/biscuits-cookies/28998"
-    },
+
     {
       "officalCategory": "Biscuits, Drinks & Packaged Foods",
       "officalSubCategory": "Biscuits & Cookies",
@@ -1640,12 +1530,7 @@
       "masterCategory": "Bakery & Biscuits",
       "url": "https://www.jiomart.com/c/groceries/dairy-bakery/cakes-muffins/125"
     },
-    {
-      "officalCategory": "Dairy & Bakery",
-      "officalSubCategory": "Breads & Chapatis",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.jiomart.com/c/groceries/dairy-bakery/breads-and-chapatis/267"
-    },
+
     {
       "officalCategory": "Dairy & Bakery",
       "officalSubCategory": "Bakery & Snacks",
@@ -2000,48 +1885,28 @@
       "masterCategory": "Skincare",
       "url": "https://www.jiomart.com/c/groceries/personal-care/skin-care/122"
     },
-    {
-      "officalCategory": "Beauty",
-      "officalSubCategory": "Face",
-      "masterCategory": "Skincare",
-      "url": "https://www.jiomart.com/c/groceries/beauty/face/29989"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Bath & Hand Wash",
       "masterCategory": "Bath & Body",
       "url": "https://www.jiomart.com/c/groceries/personal-care/bath-hand-wash/119"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Hair Care",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.jiomart.com/c/groceries/personal-care/hair-care/92"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Hair Care",
       "masterCategory": "Personal Care",
       "url": "https://www.jiomart.com/c/groceries/personal-care/hair-care/92"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Bath & Hand Wash",
-      "masterCategory": "Personal Care",
-      "url": "https://www.jiomart.com/c/groceries/personal-care/bath-hand-wash/119"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Oral Care",
       "masterCategory": "Personal Care",
       "url": "https://www.jiomart.com/c/groceries/personal-care/oral-care/132"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Skin Care",
-      "masterCategory": "Personal Care",
-      "url": "https://www.jiomart.com/c/groceries/personal-care/skin-care/122"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Feminine Hygiene",
@@ -2059,12 +1924,6 @@
       "officalSubCategory": "Deo & Fragrances",
       "masterCategory": "Personal Care",
       "url": "https://www.jiomart.com/c/groceries/personal-care/deo-fragrances/172"
-    },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Health & Wellness",
-      "masterCategory": "Personal Care",
-      "url": "https://www.jiomart.com/c/groceries/personal-care/health-wellness/165"
     }
   ],
   "Zepto": [
@@ -2893,18 +2752,7 @@
       "masterCategory": "Breakfast & Sauces",
       "url": "https://www.zepto.com/cn/breakfast-sauces/batter-mixes/cid/f804bccc-c565-4879-b6ab-1b964bb1ed41/scid/01b6ce0b-071a-4e32-b671-994f6d6da8b8"
     },
-    {
-      "officalCategory": "Breakfast Sauces",
-      "officalSubCategory": "Tea Coffee",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.zepto.com/cn/breakfast-sauces/tea-coffee/cid/f804bccc-c565-4879-b6ab-1b964bb1ed41/scid/75cb08c9-27c6-403e-b3fc-a7c7c0c4fc8d"
-    },
-    {
-      "officalCategory": "Breakfast Sauces",
-      "officalSubCategory": "Zepto Cafe",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.zepto.com/cn/breakfast-sauces/zepto-cafe/cid/f804bccc-c565-4879-b6ab-1b964bb1ed41/scid/60a35530-9491-4baf-9ec9-462add14e112"
-    },
+
     {
       "officalCategory": "Breakfast Sauces",
       "officalSubCategory": "Dates Seeds",
@@ -4329,72 +4177,7 @@
       "masterCategory": "Ice Creams & More",
       "url": "https://blinkit.com/cn/ice-cream-frozen-dessert/cid/9/183"
     },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Indian Sweets",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/indian-sweets/cid/9/943"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Chocolates",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/chocolates/cid/9/944"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Chocolate Packs",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/chocolate-packs/cid/9/1173"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Chocolate Syrup",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/chocolate-syrup/cid/9/1289"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Candies & Gum",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/candies-gum/cid/9/1930"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Mouth Fresheners",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/mouth-fresheners/cid/9/1933"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Cakes and Rolls",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/cakes-and-rolls/cid/9/108"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Chocolate Bars",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/chocolate-bars/cid/9/1736"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Filled Bars",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/filled-bars/cid/9/1737"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Wafer Chocolates",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/wafer-chocolates/cid/9/1172"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Syrups",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://blinkit.com/cn/syrups/cid/9/1298"
-    },
+
     {
       "officalCategory": "Pharma & Wellness",
       "officalSubCategory": "Healthcare Devices",
@@ -4515,18 +4298,7 @@
       "masterCategory": "Health & Wellness",
       "url": "https://blinkit.com/cn/sexual-wellness/cid/287/741"
     },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Flavoured Yogurts",
-      "masterCategory": "Sweet Cravings",
-      "url": "https://blinkit.com/cn/flavoured-yogurts/cid/9/106"
-    },
-    {
-      "officalCategory": "Sweet Tooth",
-      "officalSubCategory": "Ice Cream & Frozen Dessert",
-      "masterCategory": "Sweet Cravings",
-      "url": "https://blinkit.com/cn/ice-cream-frozen-dessert/cid/9/183"
-    },
+
     {
       "officalCategory": "Sweet Tooth",
       "officalSubCategory": "Indian Sweets",
@@ -5703,54 +5475,7 @@
       "masterCategory": "Skincare",
       "url": "https://blinkit.com/cn/toners-mists/cid/13/240"
     },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Facial Kit",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/facial-kit/cid/13/344"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Scrubs, Masks & Serums",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-scrubs-masks-serums/cid/13/369"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Balm",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-balm/cid/13/276"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Eye Creams & Masks",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/eye-creams-masks/cid/13/237"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Tint",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-tint/cid/13/260"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Primer",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-primer/cid/13/141"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Liner",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-liner/cid/13/121"
-    },
-    {
-      "officalCategory": "Beauty & Cosmetics",
-      "officalSubCategory": "Lip Gloss",
-      "masterCategory": "Skincare",
-      "url": "https://blinkit.com/cn/lip-gloss/cid/13/124"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Shampoo & Conditioner",
@@ -5763,24 +5488,14 @@
       "masterCategory": "Bath & Body",
       "url": "https://blinkit.com/cn/body-moisturizers-more/cid/163/690"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Hair Colour & More",
-      "masterCategory": "Bath & Body",
-      "url": "https://blinkit.com/cn/hair-colour-more/cid/163/691"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Soaps",
       "masterCategory": "Bath & Body",
       "url": "https://blinkit.com/cn/soaps/cid/163/696"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Hand & Foot Care",
-      "masterCategory": "Bath & Body",
-      "url": "https://blinkit.com/cn/hand-foot-care/cid/163/698"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Bath & Body Kits",
@@ -5841,18 +5556,7 @@
       "masterCategory": "Bath & Body",
       "url": "https://blinkit.com/cn/conditioners/cid/13/235"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Shampoo & Conditioner",
-      "masterCategory": "Personal Care",
-      "url": "https://blinkit.com/cn/shampoo-conditioner/cid/163/166"
-    },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Body Moisturizers & More",
-      "masterCategory": "Personal Care",
-      "url": "https://blinkit.com/cn/body-moisturizers-more/cid/163/690"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Hair Colour & More",
@@ -5871,12 +5575,7 @@
       "masterCategory": "Personal Care",
       "url": "https://blinkit.com/cn/cosmetics/cid/163/693"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Soaps",
-      "masterCategory": "Personal Care",
-      "url": "https://blinkit.com/cn/soaps/cid/163/696"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Hand & Foot Care",
@@ -5895,12 +5594,7 @@
       "masterCategory": "Personal Care",
       "url": "https://blinkit.com/cn/hair-oil-serum/cid/163/702"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Bath & Body Kits",
-      "masterCategory": "Personal Care",
-      "url": "https://blinkit.com/cn/bath-body-kits/cid/163/710"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Oral Care",
@@ -5913,12 +5607,7 @@
       "masterCategory": "Personal Care",
       "url": "https://blinkit.com/cn/feminine-care/cid/163/723"
     },
-    {
-      "officalCategory": "Personal Care",
-      "officalSubCategory": "Shower Gels & Scrubs",
-      "masterCategory": "Personal Care",
-      "url": "https://blinkit.com/cn/shower-gels-scrubs/cid/163/981"
-    },
+
     {
       "officalCategory": "Personal Care",
       "officalSubCategory": "Deodorants & Powders",
@@ -6173,72 +5862,28 @@
       "masterCategory": "Breakfast & Sauces",
       "url": "https://www.flipkart.com/hyperlocal/hloc/2002/pr?sid=hloc%2F0020%2F2002&marketplace=HYPERLOCAL&pageUID=1766502737179"
     },
-    {
-      "officalCategory": "Instant & Frozen Food",
-      "officalSubCategory": "Frozen Veg Snacks",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/2004/pr?sid=hloc%2F0020%2F2004&marketplace=HYPERLOCAL&pageUID=1766502737179"
-    },
+
     {
       "officalCategory": "Instant & Frozen Food",
       "officalSubCategory": "Frozen Veg Snacks",
       "masterCategory": "Packaged Food",
       "url": "https://www.flipkart.com/hyperlocal/hloc/2004/pr?sid=hloc%2F0020%2F2004&marketplace=HYPERLOCAL&pageUID=1766502737179"
     },
-    {
-      "officalCategory": "Chips & Namkeens",
-      "officalSubCategory": "Chips",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/Chips-Namkeen/pr?sid=hloc%2F0010&marketplace=HYPERLOCAL&param=6664532&BU=Minutes&pageUID=1766502841704"
-    },
-    {
-      "officalCategory": "Chips & Namkeens",
-      "officalSubCategory": "Namkeens",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/1002/pr?sid=hloc%2F0010%2F1002&marketplace=HYPERLOCAL&pageUID=1766502841704"
-    },
-    {
-      "officalCategory": "Chips & Namkeens",
-      "officalSubCategory": "Makhana",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/1007/pr?sid=hloc%2F0010%2F1007&marketplace=HYPERLOCAL&pageUID=1766502841704"
-    },
+
     {
       "officalCategory": "Bakery & Biscuits",
       "officalSubCategory": "All Biscuits",
       "masterCategory": "Packaged Food",
       "url": "https://www.flipkart.com/hyperlocal/Bakery-Biscuits/pr?sid=hloc%2F0006&marketplace=HYPERLOCAL&param=6884532&BU=Minutes&pageUID=1766503352430"
     },
-    {
-      "officalCategory": "Bakery & Biscuits",
-      "officalSubCategory": "Rusk & Khari",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/0606/pr?sid=hloc%2F0006%2F0606&marketplace=HYPERLOCAL&pageUID=1766503352430"
-    },
-    {
-      "officalCategory": "Chocolates",
-      "officalSubCategory": "Chocolate Packets",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2F0065&marketplace=HYPERLOCAL&param=65553444&BU=Minutes&pageUID=1766504048183"
-    },
-    {
-      "officalCategory": "Chocolates",
-      "officalSubCategory": "Chocolates",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/6501/pr?sid=hloc%2F0065%2F6501&marketplace=HYPERLOCAL&pageUID=1766504048183"
-    },
+
     {
       "officalCategory": "Chocolates",
       "officalSubCategory": "Protein Bars",
       "masterCategory": "Packaged Food",
       "url": "https://www.flipkart.com/hyperlocal/hloc/6505/pr?sid=hloc%2F0065%2F6505&marketplace=HYPERLOCAL&pageUID=1766504048183"
     },
-    {
-      "officalCategory": "Chocolates",
-      "officalSubCategory": "Wafers & Waffle",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/6504/pr?sid=hloc%2F0065%2F6504&marketplace=HYPERLOCAL&pageUID=1766504048183"
-    },
+
     {
       "officalCategory": "Tea & Coffee",
       "officalSubCategory": "Coffee",
@@ -6251,12 +5896,7 @@
       "masterCategory": "Tea, Coffee & More",
       "url": "https://www.flipkart.com/hyperlocal/hloc/1101/pr?sid=hloc%2F0011%2F1101&marketplace=HYPERLOCAL&pageUID=1766504141258"
     },
-    {
-      "officalCategory": "Instant & Frozen Food",
-      "officalSubCategory": "Frozen Veg Snacks",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/2004/pr?sid=hloc%2F0020%2F2004&marketplace=HYPERLOCAL&pageUID=1766502737179"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Antiseptic",
@@ -6389,24 +6029,7 @@
       "masterCategory": "Snacks & Munchies",
       "url": "https://www.flipkart.com/hyperlocal/hloc/1007/pr?sid=hloc%2F0010%2F1007&marketplace=HYPERLOCAL&pageUID=1766502841704"
     },
-    {
-      "officalCategory": "Bakery & Biscuits",
-      "officalSubCategory": "All Biscuits",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.flipkart.com/hyperlocal/Bakery-Biscuits/pr?sid=hloc%2F0006&marketplace=HYPERLOCAL&param=6884532&BU=Minutes&pageUID=1766503352430"
-    },
-    {
-      "officalCategory": "Bakery & Biscuits",
-      "officalSubCategory": "Rusk & Khari",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/0606/pr?sid=hloc%2F0006%2F0606&marketplace=HYPERLOCAL&pageUID=1766503352430"
-    },
-    {
-      "officalCategory": "Bakery & Biscuits",
-      "officalSubCategory": "All Biscuits",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.flipkart.com/hyperlocal/Bakery-Biscuits/pr?sid=hloc%2F0006&marketplace=HYPERLOCAL&param=6884532&BU=Minutes&pageUID=1766503352430"
-    },
+
     {
       "officalCategory": "Bakery & Biscuits",
       "officalSubCategory": "Rusk & Khari",
@@ -6581,12 +6204,7 @@
       "masterCategory": "Home Needs",
       "url": "https://www.flipkart.com/hyperlocal/hloc/vyci/pr?sid=hloc%2F0082%2Fvyci&marketplace=HYPERLOCAL&pageUID=1766508289991"
     },
-    {
-      "officalCategory": "Stationary",
-      "officalSubCategory": "Icense Sticks",
-      "masterCategory": "School, Office & Stationery",
-      "url": "https://www.flipkart.com/hyperlocal/Toys-Games/pr?sid=hloc%2F0082&marketplace=HYPERLOCAL&param=38879906&BU=Minutes&pageUID=1766508289991"
-    },
+
     {
       "officalCategory": "Stationary",
       "officalSubCategory": "Dhoop",
@@ -6629,36 +6247,14 @@
       "masterCategory": "School, Office & Stationery",
       "url": "https://www.flipkart.com/hyperlocal/Toys-Games/pr?sid=hloc%2F0082&marketplace=HYPERLOCAL&param=38879906&BU=Minutes&pageUID=1766508289991"
     },
-    {
-      "officalCategory": "Stationary",
-      "officalSubCategory": "Pooja Thali",
-      "masterCategory": "School, Office & Stationery",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/8202/pr?sid=hloc%2F0082%2F8202&marketplace=HYPERLOCAL&pageUID=1766508289991"
-    },
-    {
-      "officalCategory": "Stationary",
-      "officalSubCategory": "Bell",
-      "masterCategory": "School, Office & Stationery",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/8211/pr?sid=hloc%2F0082%2F8211&marketplace=HYPERLOCAL&pageUID=1766508289991"
-    },
-    {
-      "officalCategory": "Stationary",
-      "officalSubCategory": "Toran",
-      "masterCategory": "School, Office & Stationery",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/vyci/pr?sid=hloc%2F0082%2Fvyci&marketplace=HYPERLOCAL&pageUID=1766508289991"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Diapers and Wipers",
       "masterCategory": "Baby Care",
       "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2F0001&marketplace=HYPERLOCAL&param=811654222&BU=Minutes&pageUID=1766504386887"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Grooming & Bath Accessories",
-      "masterCategory": "Baby Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/0111/pr?sid=hloc%2F0001%2F0111&marketplace=HYPERLOCAL&pageUID=1766504386887"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Baby Food",
@@ -6749,30 +6345,14 @@
       "masterCategory": "Beauty",
       "url": "https://www.flipkart.com/hyperlocal/hloc/icez/pr?sid=hloc%2Fqbq2%2Ficez&marketplace=HYPERLOCAL&pageUID=1767097481292"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Deodorant",
-      "masterCategory": "Beauty",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/vvuo/pr?sid=hloc%2Fqbq2%2Fvvuo&marketplace=HYPERLOCAL&pageUID=1767097481292"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Fragrances",
       "masterCategory": "Beauty",
       "url": "https://www.flipkart.com/g9b/0yh/~cs-z2wbhs1nds/pr?sid=g9b%2C0yh&marketplace=HYPERLOCAL&collection-tab-name=Fragrances&param=63321789&BU=Minutes&pageUID=1767097292997"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Face Wash",
-      "masterCategory": "Skincare",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/zeok/pr?sid=hloc%2F0056%2Fzeok&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Body Lotion",
-      "masterCategory": "Skincare",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/umxs/pr?sid=hloc%2F0056%2Fumxs&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Soaps",
@@ -6815,78 +6395,28 @@
       "masterCategory": "Bath & Body",
       "url": "https://www.flipkart.com/hyperlocal/hloc/5605/pr?sid=hloc%2F0056%2F5605&marketplace=HYPERLOCAL&pageUID=1767096100239"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Hair Oil & Cream",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.flipkart.com/hyperlocal/Tea-Coffee-Milk-Drinks/pr?sid=hloc%2F0011&marketplace=HYPERLOCAL&param=141199888&BU=Minutes&pageUID=1766504141258"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Hair Colour",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/4404/pr?sid=hloc%2F0044%2F4404&marketplace=HYPERLOCAL&pageUID=1766504715599"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Hair serum & gel",
       "masterCategory": "Bath & Body",
       "url": "https://www.flipkart.com/hyperlocal/hloc/4405/pr?sid=hloc%2F0044%2F4405&marketplace=HYPERLOCAL&pageUID=1767096360706"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Soaps",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2F0056&marketplace=HYPERLOCAL&param=811674322&BU=Minutes&pageUID=1766504207157"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Shower Gels",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/5602/pr?sid=hloc%2F0056%2F5602&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Face Wash",
       "masterCategory": "Personal Care",
       "url": "https://www.flipkart.com/hyperlocal/hloc/zeok/pr?sid=hloc%2F0056%2Fzeok&marketplace=HYPERLOCAL&pageUID=1766504207157"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Body Lotion",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/umxs/pr?sid=hloc%2F0056%2Fumxs&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Toothpaste",
       "masterCategory": "Personal Care",
       "url": "https://www.flipkart.com/hyperlocal/hloc/iong/pr?sid=hloc%2F0056%2Fiong&marketplace=HYPERLOCAL&pageUID=1766504207157"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Shampoo",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/pmer/pr?sid=hloc%2F0056%2Fpmer&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Conditioner",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/newh/pr?sid=hloc%2F0056%2Fnewh&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Handwash",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/potq/pr?sid=hloc%2F0056%2Fpotq&marketplace=HYPERLOCAL&pageUID=1766504207157"
-    },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Bath Accessories",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/5605/pr?sid=hloc%2F0056%2F5605&marketplace=HYPERLOCAL&pageUID=1767096100239"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Toothbrush",
@@ -6929,12 +6459,7 @@
       "masterCategory": "Personal Care",
       "url": "https://www.flipkart.com/hyperlocal/hloc/0107/pr?sid=hloc%2F0001%2F0107&marketplace=HYPERLOCAL&pageUID=1766504386887"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Hair Oil & Cream",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/Tea-Coffee-Milk-Drinks/pr?sid=hloc%2F0011&marketplace=HYPERLOCAL&param=141199888&BU=Minutes&pageUID=1766504141258"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Hair Colour",
@@ -6947,12 +6472,7 @@
       "masterCategory": "Personal Care",
       "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fqbq2&marketplace=HYPERLOCAL&param=32117834&BU=Minutes&pageUID=1766504871910"
     },
-    {
-      "officalCategory": "Beauty & Personal, Mom , Baby Care",
-      "officalSubCategory": "Hair serum & gel",
-      "masterCategory": "Personal Care",
-      "url": "https://www.flipkart.com/hyperlocal/hloc/4405/pr?sid=hloc%2F0044%2F4405&marketplace=HYPERLOCAL&pageUID=1767096360706"
-    },
+
     {
       "officalCategory": "Beauty & Personal, Mom , Baby Care",
       "officalSubCategory": "Hair straightners & dryer",
@@ -7052,12 +6572,6 @@
       "url": "https://www.dmart.in/category/dairy-aesc-dairy"
     },
     {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Bakery",
-      "masterCategory": "Dairy, Bread & Eggs",
-      "url": "https://www.dmart.in/category/bakery-aesc-bakery"
-    },
-    {
       "officalCategory": "Grocery",
       "officalSubCategory": "Dals",
       "masterCategory": "Atta, Rice, Oil & Dals",
@@ -7069,12 +6583,7 @@
       "masterCategory": "Atta, Rice, Oil & Dals",
       "url": "https://www.dmart.in/category/pulses-aesc-pulses3"
     },
-    {
-      "officalCategory": "Grocery",
-      "officalSubCategory": "Dry Fruits",
-      "masterCategory": "Atta, Rice, Oil & Dals",
-      "url": "https://www.dmart.in/category/dry-fruits-aesc-dryfruits2"
-    },
+
     {
       "officalCategory": "Grocery",
       "officalSubCategory": "DMart Grocery",
@@ -7105,12 +6614,7 @@
       "masterCategory": "Atta, Rice, Oil & Dals",
       "url": "https://www.dmart.in/category/rice---rice-products-aesc-riceandriceproducts4"
     },
-    {
-      "officalCategory": "Grocery",
-      "officalSubCategory": "Masala & Spices",
-      "masterCategory": "Atta, Rice, Oil & Dals",
-      "url": "https://www.dmart.in/category/masala---spices-aesc-masalaandspices4"
-    },
+
     {
       "officalCategory": "Grocery",
       "officalSubCategory": "Salt / Sugar / Jaggery",
@@ -7129,18 +6633,7 @@
       "masterCategory": "Masala, Dry Fruits & More",
       "url": "https://www.dmart.in/category/masala---spices-aesc-masalaandspices4"
     },
-    {
-      "officalCategory": "Grocery",
-      "officalSubCategory": "Salt / Sugar / Jaggery",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.dmart.in/category/salt---sugar---jaggery-aesc-saltsugarjaggery4"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Mukhwas",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.dmart.in/category/mukhwas-aesc-mukhwas"
-    },
+
     {
       "officalCategory": "Gifting",
       "officalSubCategory": "Dry Fruits & Snacks",
@@ -7165,53 +6658,12 @@
       "masterCategory": "Breakfast & Sauces",
       "url": "https://www.dmart.in/category/jams---spreads-aesc-jamsandspreads"
     },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Pasta & Noodles",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.dmart.in/category/pasta---noodles-aesc-pastaandnoodles"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Ready To Cook",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.dmart.in/category/ready-to-cook-aesc-readytocook"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Pickles",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.dmart.in/category/pickles-aesc-pickles"
-    },
+
     {
       "officalCategory": "Packaged Food",
       "officalSubCategory": "Biscuits & Cookies",
       "masterCategory": "Packaged Food",
       "url": "https://www.dmart.in/category/biscuits---cookies-aesc-biscuitsandcookies"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Snacks & Farsans",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/snacks---farsans-aesc-snacksandfarsans"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Chocolates & Candies",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/chocolates---candies"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Ketchup & Sauce",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/ketchup---sauce-aesc-ketchupandsauces"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Jams & Spreads",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/jams---spreads-aesc-jamsandspreads"
     },
     {
       "officalCategory": "Packaged Food",
@@ -7233,12 +6685,6 @@
     },
     {
       "officalCategory": "Packaged Food",
-      "officalSubCategory": "Sweets",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/sweets-aesc-sweets"
-    },
-    {
-      "officalCategory": "Packaged Food",
       "officalSubCategory": "Pickles",
       "masterCategory": "Packaged Food",
       "url": "https://www.dmart.in/category/pickles-aesc-pickles"
@@ -7254,12 +6700,6 @@
       "officalSubCategory": "Mukhwas",
       "masterCategory": "Packaged Food",
       "url": "https://www.dmart.in/category/mukhwas-aesc-mukhwas"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Bakery",
-      "masterCategory": "Packaged Food",
-      "url": "https://www.dmart.in/category/bakery-aesc-bakery"
     },
     {
       "officalCategory": "Packaged Food",
@@ -7280,18 +6720,6 @@
       "url": "https://www.dmart.in/category/beverages-aesc-beverages"
     },
     {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Frozen Foods",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://www.dmart.in/category/frozen-foods-aesc-frozenfoods"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Sweets",
-      "masterCategory": "Ice Creams & More",
-      "url": "https://www.dmart.in/category/sweets-aesc-sweets"
-    },
-    {
       "officalCategory": "Personal Care & Beauty",
       "officalSubCategory": "Health & Wellness",
       "masterCategory": "Health & Wellness",
@@ -7309,60 +6737,21 @@
       "masterCategory": "Sweet Cravings",
       "url": "https://www.dmart.in/category/sweets-aesc-sweets"
     },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Mukhwas",
-      "masterCategory": "Sweet Cravings",
-      "url": "https://www.dmart.in/category/mukhwas-aesc-mukhwas"
-    },
+
     {
       "officalCategory": "Gifting",
       "officalSubCategory": "Chocolate Gift Packs",
       "masterCategory": "Sweet Cravings",
       "url": "https://www.dmart.in/category/chocolate-gift-packs"
     },
-    {
-      "officalCategory": "Dairy & Beverages",
-      "officalSubCategory": "Beverages",
-      "masterCategory": "Cold Drinks & Juices",
-      "url": "https://www.dmart.in/category/beverages-aesc-beverages"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Biscuits & Cookies",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.dmart.in/category/biscuits---cookies-aesc-biscuitsandcookies"
-    },
+
     {
       "officalCategory": "Packaged Food",
       "officalSubCategory": "Snacks & Farsans",
       "masterCategory": "Snacks & Munchies",
       "url": "https://www.dmart.in/category/snacks---farsans-aesc-snacksandfarsans"
     },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Chocolates & Candies",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.dmart.in/category/chocolates---candies"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Health Food",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.dmart.in/category/health-food-aesc-healthfood"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Mukhwas",
-      "masterCategory": "Snacks & Munchies",
-      "url": "https://www.dmart.in/category/mukhwas-aesc-mukhwas"
-    },
-    {
-      "officalCategory": "Packaged Food",
-      "officalSubCategory": "Biscuits & Cookies",
-      "masterCategory": "Bakery & Biscuits",
-      "url": "https://www.dmart.in/category/biscuits---cookies-aesc-biscuitsandcookies"
-    },
+
     {
       "officalCategory": "Packaged Food",
       "officalSubCategory": "Bakery",
@@ -7567,12 +6956,7 @@
       "masterCategory": "Home Needs",
       "url": "https://www.dmart.in/category/electrical-needs"
     },
-    {
-      "officalCategory": "Electronics & Appliances",
-      "officalSubCategory": "Kitchen Appliances",
-      "masterCategory": "Home Needs",
-      "url": "https://www.dmart.in/category/kitchen-appliances-216005--1"
-    },
+
     {
       "officalCategory": "Electronics & Appliances",
       "officalSubCategory": "Home Appliances",
@@ -7736,18 +7120,6 @@
       "url": "https://www.dmart.in/category/activities---games"
     },
     {
-      "officalCategory": "Baby Care",
-      "officalSubCategory": "Children's Books",
-      "masterCategory": "Baby Care",
-      "url": "https://www.dmart.in/category/childrens-books-204006--1"
-    },
-    {
-      "officalCategory": "Baby Care",
-      "officalSubCategory": "Art & Craft",
-      "masterCategory": "Baby Care",
-      "url": "https://www.dmart.in/category/art-craft"
-    },
-    {
       "officalCategory": "Personal Care & Beauty",
       "officalSubCategory": "Makeup",
       "masterCategory": "Beauty",
@@ -7775,30 +7147,6 @@
       "officalCategory": "Personal Care & Beauty",
       "officalSubCategory": "Bath & Body",
       "masterCategory": "Bath & Body",
-      "url": "https://www.dmart.in/category/bath-body"
-    },
-    {
-      "officalCategory": "Personal Care & Beauty",
-      "officalSubCategory": "Hair Care",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.dmart.in/category/hair-care-208506--1"
-    },
-    {
-      "officalCategory": "Home Furnishing & Decor",
-      "officalSubCategory": "Bath Range",
-      "masterCategory": "Bath & Body",
-      "url": "https://www.dmart.in/category/bath-range"
-    },
-    {
-      "officalCategory": "Personal Care & Beauty",
-      "officalSubCategory": "Skin Care",
-      "masterCategory": "Personal Care",
-      "url": "https://www.dmart.in/category/skin-care-208510--1"
-    },
-    {
-      "officalCategory": "Personal Care & Beauty",
-      "officalSubCategory": "Bath & Body",
-      "masterCategory": "Personal Care",
       "url": "https://www.dmart.in/category/bath-body"
     },
     {

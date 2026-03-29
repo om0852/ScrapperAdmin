@@ -1091,15 +1091,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
         status: 'initializing',
         progress: 0,
         totalProducts: 0,
-        products: [], // Only stores last N products for memory efficiency
-        recentProductCount: 0, // Track recent products added
+        products: [],
         startTime: new Date(),
         lastSavedTime: new Date(),
-        lastCheckpointTime: new Date(),
         error: null,
-        category: 'Uncategorized',
-        isCheckpointActive: true, // Flag to prevent saves after completion
-        MAX_STORED_PRODUCTS: 100 // Limit in-memory product store to last 100 for status queries
+        category: 'Uncategorized'
     });
     
     // Return immediately to client
@@ -1138,10 +1134,8 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
             
             // ðŸ”„ START CHECKPOINT INTERVAL: Save to disk every 10 seconds
             checkpointInterval = setInterval(async () => {
-                // Skip if checkpoint is inactive (job completed/errored) or no products
-                if (!job.isCheckpointActive || allProducts.length === 0) return;
-                
-                try {
+                if (allProducts.length > 0) {
+                    try {
                         const transformedProducts = allProducts.map((product, index) => {
                             const productCategoryUrl = product.categoryUrl || 'N/A';
                             let categoryMapping = null;
@@ -1188,6 +1182,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                     } catch (err) {
                         console.error(`âš ï¸ [${jobId}] Checkpoint save error:`, err.message);
                     }
+                }
             }, 10000); // Every 10 seconds
             
             browser = await chromium.launch({
@@ -1244,17 +1239,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 }
                 
                 job.totalProducts = allProducts.length;
-                // âœ… MEMORY FIX: Only keep last N products in memory (not full array)
-                // This prevents memory explosion on large jobs (50K+ products)
-                const lastN = job.MAX_STORED_PRODUCTS;
-                if (allProducts.length > lastN) {
-                    job.products = allProducts.slice(-lastN);
-                    job.recentProductCount = lastN;
-                } else {
-                    job.products = allProducts.slice();
-                    job.recentProductCount = allProducts.length;
-                }
-                job.lastSavedTime = new Date();
+                job.products = allProducts.slice();
                 
                 // Delay between batches
                 if (i + maxConcurrentTabs < targetCategories.length) {
@@ -1262,18 +1247,11 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 }
             }
             
-            // âš¡ SAFETY: Disable checkpoint before final save to prevent race conditions
-            job.isCheckpointActive = false;
-            
             // Stop checkpoint interval before final save
             if (checkpointInterval) {
                 clearInterval(checkpointInterval);
-                checkpointInterval = null;
-                console.log(`âœ… [${jobId}] Checkpoint interval stopped (success path)`);
+                console.log(`âœ… [${jobId}] Checkpoint interval stopped`);
             }
-            
-            // Give pending checkpoint one last chance to complete (max 1 second wait)
-            await new Promise(resolve => setTimeout(resolve, 100));
             
             // Final save with all data
             if (allProducts.length > 0) {
@@ -1325,12 +1303,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                 const saved = await saveScrapedDataToFolder(finalPayload, pincode, job.category);
                 job.savedFile = saved.filename;
                 job.totalProducts = dedupedProducts.length;
-                // âœ… MEMORY: For final result, only store last 100 products in tracker
-                const finalLastN = job.MAX_STORED_PRODUCTS;
-                job.products = dedupedProducts.length > finalLastN 
-                    ? dedupedProducts.slice(-finalLastN) 
-                    : dedupedProducts;
-                job.recentProductCount = job.products.length;
+                job.products = dedupedProducts.slice();
             }
             
             job.status = 'completed';
@@ -1398,12 +1371,7 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
                     const saved = await saveScrapedDataToFolder(errorPayload, pincode, job.category);
                     job.savedFile = saved.filename;
                     job.totalProducts = dedupedProducts.length;
-                    // âœ… MEMORY: Only store last 100 products even on error recovery
-                    const errorLastN = job.MAX_STORED_PRODUCTS;
-                    job.products = dedupedProducts.length > errorLastN 
-                        ? dedupedProducts.slice(-errorLastN) 
-                        : dedupedProducts;
-                    job.recentProductCount = job.products.length;
+                    job.products = dedupedProducts.slice();
                     
                     console.log(`âœ… [${jobId}] ERROR RECOVERY SUCCESS: Saved ${dedupedProducts.length} products`);
                 } catch (recoveryError) {
@@ -1416,19 +1384,8 @@ app.post('/jiomartcategoryscrapper-async', async (req, res) => {
             job.endTime = new Date();
             
         } finally {
-            // Clear checkpoint interval and disable
-            job.isCheckpointActive = false;
-            if (checkpointInterval) {
-                clearInterval(checkpointInterval);
-                checkpointInterval = null;
-            }
-            
-            // Memory cleanup: free large array
-            if (allProducts && allProducts.length > 0) {
-                const clearedCount = allProducts.length;
-                allProducts = null;
-                console.log(`[${jobId}] Released memory for ${clearedCount} products`);
-            }
+            // Clear checkpoint interval
+            if (checkpointInterval) clearInterval(checkpointInterval);
             
             if (browser) {
                 try {
