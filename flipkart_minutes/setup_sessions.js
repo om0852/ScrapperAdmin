@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PINCODES = {
-    'Mumbai': ['400070', '400703', '401101', '401202'],
-    'Delhi NCR': ['400706', '201303', '201014', '122008', '122010', '122016']
+    // 'Mumbai': [ '400703','401202',"400706"],
+    'Delhi NCR': [  '122008', '122010', '122016']
 };
 
 const SESSION_DIR = path.join(__dirname, 'sessions');

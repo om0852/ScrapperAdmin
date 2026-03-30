@@ -835,7 +835,7 @@ app.get('/health', (req, res) => {
 });
 
 app.post('/jiomartcategoryscrapper', async (req, res) => {
-    const { pincode, categories = [], urls = [], maxConcurrentTabs = 3, proxyUrl, store } = req.body;
+    const { pincode, categories = [], urls = [], maxConcurrentTabs = 3, proxyUrl, store, headless = true } = req.body;
 
     // Normalize input: Support `urls` array
     let targetCategories = [...categories];
@@ -857,7 +857,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
     // Launch Browser ONE Instance
     // Headless: true with anti-detection args
     const browser = await chromium.launch({
-        headless: false,
+        headless: headless,
         args: [
             '--disable-blink-features=AutomationControlled',
             '--no-sandbox',

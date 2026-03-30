@@ -101,8 +101,14 @@ function setupEventListeners() {
 
     // Manual DB Ingestion Listeners
     document.getElementById('manualCategorySelect').addEventListener('change', handleManualCategoryChange);
+    document.getElementById('platformFilterSelect').addEventListener('change', handlePlatformFilterChange);
     document.getElementById('manualIngestForm').addEventListener('submit', handleManualIngest);
     document.getElementById('pauseIngestBtn').addEventListener('click', handleIngestTogglePause);
+
+    // Tab Buttons Event Listeners
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', (e) => switchTab(e.target.closest('.tab-button').dataset.tab));
+    });
 
     // Terminal Toggle Event Listener
     document.getElementById('toggleTerminalBtn').addEventListener('click', toggleTerminal);
@@ -198,6 +204,30 @@ async function handleScrapeTogglePause() {
 }
 // ─────────────────────────────────────────────────────────────────────────────
 
+function switchTab(tabName) {
+    // Hide all panels
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+    });
+
+    // Deactivate all buttons
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.classList.remove('active');
+    });
+
+    // Show selected panel
+    const selectedPanel = document.getElementById(`tab-${tabName}`);
+    if (selectedPanel) {
+        selectedPanel.classList.add('active');
+    }
+
+    // Activate selected button
+    const selectedButton = document.querySelector(`[data-tab="${tabName}"]`);
+    if (selectedButton) {
+        selectedButton.classList.add('active');
+    }
+}
+
 function toggleTerminal() {
     const container = document.getElementById('terminalContainer');
     const logArea = document.getElementById('activityLog');
@@ -279,6 +309,7 @@ async function handleMassScrape(e) {
     const selectedPincodes = Array.from(pinNodes).map(n => n.value);
 
     const autoIngest = document.getElementById('autoIngestToggle').checked;
+    const headless = document.getElementById('headlessToggle').checked;
 
     if (selectedPlatforms.length === 0) {
         alert('Please select at least one platform');
@@ -301,7 +332,7 @@ async function handleMassScrape(e) {
     setScrapePauseUI(false);
     pauseBtn.style.display = 'inline-flex';
 
-    addLog(`Initiating mass scrape for ${selectedPlatforms.length} platforms, ${selectedCategories.length} categories, Auto Ingest: ${autoIngest ? 'ON' : 'OFF'}...`, 'info');
+    addLog(`Initiating mass scrape for ${selectedPlatforms.length} platforms, ${selectedCategories.length} categories, Auto Ingest: ${autoIngest ? 'ON' : 'OFF'}, Headless: ${headless ? 'ON' : 'OFF'}...`, 'info');
 
     try {
         const res = await fetch('/api/mass-scrape', {
@@ -311,7 +342,8 @@ async function handleMassScrape(e) {
                 platforms: selectedPlatforms,
                 categories: selectedCategories,
                 pincodes: selectedPincodes,
-                autoIngest: autoIngest
+                autoIngest: autoIngest,
+                headless: headless
             })
         });
 
@@ -363,12 +395,19 @@ async function loadManualIngestCategories() {
     }
 }
 
+// Store current files for platform filtering
+let currentManualFiles = [];
+
 async function handleManualCategoryChange(e) {
     const folder = e.target.value;
     const checkboxContainer = document.getElementById('manualFileCheckboxes');
 
+    // Reset platform filter
+    document.getElementById('platformFilterSelect').value = '';
+
     if (!folder) {
         checkboxContainer.innerHTML = '<div class="loading-text">Select a category first</div>';
+        currentManualFiles = [];
         return;
     }
 
@@ -377,46 +416,70 @@ async function handleManualCategoryChange(e) {
     try {
         const response = await fetch(`/api/scraped-files?folder=${encodeURIComponent(folder)}`);
         const files = await response.json();
+        currentManualFiles = files;
 
-        checkboxContainer.innerHTML = '';
-
-        if (files.length === 0) {
-            checkboxContainer.innerHTML = '<div class="loading-text">No JSON files found</div>';
-            return;
-        }
-
-        // Add Select All Option
-        const selectAllDiv = document.createElement('label');
-        selectAllDiv.className = 'checkbox-item';
-        selectAllDiv.style.borderBottom = '1px solid var(--border-dark)';
-        selectAllDiv.style.marginBottom = '0.5rem';
-        selectAllDiv.style.paddingBottom = '0.5rem';
-        selectAllDiv.innerHTML = `
-            <input type="checkbox" id="selectAllManualFiles">
-            <span style="font-weight: 700; color: var(--primary);">✓ Select All ${files.length} Files</span>
-        `;
-        checkboxContainer.appendChild(selectAllDiv);
-
-        const selectAllCb = document.getElementById('selectAllManualFiles');
-        selectAllCb.addEventListener('change', (ev) => {
-            const allFileCbs = document.querySelectorAll('.manual-file-cb');
-            allFileCbs.forEach(cb => cb.checked = ev.target.checked);
-        });
-
-        files.forEach((file, index) => {
-            const div = document.createElement('label');
-            div.className = 'checkbox-item';
-            div.innerHTML = `
-                <input type="checkbox" id="mfile_${index}" class="manual-file-cb" value="${file}">
-                <span>${file}</span>
-            `;
-            checkboxContainer.appendChild(div);
-        });
+        renderManualFileCheckboxes(files);
 
     } catch (e) {
         addLog(`Failed to load files for folder: ${e.message}`, 'error');
         checkboxContainer.innerHTML = '<div class="loading-text" style="color:var(--danger-color)">Error loading files</div>';
     }
+}
+
+function renderManualFileCheckboxes(files) {
+    const checkboxContainer = document.getElementById('manualFileCheckboxes');
+    checkboxContainer.innerHTML = '';
+
+    if (files.length === 0) {
+        checkboxContainer.innerHTML = '<div class="loading-text">No JSON files found</div>';
+        return;
+    }
+
+    // Add Select All Option
+    const selectAllDiv = document.createElement('label');
+    selectAllDiv.className = 'checkbox-item';
+    selectAllDiv.style.borderBottom = '1px solid var(--border-dark)';
+    selectAllDiv.style.marginBottom = '1rem';
+    selectAllDiv.style.paddingBottom = '1rem';
+    selectAllDiv.innerHTML = `
+        <input type="checkbox" id="selectAllManualFiles">
+        <span style="font-weight: 700; color: var(--primary);">✓ Select All ${files.length} Files</span>
+    `;
+    checkboxContainer.appendChild(selectAllDiv);
+
+    const selectAllCb = document.getElementById('selectAllManualFiles');
+    selectAllCb.addEventListener('change', (ev) => {
+        const allFileCbs = document.querySelectorAll('.manual-file-cb');
+        allFileCbs.forEach(cb => cb.checked = ev.target.checked);
+    });
+
+    files.forEach((file, index) => {
+        const div = document.createElement('label');
+        div.className = 'checkbox-item';
+        div.innerHTML = `
+            <input type="checkbox" id="mfile_${index}" class="manual-file-cb" value="${file}">
+            <span>${file}</span>
+        `;
+        checkboxContainer.appendChild(div);
+    });
+}
+
+function handlePlatformFilterChange(e) {
+    const platform = e.target.value;
+    
+    if (!platform) {
+        // Show all files
+        renderManualFileCheckboxes(currentManualFiles);
+        return;
+    }
+
+    // Filter files by platform
+    const filteredFiles = currentManualFiles.filter(file => {
+        const platformName = platform.toLowerCase();
+        return file.toLowerCase().includes(platformName);
+    });
+
+    renderManualFileCheckboxes(filteredFiles);
 }
 
 async function handleManualIngest(e) {

@@ -409,7 +409,7 @@ app.get('/api/categories', (req, res) => {
 });
 
 app.post('/api/mass-scrape', async (req, res) => {
-    const { platforms: selectedPlatforms, categories: selectedCategories, pincodes: selectedPincodes, autoIngest } = req.body;
+    const { platforms: selectedPlatforms, categories: selectedCategories, pincodes: selectedPincodes, autoIngest, headless = true } = req.body;
 
     if (!Array.isArray(selectedPlatforms) || !Array.isArray(selectedCategories) || !Array.isArray(selectedPincodes)) {
         return res.status(400).json({ error: 'platforms, categories, and pincodes must be arrays' });
@@ -421,7 +421,7 @@ app.post('/api/mass-scrape', async (req, res) => {
     // Put this in an async IIFE to run in the background
     (async () => {
         log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
-        log('INFO', 'MassScrape', `Starting mass scrape — ${selectedPlatforms.length} platform(s), ${selectedCategories.length} category(s), ${selectedPincodes.length} pincode(s) | AutoIngest: ${autoIngest ? 'ON' : 'OFF'}`);
+        log('INFO', 'MassScrape', `Starting mass scrape — ${selectedPlatforms.length} platform(s), ${selectedCategories.length} category(s), ${selectedPincodes.length} pincode(s) | AutoIngest: ${autoIngest ? 'ON' : 'OFF'} | Headless: ${headless ? 'ON' : 'OFF'}`);
         log('INFO', 'MassScrape', `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`);
 
         jobState.scrape.running = true;
@@ -501,7 +501,8 @@ app.post('/api/mass-scrape', async (req, res) => {
                                     body: JSON.stringify({
                                         pincode: pincode.trim(),
                                         urls: urlsToScrape,
-                                        store: false // DO NOT store individually inside the scraper codebase
+                                        store: false, // DO NOT store individually inside the scraper codebase
+                                        headless: headless
                                     }),
                                     signal: controller.signal
                                 });

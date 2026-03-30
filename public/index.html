@@ -60,116 +60,150 @@
                 </div>
             </section>
 
-            <div class="grid-2col">
-                <!-- Mass Scrape Runner -->
-                <section class="card">
-                    <div class="card-header">
-                        <h2 class="section-title text-primary">
-                            <span class="material-symbols-outlined">rocket_launch</span>
-                            Mass Scrape Runner
-                        </h2>
-                    </div>
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-button active" data-tab="scraper">
+                        <span class="material-symbols-outlined">rocket_launch</span>
+                        Mass Scrape Runner
+                    </button>
+                    <button class="tab-button" data-tab="ingest">
+                        <span class="material-symbols-outlined">database</span>
+                        Manual DB Ingestion
+                    </button>
+                </div>
 
-                    <form id="massScrapeForm" class="card-body">
-                        <div class="flex-2col">
-                            <div class="form-group">
-                                <label class="form-label">1. Target Platforms</label>
-                                <div id="platformCheckboxes" class="checkbox-group">
-                                    <div class="text-sm text-muted">Loading platforms...</div>
+                <div class="tabs-content">
+                    <!-- Mass Scrape Runner Tab -->
+                    <section class="card tab-panel active" id="tab-scraper">
+                        <div class="card-body">
+                            <div class="flex-2col">
+                                <div class="form-group">
+                                    <label class="form-label">1. Target Platforms</label>
+                                    <div id="platformCheckboxes" class="checkbox-group">
+                                        <div class="text-sm text-muted">Loading platforms...</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">2. Target Categories</label>
+                                    <div id="categoryCheckboxes" class="scroll-box">
+                                        <div class="text-sm text-muted">Loading categories...</div>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
-                                <label class="form-label">2. Target Categories</label>
-                                <div id="categoryCheckboxes" class="scroll-box">
-                                    <div class="text-sm text-muted">Loading categories...</div>
+                                <label class="form-label">3. Target Pincodes</label>
+                                <div id="pincodeCheckboxes" class="scroll-box scroll-box-grid">
+                                    <div class="text-sm text-muted" style="grid-column: 1 / -1;">Loading pincodes...</div>
                                 </div>
+                                <p class="form-help">The scraper will sequentially run for each platform and category on
+                                    these pincodes.</p>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">3. Target Pincodes</label>
-                            <div id="pincodeCheckboxes" class="scroll-box scroll-box-grid">
-                                <div class="text-sm text-muted" style="grid-column: 1 / -1;">Loading pincodes...</div>
-                            </div>
-                            <p class="form-help">The scraper will sequentially run for each platform and category on
-                                these pincodes.</p>
-                        </div>
-
-                        <div class="toggle-switch-container">
-                            <div class="form-group" style="gap: 0.25rem;">
-                                <span class="font-medium text-white"
-                                    style="display: flex; align-items: center; gap: 0.25rem;">
-                                    <span class="material-symbols-outlined text-primary"
-                                        style="font-size: 16px;">auto_mode</span>
-                                    Auto DB Ingestion
-                                </span>
-                                <span class="form-help" style="margin-top: 0;">Insert scraped data into the DB
-                                    automatically.</span>
-                            </div>
-                            <label class="toggle-label">
-                                <input type="checkbox" id="autoIngestToggle">
-                                <div class="toggle-bg">
-                                    <div class="toggle-dot"></div>
+                            <div class="toggle-switch-container">
+                                <div class="form-group" style="gap: 0.25rem;">
+                                    <span class="font-medium text-white"
+                                        style="display: flex; align-items: center; gap: 0.25rem;">
+                                        <span class="material-symbols-outlined text-primary"
+                                            style="font-size: 16px;">auto_mode</span>
+                                        Auto DB Ingestion
+                                    </span>
+                                    <span class="form-help" style="margin-top: 0;">Insert scraped data into the DB
+                                        automatically.</span>
                                 </div>
-                            </label>
-                        </div>
-
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <button type="submit" id="startMassScrapeBtn" class="btn btn-primary-gradient">
-                                <span class="material-symbols-outlined">play_arrow</span>
-                                Start Mass Scrape
-                            </button>
-                            <button type="button" id="pauseMassScrapeBtn" class="btn btn-outline-blue" style="display:none;">
-                                <span class="material-symbols-outlined" id="pauseScrapeIcon">pause</span>
-                                <span id="pauseScrapeText">Pause</span>
-                            </button>
-                        </div>
-                    </form>
-                </section>
-
-                <!-- Manual DB Ingestion -->
-                <section class="card">
-                    <div class="card-header">
-                        <h2 class="section-title text-blue">
-                            <span class="material-symbols-outlined text-blue">database</span>
-                            Manual DB Ingestion
-                        </h2>
-                    </div>
-
-                    <form id="manualIngestForm" class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">1. Category Folder</label>
-                            <select id="manualCategorySelect" class="form-control">
-                                <option value="">Loading folders...</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group" style="flex: 1; min-height: 120px;">
-                            <label class="form-label">2. Select JSON Files</label>
-                            <div id="manualFileCheckboxes" class="scroll-box" style="height: 8rem; max-height: 8rem;">
-                                <div class="text-sm text-muted" style="padding: 0.5rem;">Select a category first</div>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="autoIngestToggle">
+                                    <div class="toggle-bg">
+                                        <div class="toggle-dot"></div>
+                                    </div>
+                                </label>
                             </div>
-                        </div>
 
-                        <div class="form-group">
-                            <label class="form-label">3. Override Scrape Date/Time (Optional)</label>
-                            <input type="datetime-local" id="manualDateOverride" class="form-control" />
-                            <p class="form-help">Leave blank to use the file's original scrape time.</p>
-                        </div>
+                            <div class="toggle-switch-container">
+                                <div class="form-group" style="gap: 0.25rem;">
+                                    <span class="font-medium text-white"
+                                        style="display: flex; align-items: center; gap: 0.25rem;">
+                                        <span class="material-symbols-outlined text-primary"
+                                            style="font-size: 16px;">visibility_off</span>
+                                        Headless Browser Mode
+                                    </span>
+                                    <span class="form-help" style="margin-top: 0;">Run browsers in headless mode (no UI visible).</span>
+                                </div>
+                                <label class="toggle-label">
+                                    <input type="checkbox" id="headlessToggle" checked>
+                                    <div class="toggle-bg">
+                                        <div class="toggle-dot"></div>
+                                    </div>
+                                </label>
+                            </div>
 
-                        <div style="display: flex; gap: 0.5rem; align-items: center;">
-                            <button type="submit" id="startManualIngestBtn" class="btn btn-outline-blue">
-                                <span class="material-symbols-outlined">data_object</span>
-                                Insert and Group Data
-                            </button>
-                            <button type="button" id="pauseIngestBtn" class="btn" style="display:none; background: rgba(250,204,21,0.12); color: #facc15; border: 1px solid rgba(250,204,21,0.3);">
-                                <span class="material-symbols-outlined" id="pauseIngestIcon">pause</span>
-                                <span id="pauseIngestText">Pause</span>
-                            </button>
+                            <form id="massScrapeForm">
+                                <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                    <button type="submit" id="startMassScrapeBtn" class="btn btn-primary-gradient">
+                                        <span class="material-symbols-outlined">play_arrow</span>
+                                        Start Mass Scrape
+                                    </button>
+                                    <button type="button" id="pauseMassScrapeBtn" class="btn btn-outline-blue" style="display:none;">
+                                        <span class="material-symbols-outlined" id="pauseScrapeIcon">pause</span>
+                                        <span id="pauseScrapeText">Pause</span>
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </form>
-                </section>
+                    </section>
+
+                    <!-- Manual DB Ingestion Tab -->
+                    <section class="card tab-panel" id="tab-ingest">
+                        <div class="card-body">
+                            <form id="manualIngestForm">
+                                <div class="form-group">
+                                    <label class="form-label">1. Category Folder</label>
+                                    <select id="manualCategorySelect" class="form-control">
+                                        <option value="">Loading folders...</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">2. Filter by Platform (Optional)</label>
+                                    <select id="platformFilterSelect" class="form-control">
+                                        <option value="">All Platforms</option>
+                                        <option value="Blinkit">Blinkit</option>
+                                        <option value="Instamart">Instamart</option>
+                                        <option value="Jiomart">Jiomart</option>
+                                        <option value="Zepto">Zepto</option>
+                                        <option value="Flipkart">Flipkart</option>
+                                        <option value="Dmart">Dmart</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" style="flex: 1; min-height: 300px;">
+                                    <label class="form-label">3. Select JSON Files</label>
+                                    <div id="manualFileCheckboxes" class="scroll-box" style="height: 22rem; max-height: 22rem;">
+                                        <div class="text-sm text-muted" style="padding: 1rem;">Select a category first</div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">4. Override Scrape Date/Time (Optional)</label>
+                                    <input type="datetime-local" id="manualDateOverride" class="form-control" />
+                                    <p class="form-help">Leave blank to use the file's original scrape time.</p>
+                                </div>
+
+                                <div style="display: flex; gap: 1rem; align-items: center; margin-top: 1rem;">
+                                    <button type="submit" id="startManualIngestBtn" class="btn btn-outline-blue">
+                                        <span class="material-symbols-outlined">data_object</span>
+                                        Insert and Group Data
+                                    </button>
+                                    <button type="button" id="pauseIngestBtn" class="btn" style="display:none; background: rgba(250,204,21,0.12); color: #facc15; border: 1px solid rgba(250,204,21,0.3);">
+                                        <span class="material-symbols-outlined" id="pauseIngestIcon">pause</span>
+                                        <span id="pauseIngestText">Pause</span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                </div>
             </div>
         </main>
 

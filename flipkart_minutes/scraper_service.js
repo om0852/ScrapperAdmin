@@ -27,10 +27,10 @@ function saveApiDump(pincode, url, jsonData, dumpType = 'response') {
         const filename = `dump_${pincode}_${dumpType}_${urlHash}_${timestamp}.json`;
         const filepath = path.join(API_DUMPS_DIR, filename);
         fs.writeFileSync(filepath, JSON.stringify(jsonData, null, 2));
-        log(`âœ“ API dump saved: ${filename}`, 'SUCCESS');
+        log(`✓ API dump saved: ${filename}`, 'SUCCESS');
         return filename;
     } catch (err) {
-        log(`âœ— Failed to save API dump: ${err.message}`, 'ERROR');
+        log(`✗ Failed to save API dump: ${err.message}`, 'ERROR');
         return null;
     }
 }
@@ -93,7 +93,7 @@ async function setupSession(pincode) {
 
     log(`Starting Session Setup for Pincode: ${pincode}`, 'INFO');
     const browser = await chromium.launch({
-        headless: false,
+        headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -230,473 +230,160 @@ async function setupSession(pincode) {
 async function scrapeUrlInContext(context, url, pincode) {
     const page = await context.newPage();
 
-    const API_PATH = '/api/4/page/fetch';
-    const API_ENDPOINT = 'https://1.rome.api.flipkart.com/api/4/page/fetch?cacheFirst=false';
-    const DEFAULT_X_USER_AGENT =
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 FKUA/msite/0.0.4/msite/Mobile';
-
-    const HEADER_KEYS = [
-        'flipkart_secure',
-        'x-user-agent',
-        'x-partner-context',
-        'x-ack-response',
-        'referer',
-        'origin',
-        'accept',
-        'accept-language',
-        'sec-ch-ua',
-        'sec-ch-ua-mobile',
-        'sec-ch-ua-platform',
-        'user-agent'
-    ];
-
-    const MAX_REDIRECT_DEPTH = Number.isFinite(Number(process.env.FLIPKART_MAX_REDIRECT_DEPTH))
-        ? Math.max(0, Number(process.env.FLIPKART_MAX_REDIRECT_DEPTH))
-        : 5;
-    const MAX_PAGINATION_PAGES = Number.isFinite(Number(process.env.FLIPKART_MAX_PAGINATION_PAGES))
-        ? Math.max(1, Number(process.env.FLIPKART_MAX_PAGINATION_PAGES))
-        : 20;
-    const RETRY_COUNT = Number.isFinite(Number(process.env.FLIPKART_RETRY_COUNT))
-        ? Math.max(1, Number(process.env.FLIPKART_RETRY_COUNT))
-        : 3;
-    const INTER_REQUEST_DELAY_MS = Number.isFinite(Number(process.env.FLIPKART_INTER_REQUEST_DELAY_MS))
-        ? Math.max(0, Number(process.env.FLIPKART_INTER_REQUEST_DELAY_MS))
-        : 500;
-
-    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-
-    const cloneJson = (value) => {
-        if (value === undefined) return undefined;
-        return JSON.parse(JSON.stringify(value));
-    };
-
-    const isPlainObject = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-
-    const deepMerge = (base, override) => {
-        if (Array.isArray(override)) return cloneJson(override);
-        if (!isPlainObject(base) || !isPlainObject(override)) return cloneJson(override);
-
-        const merged = cloneJson(base);
-        for (const [key, value] of Object.entries(override)) {
-            if (isPlainObject(value) && isPlainObject(merged[key])) {
-                merged[key] = deepMerge(merged[key], value);
-            } else {
-                merged[key] = cloneJson(value);
-            }
-        }
-        return merged;
-    };
-
-    const extractPageUriFromInput = (input) => {
-        const raw = String(input || '').trim();
-        if (!raw) return '/?marketplace=HYPERLOCAL';
-
-        let pageUri = raw;
-        if (raw.startsWith('http://') || raw.startsWith('https://')) {
-            try {
-                const parsed = new URL(raw);
-                pageUri = `${parsed.pathname}${parsed.search}`;
-            } catch (_) {
-                pageUri = '/?marketplace=HYPERLOCAL';
-            }
-        } else if (!raw.startsWith('/')) {
-            pageUri = `/${raw}`;
-        }
-
-        try {
-            const parsedPageUri = new URL(pageUri, 'https://www.flipkart.com');
-            parsedPageUri.searchParams.delete('pageUID');
-            return `${parsedPageUri.pathname}${parsedPageUri.search}`;
-        } catch (_) {
-            return pageUri;
-        }
-    };
-
-    const buildFallbackRequestBody = (sourceUrl, pin) => {
-        const parsedPin = Number.parseInt(String(pin || ''), 10);
-        const pincodeNumber = Number.isFinite(parsedPin) ? parsedPin : null;
-
-        return {
-            pageUri: extractPageUriFromInput(sourceUrl),
-            pageContext: {
-                pageNumber: 1,
-                paginatedFetch: true,
-                fetchAllPages: false,
-                slotContextMap: {}
-            },
-            requestContext: {
-                type: 'BROWSE_PAGE',
-                marketPlace: 'HYPERLOCAL'
-            },
-            locationContext: {
-                pincode: pincodeNumber,
-                changed: false
-            }
-        };
-    };
-
-    const normalizeRequestUrl = (requestUrl) => {
-        if (!requestUrl) return API_ENDPOINT;
-        try {
-            const parsed = new URL(requestUrl);
-            if (!parsed.searchParams.has('cacheFirst')) {
-                parsed.searchParams.set('cacheFirst', 'false');
-            }
-            return parsed.toString();
-        } catch (_) {
-            return API_ENDPOINT;
-        }
-    };
-
-    const buildDirectHeaders = (captured, sourceUrl) => {
-        const headers = {
-            accept: captured.accept || '*/*',
-            'accept-language': captured['accept-language'] || 'en-GB,en-US;q=0.9,en;q=0.8',
-            'content-type': 'application/json',
-            'cache-control': 'no-cache',
-            pragma: 'no-cache',
-            flipkart_secure: captured.flipkart_secure || 'true',
-            'x-user-agent': captured['x-user-agent'] || DEFAULT_X_USER_AGENT,
-            origin: captured.origin || 'https://www.flipkart.com',
-            referer: captured.referer || sourceUrl
-        };
-
-        const optionalKeys = ['x-partner-context', 'x-ack-response', 'sec-ch-ua', 'sec-ch-ua-mobile', 'sec-ch-ua-platform', 'user-agent'];
-        for (const key of optionalKeys) {
-            const value = captured[key];
-            if (value !== undefined && value !== null && value !== '') {
-                headers[key] = value;
-            }
-        }
-
-        return headers;
-    };
-
-    const stableStringify = (value) => {
-        if (value === null || value === undefined) return String(value);
-        if (typeof value !== 'object') return JSON.stringify(value);
-        if (Array.isArray(value)) {
-            return `[${value.map((item) => stableStringify(item)).join(',')}]`;
-        }
-        const keys = Object.keys(value).sort();
-        return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(value[key])}`).join(',')}}`;
-    };
-
-    const extractRedirectPageUri = (payload) => {
-        const redirectUrl =
-            payload?.RESPONSE?.pageMeta?.redirectionObject?.url ||
-            payload?.RESPONSE?.pageMeta?.redirectionObject?.redirectionAction?.url ||
-            '';
-
-        if (!redirectUrl) return '';
-
-        try {
-            const parsed = new URL(redirectUrl);
-            return `${parsed.pathname}${parsed.search}`;
-        } catch (_) {
-            return String(redirectUrl).trim();
-        }
-    };
-
-    const getPageNumber = (requestBody) => {
-        const parsed = Number(requestBody?.pageContext?.pageNumber);
-        return Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
-    };
-
-    const extractPaginationState = (payload) => {
-        const pageData = payload?.RESPONSE?.pageData;
-        const paginationContextMap = pageData?.paginationContextMap;
-
-        return {
-            hasMorePages: pageData?.hasMorePages === true,
-            pageHashKey: pageData?.pageHash ? String(pageData.pageHash) : '',
-            paginationContextMap: isPlainObject(paginationContextMap) ? paginationContextMap : null
-        };
-    };
-
-    const buildNextPaginatedRequestBody = (currentRequestBody, payload) => {
-        const paginationState = extractPaginationState(payload);
-        if (!paginationState.hasMorePages) return null;
-
-        const nextPageNumber = getPageNumber(currentRequestBody) + 1;
-        const pageContextOverride = {
-            pageNumber: nextPageNumber,
-            paginatedFetch: true,
-            fetchAllPages: false
-        };
-
-        if (paginationState.pageHashKey) {
-            pageContextOverride.pageHashKey = paginationState.pageHashKey;
-        }
-
-        if (paginationState.paginationContextMap) {
-            pageContextOverride.paginationContextMap = paginationState.paginationContextMap;
-        }
-
-        return deepMerge(currentRequestBody, {
-            pageContext: pageContextOverride
-        });
-    };
-
-    const fetchPageOnce = async (requestUrl, headers, requestBody) => {
-        return page.evaluate(
-            async ({ requestUrl, headers, requestBody }) => {
-                try {
-                    const response = await fetch(requestUrl, {
-                        method: 'POST',
-                        credentials: 'include',
-                        headers,
-                        body: JSON.stringify(requestBody)
-                    });
-
-                    const raw = await response.text();
-                    let data = null;
-                    if (raw) {
-                        try {
-                            data = JSON.parse(raw);
-                        } catch (_) {
-                            data = null;
-                        }
-                    }
-
-                    return {
-                        ok: response.ok,
-                        status: response.status,
-                        requestUrl: response.url || requestUrl,
-                        data,
-                        error: response.ok ? null : raw.slice(0, 300)
-                    };
-                } catch (error) {
-                    return {
-                        ok: false,
-                        status: 0,
-                        requestUrl,
-                        data: null,
-                        error: error.message
-                    };
-                }
-            },
-            { requestUrl, headers, requestBody }
-        );
-    };
-
-    const fetchPageWithRetry = async (requestUrl, headers, requestBody) => {
-        for (let attempt = 1; attempt <= RETRY_COUNT; attempt += 1) {
-            const result = await fetchPageOnce(requestUrl, headers, requestBody);
-            if (result.ok) {
-                return result;
-            }
-
-            const retriable = result.status === 0 || result.status === 403 || result.status === 429 || result.status >= 500;
-            if (!retriable || attempt === RETRY_COUNT) {
-                return result;
-            }
-
-            const backoffMs = 400 * (2 ** (attempt - 1));
-            log(`Direct API transient failure (${result.status || 'network'}). Retry ${attempt}/${RETRY_COUNT - 1} in ${backoffMs}ms`, 'WARN');
-            await sleep(backoffMs);
-        }
-
-        return {
-            ok: false,
-            status: 0,
-            requestUrl,
-            data: null,
-            error: 'Retry loop exhausted'
-        };
-    };
+    // DON'T block resources during scraping - causes pages to not load properly
+    // await interceptResources(page);
 
     try {
-        await page.route('**/*', async (route) => {
-            const resourceType = route.request().resourceType();
-            if (['image', 'font', 'media'].includes(resourceType)) {
-                await route.abort();
-            } else {
-                await route.continue();
-            }
-        });
-
-        const capturedHeaders = {};
-        let capturedRequestBody = null;
-        let capturedRequestUrl = null;
-
-        const captureTemplateFromRequest = (request) => {
-            if (request.method() !== 'POST' || !request.url().includes(API_PATH)) {
-                return false;
-            }
-
-            capturedRequestUrl = request.url();
-
-            const headers = request.headers();
-            for (const key of HEADER_KEYS) {
-                const value = headers[key];
-                if (value !== undefined && value !== null && value !== '') {
-                    capturedHeaders[key] = value;
-                }
-            }
-
-            if (!capturedRequestBody) {
-                const postData = request.postData();
-                if (postData && postData.length > 2) {
-                    try {
-                        capturedRequestBody = JSON.parse(postData);
-                    } catch (_) {
-                        capturedRequestBody = null;
-                    }
-                }
-            }
-
-            return true;
-        };
-
-        const requestWait = page.waitForRequest(
-            (request) => captureTemplateFromRequest(request),
-            { timeout: 25000 }
-        ).catch(() => null);
-
-        const responseWait = page.waitForResponse(
-            (response) =>
-                response.url().includes(API_PATH) &&
-                response.request().method() === 'POST' &&
-                response.status() === 200,
-            { timeout: 25000 }
-        ).catch(() => null);
-
-        try {
-            await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 90000 });
-        } catch (navError) {
-            log(`[${url}] Navigation fallback: ${navError.message}`, 'WARN');
-            await page.goto(url, { waitUntil: 'commit', timeout: 45000 });
-        }
-
-        await page.waitForTimeout(1200);
-
-        const [warmRequest, warmResponse] = await Promise.all([requestWait, responseWait]);
-        if (warmRequest) {
-            captureTemplateFromRequest(warmRequest);
-        }
-
-        let firstPayload = null;
-        if (warmResponse) {
-            try {
-                const raw = await warmResponse.text();
-                firstPayload = raw ? JSON.parse(raw) : null;
-            } catch (_) {
-                firstPayload = null;
-            }
-        }
-
-        const requestUrl = normalizeRequestUrl(capturedRequestUrl || API_ENDPOINT);
-        const headers = buildDirectHeaders(capturedHeaders, url);
-        let requestBody = capturedRequestBody ? cloneJson(capturedRequestBody) : buildFallbackRequestBody(url, pincode);
-
+        // Setup API intercept
         const collectedData = [];
-        const responseEntries = [];
-        const seenRequestBodies = new Set([stableStringify(requestBody)]);
-        const seenPageUris = new Set();
-        let redirectDepth = 0;
-        let fetchedPageCount = 1;
+        const collectedPIDs = new Set();
+        const API_ENDPOINT_PART = '/api/4/page/fetch';
 
-        if (!firstPayload || !firstPayload.RESPONSE) {
-            const bootstrapResult = await fetchPageWithRetry(requestUrl, headers, requestBody);
-            if (!bootstrapResult.ok || !bootstrapResult.data) {
-                log(`[${url}] Direct API bootstrap failed (${bootstrapResult.status}): ${bootstrapResult.error || 'unknown error'}`, 'ERROR');
-                return [];
+        await page.route(`**${API_ENDPOINT_PART}*`, async route => {
+            // NOTE: We must NOT block API requests here, so we wrap in try-catch
+            // and fallback to standard fetch if our interceptLogic is complex.
+            // But since 'interceptResources' handles images/fonts globally, 
+            // we just need to handle the specific API interception here.
+
+            // Wait: interceptResources uses page.route('**/*')... 
+            // Playwright routing: specific routes should be defined BEFORE global catch-alls if priority matters,
+            // OR we rely on how Playwright handles overrides.
+            // Actually, declaring `page.route` multiple times works, the matching order is LIFO (last registered matches first).
+            // So we register API interception LAST (effectively first priority for this specific URL pattern).
+
+            try {
+                const response = await route.fetch();
+                try {
+                    const json = await response.json();
+                    collectedData.push(json);
+                    // Save API dump
+                    saveApiDump(pincode, url, json, 'api_response');
+                } catch (e) { }
+                await route.fulfill({ response });
+            } catch (err) {
+                // Handle socket hangup or network failures gracefully
+                try { await route.continue(); } catch (e) { }
             }
-            firstPayload = bootstrapResult.data;
-        }
-
-        collectedData.push(firstPayload);
-        responseEntries.push({
-            phase: 'initial',
-            status: 200,
-            pageNumber: getPageNumber(requestBody),
-            requestBody: cloneJson(requestBody),
-            response: firstPayload
         });
 
-        let currentPayload = firstPayload;
+        await page.goto(url, { waitUntil: 'domcontentloaded' });
+        await page.waitForTimeout(3000);
 
-        while (currentPayload) {
-            const nextRedirectPageUri = extractRedirectPageUri(currentPayload);
-            let nextRequestBody = null;
-            let phase = '';
-
-            if (nextRedirectPageUri && !seenPageUris.has(nextRedirectPageUri) && redirectDepth < MAX_REDIRECT_DEPTH) {
-                redirectDepth += 1;
-                seenPageUris.add(nextRedirectPageUri);
-                nextRequestBody = deepMerge(requestBody, { pageUri: nextRedirectPageUri });
-                phase = `redirect-${redirectDepth}`;
-            } else {
-                const paginatedBody = buildNextPaginatedRequestBody(requestBody, currentPayload);
-                const nextBodyKey = paginatedBody ? stableStringify(paginatedBody) : '';
-
-                if (!paginatedBody || fetchedPageCount >= MAX_PAGINATION_PAGES || seenRequestBodies.has(nextBodyKey)) {
-                    break;
-                }
-
-                seenRequestBodies.add(nextBodyKey);
-                nextRequestBody = paginatedBody;
-                fetchedPageCount += 1;
-                phase = `page-${getPageNumber(paginatedBody)}`;
+        // Click-and-Back Strategy
+        try {
+            const firstProduct = page.locator('a[href*="/p/"]').first();
+            if (await firstProduct.count() > 0) {
+                await firstProduct.click();
+                await page.waitForTimeout(2000);
+                await page.goBack({ waitUntil: 'domcontentloaded' });
+                await page.waitForTimeout(2000);
             }
+        } catch (e) { log(`[${url}] Click-and-back skipped/failed: ${e.message}`, 'WARN'); }
 
-            requestBody = nextRequestBody;
+        // Scroll Logic
+        let previousHeight = 0;
+        let sameHeightCount = 0;
+        const maxSameHeight = 10;
+        const scrollSelector = '.lQLKCP';
 
-            if (INTER_REQUEST_DELAY_MS > 0) {
-                await sleep(INTER_REQUEST_DELAY_MS);
-            }
-
-            const pageResult = await fetchPageWithRetry(requestUrl, headers, requestBody);
-            if (!pageResult.ok || !pageResult.data) {
-                log(`[${url}] Request stopped at ${phase} (${pageResult.status}): ${pageResult.error || 'unknown error'}`, 'WARN');
-                break;
-            }
-
-            currentPayload = pageResult.data;
-            if (!currentPayload?.RESPONSE) {
-                log(`[${url}] Non-product response at ${phase}. Stopping.`, 'WARN');
-                break;
-            }
-
-            collectedData.push(currentPayload);
-            responseEntries.push({
-                phase,
-                status: pageResult.status,
-                pageNumber: getPageNumber(requestBody),
-                requestBody: cloneJson(requestBody),
-                response: currentPayload
+        while (true) {
+            // Scrape DOM IDs
+            const currentPIDs = await page.evaluate(() => {
+                const anchors = Array.from(document.querySelectorAll('a[href*="pid="]'));
+                return anchors.map(a => {
+                    const href = a.getAttribute('href') || '';
+                    const match = href.match(/pid=([^&]+)/);
+                    return match ? match[1] : null;
+                }).filter(id => id !== null);
             });
+            currentPIDs.forEach(pid => collectedPIDs.add(pid));
+
+            // Scroll
+            const containerExists = await page.locator(scrollSelector).count() > 0;
+            let currentScrollHeight;
+
+            if (containerExists) {
+                currentScrollHeight = await page.evaluate((selector) => {
+                    const el = document.querySelector(selector);
+                    if (el) { el.scrollTop = el.scrollHeight; return el.scrollHeight; }
+                    return 0;
+                }, scrollSelector);
+            } else {
+                await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+                currentScrollHeight = await page.evaluate(() => document.body.scrollHeight);
+            }
+            // Double tap window scroll
+            await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+
+            if (currentScrollHeight === previousHeight) {
+                sameHeightCount++;
+                if (sameHeightCount >= maxSameHeight) break;
+            } else {
+                sameHeightCount = 0;
+                previousHeight = currentScrollHeight;
+            }
+            await page.waitForTimeout(1500);
         }
 
-        const finalProducts = extractData(collectedData, [], []);
-        finalProducts.forEach((product) => {
-            product.categoryUrl = url;
+        // Scrape Unavailable Items explicitly
+        const unavailableItems = await page.evaluate(() => {
+            const items = [];
+            const headers = Array.from(document.querySelectorAll('div')).filter(el =>
+                el.textContent && el.textContent.trim().includes('Few items are unavailable')
+            );
+
+            if (headers.length === 0) return items;
+
+            const header = headers[0];
+            const allParentCtrs = Array.from(document.querySelectorAll('#_parentCtr_'));
+
+            // Find the _parentCtr_ that follows the header
+            const container = allParentCtrs.find(ctr =>
+                header.compareDocumentPosition(ctr) & 4 // Node.DOCUMENT_POSITION_FOLLOWING = 4
+            );
+
+            if (container) {
+                const productCards = Array.from(container.children).filter(c => c.querySelector('img'));
+                productCards.forEach((card, idx) => {
+                    const img = card.querySelector('img');
+                    if (!img) return;
+                    const imageUrl = img.src || '';
+                    const textLines = card.innerText.split('\n').filter(t => t.trim().length > 0);
+                    const title = textLines.find(l => l.length >= 25 && !l.includes('₹')) || textLines[2] || 'Unknown Title';
+                    const priceLine = textLines.find(l => l.includes('₹'));
+                    const price = priceLine ? priceLine.replace(/[^0-9]/g, '') : null;
+                    const imgIdMatch = imageUrl.match(/original-([a-zA-Z0-9]+)\./);
+                    const domId = imgIdMatch ? imgIdMatch[1] : `unavailable_${idx}`;
+                    items.push({
+                        productId: domId,
+                        productName: title,
+                        productImage: imageUrl,
+                        productWeight: "",
+                        quantity: "",
+                        deliveryTime: "N/A",
+                        isAd: false,
+                        rating: 0,
+                        currentPrice: price ? parseFloat(price) : 0,
+                        originalPrice: price ? parseFloat(price) : 0,
+                        discountPercentage: 0,
+                        isOutOfStock: true,
+                        productUrl: null,
+                        platform: "flipkart_minutes",
+                        ranking: 9999 + idx
+                    });
+                });
+            }
+            return items;
         });
 
-        saveApiDump(
-            pincode,
-            url,
-            {
-                metadata: {
-                    pincode,
-                    sourceUrl: url,
-                    endpoint: requestUrl,
-                    mode: 'direct_api_pagination',
-                    responsesCaptured: collectedData.length,
-                    productsExtracted: finalProducts.length,
-                    generatedAt: new Date().toISOString()
-                },
-                requestTemplate: {
-                    headers: capturedHeaders,
-                    requestBody: capturedRequestBody || null
-                },
-                responses: responseEntries
-            },
-            'direct_api'
-        );
+        log(`[${url}] Scrape Complete. API Pages: ${collectedData.length}, DOM IDs: ${collectedPIDs.size}, Unavailable Items: ${unavailableItems.length}`, 'SUCCESS');
 
-        log(`[${url}] Direct API scrape complete. Responses: ${collectedData.length}, products: ${finalProducts.length}`, 'SUCCESS');
+        // Check extraction result
+        let finalProducts = extractData(collectedData, Array.from(collectedPIDs), unavailableItems);
+
+        // Add categoryUrl to each product
+        finalProducts.forEach(p => p.categoryUrl = url);
+
         return finalProducts;
 
     } catch (e) {
@@ -707,6 +394,9 @@ async function scrapeUrlInContext(context, url, pincode) {
     }
 }
 
+/**
+ * Extracts delivery time from the main store page
+ */
 async function getDeliveryTime(context) {
     const page = await context.newPage();
     const STORE_URL = 'https://www.flipkart.com/flipkart-minutes-store?marketplace=HYPERLOCAL';
@@ -783,7 +473,7 @@ async function scrape(url, pincode) {
     // 2. Launch Scraper
     log(`Scraping URL: ${url} with Pincode: ${pincode}`, 'INFO');
     const browser = await chromium.launch({
-        headless: false,
+        headless: true,
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
@@ -850,7 +540,7 @@ async function scrape(url, pincode) {
 /**
  * Scrape Multiple URLs concurrently
  */
-async function scrapeMultiple(urls, pincode, maxConcurrentTabs = 2) {
+async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true) {
     if (!urls || urls.length === 0) throw new Error('URLs array is required');
     if (!pincode) throw new Error('Pincode is required');
 
@@ -874,10 +564,7 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs = 2) {
 
     try {
         const globalDeliveryTime = "N/A";
-        const requestedConcurrency = Number(maxConcurrentTabs);
-        const CONCURRENCY_LIMIT = Number.isFinite(requestedConcurrency)
-            ? Math.max(1, Math.min(requestedConcurrency, 6))
-            : 2;
+        const CONCURRENCY_LIMIT = 2; // Reduced from 4 to prevent browser crashes
         const results = new Array(urls.length);
         const queue = urls.map((url, index) => ({ url, index }));
 
@@ -892,7 +579,7 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs = 2) {
                         try { await workerBrowser.close(); } catch (e) {}
                     }
                     workerBrowser = await chromium.launch({
-                        headless: false,
+                        headless: headless,
                         args: [
                             '--no-sandbox',
                             '--disable-setuid-sandbox',
@@ -1080,506 +767,207 @@ async function ensureLocation(page, pincode) {
  */
 function extractData(pages, domIds, unavailableItems = []) {
     const productMap = new Map();
-    const discoveryOrder = [];
+    const seenIds = new Set();
+    const domIdSet = new Set(domIds);
 
-    function rememberProduct(product) {
-        if (!product || !product.productId) return;
-
-        if (!productMap.has(product.productId)) {
-            productMap.set(product.productId, product);
-            discoveryOrder.push(product.productId);
-            return;
-        }
-
-        const existing = productMap.get(product.productId);
-        const mergeFields = [
-            'skuId',
-            'brand',
-            'productName',
-            'productImage',
-            'productWeight',
-            'quantity',
-            'rating',
-            'currentPrice',
-            'originalPrice',
-            'discountPercentage',
-            'productUrl',
-            'categoryName'
-        ];
-
-        mergeFields.forEach((field) => {
-            const currentValue = existing[field];
-            const nextValue = product[field];
-            if (
-                (currentValue === undefined || currentValue === null || currentValue === '' || currentValue === 'N/A') &&
-                nextValue !== undefined &&
-                nextValue !== null &&
-                nextValue !== '' &&
-                nextValue !== 'N/A'
-            ) {
-                existing[field] = nextValue;
-            }
-        });
-
-        if (!existing.inStock && product.inStock) {
-            existing.inStock = true;
-        }
-        existing.isAd = Boolean(existing.isAd || product.isAd);
+    // Helper functions (Same as before, but scoped inside)
+    function extractFromContext(ctx) {
+        const id = ctx.productId;
+        const product = extractProductData(ctx, id);
+        if (product) productMap.set(id, product);
     }
 
-    function walkNodes(value, visitor, seen = new Set()) {
-        if (!value || typeof value !== 'object') return;
-        if (seen.has(value)) return;
-        seen.add(value);
+    function extractFromProduct(rawProduct) {
+        const productInfo = rawProduct.productInfo;
+        if (!productInfo) return;
+        const value = productInfo.value;
+        if (!value) return;
 
-        visitor(value);
-
-        if (Array.isArray(value)) {
-            value.forEach((item) => walkNodes(item, visitor, seen));
-            return;
+        // Main
+        if (value.id) {
+            const product = extractProductData(value, value.id);
+            if (product && !productMap.has(value.id)) {
+                productMap.set(value.id, product);
+                seenIds.add(value.id);
+            }
         }
-
-        Object.values(value).forEach((child) => walkNodes(child, visitor, seen));
+        // Variants
+        if (value.productSwatch && value.productSwatch.products) {
+            Object.keys(value.productSwatch.products).forEach(vId => {
+                const vData = value.productSwatch.products[vId];
+                const cleanId = vData.id || vId;
+                const vProd = extractProductData(vData, cleanId);
+                if (vProd && !productMap.has(cleanId)) {
+                    productMap.set(cleanId, vProd);
+                    seenIds.add(cleanId);
+                }
+            });
+        }
     }
 
-    pages.forEach((page) => {
-        walkNodes(page, (node) => {
-            if (!looksLikeProductNode(node)) {
-                return;
+    function extractFromComponent(comp) {
+        const value = comp.value;
+        if (!value) return;
+        if (value.id) {
+            const product = extractProductData(value, value.id);
+            if (product && !productMap.has(value.id)) {
+                productMap.set(value.id, product);
+                seenIds.add(value.id);
             }
+        }
+    }
 
-            const product = extractProductData(node);
-            rememberProduct(product);
+    // Process Pages
+    pages.forEach(page => {
+        if (page.RESPONSE && page.RESPONSE.pageData && page.RESPONSE.pageData.pageContext) {
+            const ctx = page.RESPONSE.pageData.pageContext;
+            if (ctx.productId) extractFromContext(ctx);
+        }
+        const slots = page.RESPONSE?.slots || [];
+        slots.forEach(slot => {
+            const widget = slot.widget;
+            if (widget && widget.data) {
+                if (widget.data.products) {
+                    widget.data.products.forEach(p => extractFromProduct(p));
+                }
+                if (widget.data.renderableComponents) {
+                    widget.data.renderableComponents.forEach(c => extractFromComponent(c));
+                }
+            }
         });
     });
 
-    const allProducts = [];
+    // Reconstruct Order
+    let allProducts = [];
     const processedIds = new Set();
 
+    // 1. Follow DOM Order
     domIds.forEach((id, index) => {
-        if (!productMap.has(id)) return;
-        const product = productMap.get(id);
-        product.ranking = index + 1;
-        allProducts.push(product);
-        processedIds.add(id);
+        if (productMap.has(id)) {
+            const prod = productMap.get(id);
+            prod.ranking = index + 1;
+            allProducts.push(prod);
+            processedIds.add(id);
+        }
     });
 
-    const orphans = [];
-    discoveryOrder.forEach((id) => {
-        if (!productMap.has(id) || processedIds.has(id)) return;
-        const product = productMap.get(id);
-        product.ranking = allProducts.length + orphans.length + 1;
-        orphans.push(product);
-        processedIds.add(id);
-    });
+    // 2. Append Orphans
+    let orphans = [];
+    for (const [id, prod] of productMap) {
+        if (!processedIds.has(id)) {
+            prod.ranking = allProducts.length + orphans.length + 1;
+            orphans.push(prod);
+        }
+    }
 
-    const existingIds = new Set(allProducts.concat(orphans).map((p) => p.productId));
+    // 3. Append Unavailable Items (Dedup check)
+    // Map existing products for quick lookup to avoid dupes if API actually HAD them
+    const existingIds = new Set(allProducts.concat(orphans).map(p => p.productId));
+
     unavailableItems.forEach((item, idx) => {
-        if (!item || !item.productId || existingIds.has(item.productId)) return;
-        item.ranking = allProducts.length + orphans.length + idx + 1;
-        orphans.push(item);
+        if (!existingIds.has(item.productId)) {
+            item.ranking = allProducts.length + orphans.length + idx + 1;
+            orphans.push(item);
+        }
     });
 
     return allProducts.concat(orphans);
 }
 
-function getPathValue(input, pathExpression) {
-    if (!pathExpression) return undefined;
-
-    const parts = String(pathExpression).split('.');
-    let current = input;
-
-    for (const part of parts) {
-        if (current === null || current === undefined) return undefined;
-
-        if (Array.isArray(current) && /^\d+$/.test(part)) {
-            current = current[Number(part)];
-            continue;
-        }
-
-        current = current[part];
-    }
-
-    return current;
-}
-
-function extractPrimitive(value) {
-    if (value === null || value === undefined) return '';
-    if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
-        return String(value).trim();
-    }
-
-    if (Array.isArray(value)) {
-        for (const item of value) {
-            const extracted = extractPrimitive(item);
-            if (extracted) return extracted;
-        }
-        return '';
-    }
-
-    if (typeof value === 'object') {
-        for (const key of ['text', 'value', 'amount', 'formattedValue', 'displayText', 'title', 'url']) {
-            if (Object.prototype.hasOwnProperty.call(value, key)) {
-                const extracted = extractPrimitive(value[key]);
-                if (extracted) return extracted;
-            }
-        }
-    }
-
-    return '';
-}
-
-function pickFirstValue(input, paths) {
-    for (const currentPath of paths) {
-        const value = extractPrimitive(getPathValue(input, currentPath));
-        if (value) return value;
-    }
-    return '';
-}
-
-function pickPriceFromCollections(input, collectionPaths, acceptedTypes = []) {
-    const normalizedTypes = acceptedTypes.map((type) => String(type).toUpperCase());
-
-    for (const currentPath of collectionPaths) {
-        const collection = getPathValue(input, currentPath);
-        if (!Array.isArray(collection)) continue;
-
-        for (const entry of collection) {
-            const typeLabel = String(entry?.priceType || entry?.name || '').toUpperCase();
-            const matchesType =
-                normalizedTypes.length === 0 ||
-                normalizedTypes.some((type) => typeLabel === type || typeLabel.includes(type));
-
-            if (!matchesType) continue;
-
-            const value = extractPrimitive(entry?.value ?? entry?.decimalValue ?? entry);
-            if (value) return value;
-        }
-    }
-
-    return '';
-}
-
-function pickBooleanValue(input, paths) {
-    for (const currentPath of paths) {
-        const rawValue = getPathValue(input, currentPath);
-
-        if (typeof rawValue === 'boolean') return rawValue;
-
-        const normalized = String(rawValue || '').trim().toLowerCase();
-        if (normalized === 'true') return true;
-        if (normalized === 'false') return false;
-    }
-
-    return null;
-}
-
-function normalizeProductUrl(url) {
-    let productUrl = String(url || '').trim();
-    if (!productUrl) return 'N/A';
-
-    if (productUrl.includes('https://dl.flipkart.com/dl')) {
-        productUrl = productUrl.replace('https://dl.flipkart.com/dl', '');
-    }
-
-    if (!productUrl.startsWith('http://') && !productUrl.startsWith('https://')) {
-        if (!productUrl.startsWith('/')) {
-            productUrl = `/${productUrl}`;
-        }
-        productUrl = `https://www.flipkart.com${productUrl}`;
-    }
-
-    return productUrl;
-}
-
-function normalizeImageUrl(url) {
-    return String(url || '')
-        .trim()
-        .replace(/{@width}/g, '400')
-        .replace(/{@height}/g, '400')
-        .replace(/{@quality}/g, '70');
-}
-
-function normalizeDiscountValue(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return 0;
-
-    const numeric = raw.replace(/[^\d.]+/g, '');
-    return numeric || 0;
-}
-
-function inferStockState(data) {
-    const explicitBoolean = pickBooleanValue(data, [
-        'available',
-        'inStock',
-        'serviceable',
-        'isAvailable',
-        'isServiceable',
-        'availability.isAvailable',
-        'availability.serviceable',
-        'pls.isAvailable',
-        'pls.isServiceable',
-        'trackingDataV2.serviceable'
-    ]);
-
-    const stockLabel = pickFirstValue(data, [
-        'availability.displayState',
-        'availabilityStatus',
-        'pls.availabilityStatus',
-        'buyability.message',
-        'buyability.intent',
-        'stepperData_0.action.tracking.listingState',
-        'status'
-    ]).toUpperCase();
-
-    if (
-        stockLabel.includes('OUT_OF_STOCK') ||
-        stockLabel.includes('OUT OF STOCK') ||
-        stockLabel.includes('UNAVAILABLE') ||
-        stockLabel.includes('NOT_AVAILABLE') ||
-        stockLabel.includes('SOLD_OUT')
-    ) {
-        return false;
-    }
-
-    if (stockLabel.includes('IN_STOCK') || stockLabel.includes('AVAILABLE')) {
-        return true;
-    }
-
-    if (explicitBoolean !== null) {
-        return explicitBoolean;
-    }
-
-    return true;
-}
-
-function looksLikeProductNode(node) {
-    if (!node || typeof node !== 'object' || Array.isArray(node)) return false;
-
-    const id = pickFirstValue(node, [
-        'value.productMeta.productId',
-        'value.id',
-        'productMeta.productId',
-        'productId',
-        'itemId',
-        'id'
-    ]);
-    const name = pickFirstValue(node, [
-        'value.titles.title',
-        'value.titles.newTitle',
-        'titles.title',
-        'title',
-        'name',
-        'productName',
-        'label_2.value.text'
-    ]);
-    const price =
-        pickFirstValue(node, [
-            'value.pricing.finalPrice',
-            'value.pricing.displayPrice',
-            'pricing.finalPrice',
-            'sellingPrice',
-            'offerPrice',
-            'finalPrice',
-            'price',
-            'stepperData_0.action.params.price',
-            'label_5.value.UNLOCKED.value.text',
-            'label_5.value.LOCKED.value.text'
-        ]) ||
-        pickPriceFromCollections(node, ['pricing.prices', 'value.pricing.prices'], ['SPECIAL_PRICE', 'FINAL', 'TOTAL', 'FSP']);
-    const image = pickFirstValue(node, [
-        'value.images.0.imageUrl',
-        'value.images.0.url',
-        'images.0.url',
-        'imageUrl',
-        'stepperData_0.action.params.productImage'
-    ]);
-    const url = pickFirstValue(node, [
-        'value.baseUrl',
-        'value.smartUrl',
-        'baseUrl',
-        'smartUrl',
-        'url',
-        'stepperData_0.action.params.url'
-    ]);
-
-    let score = 0;
-    if (id) score += 1;
-    if (name && !/^\d+$/.test(name)) score += 1;
-    if (price) score += 1;
-    if (image || url) score += 1;
-
-    return score >= 3 || ((id || name || url) && price);
-}
-
 function extractProductData(data, id) {
-    const resolvedId = id || pickFirstValue(data, [
-        'value.productMeta.productId',
-        'value.id',
-        'productMeta.productId',
-        'productId',
-        'itemId',
-        'id'
-    ]);
-    if (!resolvedId) return null;
+    if (!id) return null;
 
-    const title = pickFirstValue(data, [
-        'titles.title',
-        'titles.newTitle',
-        'value.titles.title',
-        'value.titles.newTitle',
-        'title',
-        'name',
-        'productName',
-        'productTitle',
-        'displayName',
-        'itemName',
-        'label_2.value.text'
-    ]);
+    let imageUrl = '';
+    if (data.media && data.media.images && data.media.images.length > 0) {
+        imageUrl = data.media.images[0].url;
+    } else if (data.imageUrl) {
+        imageUrl = data.imageUrl;
+    }
 
+    if (imageUrl) {
+        imageUrl = imageUrl.replace(/{@width}/g, '400')
+            .replace(/{@height}/g, '400')
+            .replace('{@quality}', '70');
+    }
+
+    const pricing = data.pricing || {};
+    const finalPrice = pricing.finalPrice?.value;
+    const mrpObj = pricing.prices?.find(p => p.priceType === 'MRP');
+    const mrp = mrpObj ? mrpObj.value : finalPrice;
+    const discount = pricing.totalDiscount || 0;
+
+    const titles = data.titles || {};
+    const title = titles.title || data.title;
+    const subtitle = titles.subtitle || data.subTitle;
+    const brand = data.productBrand || data.brand;
+
+    // Reject products whose name resolves to a plain number — this means the API
+    // returned incomplete data and something like a discount % was mistaken for a title.
     if (!title || /^\d+$/.test(String(title).trim())) {
         return null;
     }
 
-    const subtitle = pickFirstValue(data, [
-        'titles.subtitle',
-        'value.titles.subtitle',
-        'subTitle',
-        'subtitle',
-        'variant',
-        'variantText',
-        'unit',
-        'packSize',
-        'productSwatch.attributeOptions.0.0.value',
-        'productSwatch.attributeOptions.0.0.text',
-        'tagData_3.value.text'
-    ]);
+    let prodUrl = '/p/' + id;
+    if (data.baseUrl) prodUrl = data.baseUrl;
+    else if (data.smartUrl) prodUrl = data.smartUrl.replace('https://dl.flipkart.com/dl', '');
 
-    const quantityRegex = /(\d+(?:\.\d+)?\s*(?:g|kg|ml|l|pc|pcs|pack|packs|units?|gms?)\b)/i;
+    if (!prodUrl.startsWith('http') && !prodUrl.startsWith('/')) prodUrl = '/' + prodUrl;
+    if (!prodUrl.startsWith('http')) prodUrl = 'https://www.flipkart.com' + prodUrl;
+
+    // Extract Quantity intelligently
+    const quantityRegex = /(\d+(?:\.\d+)?\s*(?:g|kg|ml|l|pc|pcs|pack|units?|gms?)\b)/i;
     let extractedQty = '';
-    let qMatch = (subtitle || '').match(quantityRegex);
-    if (!qMatch) {
-        qMatch = (title || '').match(quantityRegex);
-    }
+    let subT = subtitle || '';
+
+    // 1. Try regex on subtitle
+    let qMatch = (subT || '').match(quantityRegex);
     if (qMatch) {
         extractedQty = qMatch[0];
-    } else if (subtitle && /^\d/.test(subtitle)) {
-        extractedQty = subtitle;
+    } else {
+        // 2. Try regex on title
+        qMatch = (title || '').match(quantityRegex);
+        if (qMatch) {
+            extractedQty = qMatch[0];
+        } else {
+            // 3. Fallback: Use subtitle if it's NOT just text (likely a color)
+            // If subtitle starts with a number, assume it's relevant
+            if (subT && /^\d/.test(subT)) {
+                extractedQty = subT;
+            }
+        }
     }
 
-    const finalPrice =
-        pickFirstValue(data, [
-            'pricing.finalPrice.value',
-            'pricing.finalPrice',
-            'value.pricing.finalPrice.value',
-            'value.pricing.finalPrice',
-            'value.pricing.displayPrice',
-            'sellingPrice',
-            'offerPrice',
-            'finalPrice',
-            'price',
-            'stepperData_0.action.params.price',
-            'label_5.value.UNLOCKED.value.text',
-            'label_5.value.LOCKED.value.text'
-        ]) ||
-        pickPriceFromCollections(
-            data,
-            ['pricing.prices', 'value.pricing.prices', 'productPricingSection.prices', 'productPricingSection.priceInfo.prices'],
-            ['SPECIAL_PRICE', 'FINAL', 'TOTAL', 'FSP']
-        );
+    // Attempt to extract category (vertical)
+    let extractedCategory = 'N/A';
+    // Check common locations for category in Flipkart data
+    if (data.analyticsData) {
+        extractedCategory = data.analyticsData.category || data.analyticsData.vertical || 'N/A';
+    } else if (data.tracking) {
+        extractedCategory = data.tracking.category || data.tracking.vertical || 'N/A';
+    }
 
-    const mrp =
-        pickFirstValue(data, [
-            'pricing.mrp.value',
-            'pricing.mrp',
-            'value.pricing.strikeOffPrice',
-            'mrp',
-            'price.mrp',
-            'price.originalPrice',
-            'stepperData_0.action.tracking.mrp',
-            'label_4.value.text'
-        ]) ||
-        pickPriceFromCollections(
-            data,
-            ['pricing.prices', 'value.pricing.prices', 'productPricingSection.prices', 'productPricingSection.priceInfo.prices'],
-            ['MRP', 'MAXIMUM RETAIL PRICE']
-        ) ||
-        finalPrice;
-
-    const imageUrl = normalizeImageUrl(
-        pickFirstValue(data, [
-            'media.images.0.url',
-            'value.images.0.imageUrl',
-            'value.images.0.url',
-            'images.0.url',
-            'images.0.imageUrl',
-            'imageUrl',
-            'image.url',
-            'stepperData_0.action.params.productImage',
-            'hp_reco_pmu_product-card_image_0.value.image_0.value.dynamicImageUrl'
-        ])
-    );
-
-    const extractedCategory = pickFirstValue(data, [
-        'analyticsData.category',
-        'analyticsData.vertical',
-        'value.analyticsData.category',
-        'value.analyticsData.vertical',
-        'tracking.category',
-        'tracking.vertical',
-        'stepperData_0.action.tracking.category',
-        'stepperData_0.action.tracking.vertical'
-    ]) || 'N/A';
+    // NOTE: offerTags (Bank Offer, Special Price, etc.) are regular discounts, NOT ads
+    // isAd should only be true for actual sponsored/promotional products
+    // Flipkart Hyperlocal API doesn't have a specific sponsored indicator, so default to false
 
     return {
-        productId: resolvedId,
-        skuId: pickFirstValue(data, ['listingId', 'productMeta.listingId', 'value.productMeta.listingId']) || 'N/A',
-        brand: pickFirstValue(data, [
-            'productBrand',
-            'value.productBrand',
-            'titles.superTitle',
-            'value.titles.superTitle',
-            'stepperData_0.action.tracking.bn',
-            'brand',
-            'brandName'
-        ]) || 'N/A',
+        productId: id,
         productName: title,
-        productImage: imageUrl || 'N/A',
-        productWeight: subtitle || extractedQty || 'N/A',
-        quantity: extractedQty || subtitle || 'N/A',
-        deliveryTime: 'N/A',
-        isAd: pickBooleanValue(data, ['adProductCard', 'adInfo.adProductCard']) === true,
-        rating: pickFirstValue(data, ['rating.average', 'ratingData_0.value.rating']) || 0,
-        currentPrice: finalPrice || 'N/A',
-        originalPrice: mrp || 'N/A',
-        discountPercentage: normalizeDiscountValue(
-            pickFirstValue(data, [
-                'pricing.totalDiscount',
-                'value.pricing.discountPercentage',
-                'value.pricing.discount',
-                'discount',
-                'label_15.value.UNLOCKED.value.text',
-                'label_15.value.LOCKED.value.text'
-            ])
-        ),
-        inStock: inferStockState(data),
-        productUrl: normalizeProductUrl(
-            pickFirstValue(data, [
-                'baseUrl',
-                'value.baseUrl',
-                'smartUrl',
-                'value.smartUrl',
-                'productUrl',
-                'stepperData_0.action.params.url',
-                'url',
-                'listingUrl',
-                'deeplink'
-            ]) || `/p/${resolvedId}`
-        ),
-        platform: 'flipkart_minutes',
-        categoryName: extractedCategory
+        productImage: imageUrl,
+        productWeight: subtitle || "N/A",
+        quantity: subtitle || "N/A",
+        deliveryTime: "N/A",
+        isAd: false,
+        rating: data.rating?.average || 0,
+        currentPrice: finalPrice,
+        originalPrice: mrp,
+        discountPercentage: discount,
+        inStock: data.availability?.displayState === 'IN_STOCK',
+        productUrl: prodUrl,
+        platform: "flipkart_minutes",
+        categoryName: extractedCategory // Return extracted category
     };
 }
 
-module.exports = { scrape, scrapeMultiple, setupSession, scrapeUrlInContext, ensureLocation };
 
+module.exports = { scrape, scrapeMultiple, setupSession, scrapeUrlInContext, ensureLocation };

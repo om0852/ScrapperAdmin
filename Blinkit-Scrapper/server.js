@@ -901,7 +901,7 @@ app.get('/health', (req, res) => {
 });
 
 app.post('/blinkitcategoryscrapper', async (req, res) => {
-    const { url, urls, pincode, categories, maxConcurrentTabs = 2, proxyUrl, store } = req.body;
+    const { url, urls, pincode, categories, maxConcurrentTabs = 2, proxyUrl, store, headless = true } = req.body;
 
     if (!pincode || (!url && (!urls || urls.length === 0) && (!categories || categories.length === 0))) {
         return res.status(400).json({ error: 'Invalid input. Pincode and either url, urls array, or categories array are required.' });
@@ -949,7 +949,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
     try {
         const launchOptions = {
-            headless: false,
+            headless: headless,
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
