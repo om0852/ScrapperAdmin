@@ -1056,29 +1056,46 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
             }
         }
 
-        // 2. Process Categories SEQUENTIALLY (one at a time) for testing
+        // 2. Process Categories with concurrency=3
         const allProducts = [];
         
-        log('info', 'Scrape', `Processing ${targets.length} categories sequentially (one at a time)...`);
+        log('info', 'Scrape', `Processing ${targets.length} categories with concurrency=3...`);
         
-        for (let i = 0; i < targets.length; i++) {
-            const category = targets[i];
-            log('info', 'Batch', `[${i + 1}/${targets.length}] Scraping: ${category.name}`);
-            
-            // Scrape ONE category at a time, wait for completion before moving to next
-            const result = await scrapeCategory(context, category, pincode, proxyConfig, deliveryTime);
-            
-            if (result && result.length > 0) {
-                allProducts.push(...result);
-                log('success', 'Batch', `[${i + 1}/${targets.length}] âœ… Got ${result.length} products`);
-            } else {
-                log('warn', 'Batch', `[${i + 1}/${targets.length}] âš ï¸ No products extracted`);
-            }
-            
-            // Small delay between categories to avoid overwhelming the API
-            if (i < targets.length - 1) {
-                const delayMs = Math.random() * 2000 + 3000;  // 3-5 seconds between categories
-                log('info', 'Batch', `Waiting ${(delayMs / 1000).toFixed(1)}s before next category...`);
+        const concurrency = 3;
+        for (let i = 0; i < targets.length; i += concurrency) {
+            const batch = targets.slice(i, i + concurrency);
+            const batchNumber = Math.floor(i / concurrency) + 1;
+            const totalBatches = Math.ceil(targets.length / concurrency);
+
+            log('info', 'Batch', `Starting batch ${batchNumber}/${totalBatches} with ${batch.length} categories in parallel...`);
+
+            const results = await Promise.allSettled(
+                batch.map(async (category, idx) => {
+                    const categoryIndex = i + idx;
+                    const result = await scrapeCategory(context, category, pincode, proxyConfig, deliveryTime);
+                    return { category, categoryIndex, result };
+                })
+            );
+
+            results.forEach((settledResult) => {
+                if (settledResult.status === 'fulfilled') {
+                    const { result, categoryIndex, category } = settledResult.value;
+
+                    if (result && result.length > 0) {
+                        allProducts.push(...result);
+                        log('success', 'Batch', `[${categoryIndex + 1}/${targets.length}] ${category.name || category.url} -> ${result.length} products`);
+                    } else {
+                        log('warn', 'Batch', `[${categoryIndex + 1}/${targets.length}] ${category.name || category.url} -> No products extracted`);
+                    }
+                } else {
+                    const failedCategory = batch[results.indexOf(settledResult)];
+                    log('error', 'Batch', `Failed category ${failedCategory?.name || failedCategory?.url || 'Unknown'}: ${settledResult.reason?.message || settledResult.reason}`);
+                }
+            });
+
+            if (i + concurrency < targets.length) {
+                const delayMs = Math.random() * 2000 + 3000;
+                log('info', 'Batch', `Waiting ${(delayMs / 1000).toFixed(1)}s before next batch...`);
                 await sleep(delayMs);
             }
         }

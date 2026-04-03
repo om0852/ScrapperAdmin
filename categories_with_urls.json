@@ -6517,6 +6517,44 @@
     }
   ],
   "DMart": [
+    
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Soft Drinks",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soft-drinks-aesc-soft-drinkssc2"
+  },
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Fruit Mixes",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/fruit-mixes"
+  },
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Juices",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/juices-aesc-juicessc2"
+  },
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Soda & Water",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soda---water-aesc-soda---watersc2"
+  },
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Non-Alcoholic Beer",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/non-alcoholic-beer"
+  },
+  {
+    "masterCategory": "Cold Drinks & Juices",
+    "officialCategory": "Beverages",
+    "officialSubCategory": "Energy Drinks",
+    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/energy-drinks-aesc-energy-drinkssc2"
+  }
+,
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fruits",
