@@ -70,21 +70,95 @@ const safeFilePart = (value) => {
  * Set pincode with retry logic and progressive timeout increase
  * Attempt 1: 10s, Attempt 2: 20s, Attempt 3: 30s
  */
+async function openJiomartLocationDialog(page, timeout) {
+    const closeBtn = page.locator('#btn_location_close_icon, button.close-privacy, button.close-icon').first();
+    if (await closeBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await closeBtn.click().catch(() => {});
+        await delay(300, 700);
+    }
+
+    const locationButtonSelectors = [
+        '#btn_pin_code_delivery',
+        '#btn_delivery_location',
+        'button.header-main-pincode-address',
+        'span#delivery_city_pincode',
+        '.delivery-location',
+        '.pin-code-text',
+        'button[class*="delivery"]'
+    ];
+
+    for (const selector of locationButtonSelectors) {
+        const button = page.locator(selector).first();
+        if (await button.isVisible({ timeout: 2000 }).catch(() => false)) {
+            await button.click({ timeout: 5000 }).catch(() => {});
+            await delay(800, 1400);
+            if (await page.locator('#delivery_popup, #delivery_enter_pincode').first().isVisible({ timeout: 3000 }).catch(() => false)) {
+                return true;
+            }
+        }
+    }
+
+    const deliverToText = page.getByText(/Deliver to|Pincode|Location/i).first();
+    if (await deliverToText.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await deliverToText.click({ timeout: 5000 }).catch(() => {});
+        await delay(800, 1400);
+    }
+
+    return await page.locator('#delivery_popup, #delivery_enter_pincode').first().isVisible({ timeout }).catch(() => false);
+}
+
+async function getJiomartPincodeInput(page, timeout) {
+    const enterPincodeButton = page.locator('#btn_enter_pincode, button:has-text("Enter a pincode"), button:has-text("Enter Pincode")').first();
+    if (await enterPincodeButton.isVisible({ timeout: 2500 }).catch(() => false)) {
+        await enterPincodeButton.click({ timeout: 5000 }).catch(() => {});
+        await delay(700, 1200);
+    }
+
+    await page.evaluate(() => {
+        const wrapper = document.querySelector('#delivery_enter_pincode');
+        if (wrapper) {
+            wrapper.style.display = 'block';
+            wrapper.removeAttribute('hidden');
+        }
+    }).catch(() => {});
+
+    const input = page.locator('input#rel_pincode, input[placeholder*="pincode" i], input[type="tel"]').first();
+    await input.waitFor({ state: 'visible', timeout });
+    return input;
+}
+
 async function setPincodeWithRetry(page, pincode, maxRetries = 3) {
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
         try {
             // Progressive timeout: 10s, 20s, 30s
             const timeout = 10000 * attempt;
             console.log(`ðŸ”„ Attempt ${attempt}/${maxRetries} to set pincode (timeout: ${timeout}ms)...`);
-            
-            const input = page.locator('input[id="rel_pincode"], input[placeholder*="pincode"], input[type="tel"]').first();
-            await input.waitFor({ state: 'visible', timeout });
-            
+
+            await page.waitForLoadState('domcontentloaded', { timeout: Math.min(timeout, 10000) }).catch(() => {});
+            const dialogOpened = await openJiomartLocationDialog(page, Math.min(timeout, 6000));
+            if (!dialogOpened) {
+                throw new Error('Could not open Jiomart location dialog');
+            }
+
+            const input = await getJiomartPincodeInput(page, timeout);
             await input.fill(pincode);
             await delay(500, 1000);
-            
-            const applyBtn = page.getByText('Apply').first();
+
+            await page.evaluate((value) => {
+                const el = document.querySelector('input#rel_pincode, input[placeholder*="pincode" i], input[type="tel"]');
+                if (el) {
+                    el.value = value;
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                    el.dispatchEvent(new Event('blur', { bubbles: true }));
+                }
+            }, pincode).catch(() => {});
+
+            const applyBtn = page.locator('#btn_pincode_submit, button:has-text("Apply")').first();
+            await applyBtn.waitFor({ state: 'visible', timeout: 5000 });
             await applyBtn.click();
+
+            await page.locator('#delivery_popup').waitFor({ state: 'hidden', timeout: 7000 }).catch(() => {});
             
             console.log(`âœ… Pincode set successfully on attempt ${attempt}`);
             return true;
@@ -94,6 +168,7 @@ async function setPincodeWithRetry(page, pincode, maxRetries = 3) {
             if (attempt < maxRetries) {
                 const waitTime = 2000 * attempt;
                 console.log(`â³ Waiting ${waitTime}ms before retry...`);
+                await page.goto('https://www.jiomart.com/', { waitUntil: 'domcontentloaded', timeout: 60000 }).catch(() => {});
                 await delay(waitTime, waitTime + 1000);
             } else {
                 throw error;

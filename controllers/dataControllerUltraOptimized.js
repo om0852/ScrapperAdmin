@@ -270,6 +270,8 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
       brand: brandName,
       quantity: prod.quantity || '',
       combo: prod.combo || '',
+      isVariant: prod.isVariant || false,
+      comboOf: Array.isArray(prod.comboOf) ? prod.comboOf : [],
       skuId: prod.skuId || 'N/A',
       savings: toNum(prod.savings || 0),
       new: isNewProduct,

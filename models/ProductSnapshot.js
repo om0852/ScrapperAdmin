@@ -7,6 +7,7 @@ const ProductSnapshotSchema = new mongoose.Schema({
     required: true,
     index: true
   },
+
   categoryUrl: {
     type: String,
     required: true
@@ -21,7 +22,11 @@ const ProductSnapshotSchema = new mongoose.Schema({
   platform: {
     type: String,
     required: true,
-    enum: ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes', "flipkart"],
+    enum: ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes', 'flipkart'],
+    index: true
+  },
+  groupingId: {
+    type: String,
     index: true
   },
   scrapedAt: {
@@ -38,7 +43,9 @@ const ProductSnapshotSchema = new mongoose.Schema({
   },
   // DMart-specific fields
   skuId: String,
+  variant: String,
   brand: String,
+  availability: String,
   savings: Number,
 
   productName: {
@@ -95,7 +102,14 @@ const ProductSnapshotSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-
+  isVariant: {
+    type: Boolean,
+    default: false
+  },
+  comboOf: {
+    type: [String],
+    default: []
+  },
   // Metadata
   productUrl: String,
   lastComparedWith: {
