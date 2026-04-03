@@ -127,6 +127,15 @@ const jobState = {
 
 const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+const isLocalScraperConnectionError = (err) => {
+    const message = err?.message || '';
+    return err?.code === 'ECONNREFUSED'
+        || err?.code === 'ECONNRESET'
+        || message.includes('ECONNREFUSED')
+        || message.includes('ECONNRESET')
+        || message.includes('127.0.0.1');
+};
+
 /**
  * Validates productName to ensure it's not a price or invalid value.
  * Skips products where productName is empty, "N/A", or looks like a price (₹XX, $XX, etc.)
@@ -495,17 +504,38 @@ app.post('/api/mass-scrape', async (req, res) => {
 
                             let response;
                             try {
-                                response = await fetch(`http://127.0.0.1:${pConfig.port}${endpoint}`, {
+                                const requestPayload = {
+                                    pincode: pincode.trim(),
+                                    urls: urlsToScrape,
+                                    store: false, // DO NOT store individually inside the scraper codebase
+                                    headless: headless
+                                };
+
+                                const runScraperRequest = async () => fetch(`http://127.0.0.1:${pConfig.port}${endpoint}`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                        pincode: pincode.trim(),
-                                        urls: urlsToScrape,
-                                        store: false, // DO NOT store individually inside the scraper codebase
-                                        headless: headless
-                                    }),
+                                    body: JSON.stringify(requestPayload),
                                     signal: controller.signal
                                 });
+
+                                try {
+                                    response = await runScraperRequest();
+                                } catch (requestErr) {
+                                    if (!isLocalScraperConnectionError(requestErr)) {
+                                        throw requestErr;
+                                    }
+
+                                    log('WARNING', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Local ${pConfig.name} scraper became unavailable. Restarting server and retrying once...`);
+
+                                    if (pConfig.status === 'running') {
+                                        try {
+                                            await stopServer(platformConfigKey);
+                                        } catch (_) { }
+                                    }
+
+                                    await startServer(platformConfigKey);
+                                    response = await runScraperRequest();
+                                }
                             } finally {
                                 clearTimeout(timeoutId);
                             }
@@ -617,10 +647,15 @@ app.post('/api/mass-scrape', async (req, res) => {
                                 log('INFO', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] File saved. Use /api/manual-ingest for MongoDB operations.`);
                             }
                         } catch (err) {
-                            const isNetworkErr = err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND' || err.message?.includes('fetch failed') || (err.name === 'AbortError' && err.message?.includes('network'));
+                            const isNetworkErr = err.code === 'ENOTFOUND' || err.message?.includes('fetch failed') || (err.name === 'AbortError' && err.message?.includes('network'));
                             const isTimeoutErr = err.name === 'AbortError' && (err.message?.includes('timeout') || err.message?.includes('signal'));
+                            const isLocalScraperErr = isLocalScraperConnectionError(err);
                             
-                            if (isNetworkErr && !jobState.scrape.paused) {
+                            if (isLocalScraperErr && !jobState.scrape.paused) {
+                                jobState.scrape.paused = true;
+                                log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] Local scraper failed even after restart — scrape AUTO-PAUSED: ${err.message}`);
+                                log('WARNING', 'MassScrape', `    Waiting for resume signal via /api/job/resume?type=scrape ...`);
+                            } else if (isNetworkErr && !jobState.scrape.paused) {
                                 jobState.scrape.paused = true;
                                 log('ERROR', 'MassScrape', `    [Pin ${pinIdx + 1}/${totalPincodes}] ⚡ Network error — scrape AUTO-PAUSED: ${err.message}`);
                                 log('WARNING', 'MassScrape', `    Waiting for resume signal via /api/job/resume?type=scrape ...`);
