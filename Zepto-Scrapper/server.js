@@ -1014,10 +1014,11 @@ function normalizeRscProduct(node, productUrlLookup = new Map()) {
 
     return {
         productId: productId || null,
+        baseProductId: pickFirst(node, ['baseProductId', 'product.id']) || productId || null,
         skuId,
         productSlug: productSlug || null,
         productName: pickFirst(node, ['product.name']) || null,
-        brand: pickFirst(node, ['product.brand', 'brand', 'brand_name', 'brandName']) || null,
+        brand: pickFirst(node, ['product.brand', 'product.manufacturerName', 'brand', 'brand_name', 'brandName']) || null,
         productImage: normalizeImageUrl(
             pickFirst(node, ['productVariant.images.0.path'])
         ),
@@ -1034,8 +1035,69 @@ function normalizeRscProduct(node, productUrlLookup = new Map()) {
         productUrl,
         categoryName: pickFirst(node, ['primaryCategoryName']) || null,
         subCategory: pickFirst(node, ['primarySubcategoryName']) || null,
+        isPrimary: normalizeBoolean(pickFirst(node, ['isPrimary'])) === true,
         scrapedAt: new Date().toISOString()
     };
+}
+
+function applyVariantGrouping(products = []) {
+    const grouped = new Map();
+
+    for (const product of products) {
+        const familyKey = String(product?.baseProductId || product?.productId || product?.skuId || '').trim();
+        if (!familyKey) {
+            continue;
+        }
+
+        if (!grouped.has(familyKey)) {
+            grouped.set(familyKey, []);
+        }
+        grouped.get(familyKey).push(product);
+    }
+
+    const result = [];
+    for (const entries of grouped.values()) {
+        const family = entries.filter(Boolean);
+        if (!family.length) {
+            continue;
+        }
+
+        family.sort((left, right) => {
+            const leftPrimary = left?.isPrimary === true ? 1 : 0;
+            const rightPrimary = right?.isPrimary === true ? 1 : 0;
+            if (leftPrimary !== rightPrimary) {
+                return rightPrimary - leftPrimary;
+            }
+            return 0;
+        });
+
+        const primary = family[0];
+        const variants = family.slice(1);
+        const comboSize = family.length;
+        const comboOf = variants
+            .map((entry) => ({
+                productId: String(entry?.skuId || entry?.productId || '').trim(),
+                quantity: entry?.quantity || ''
+            }))
+            .filter((entry) => entry.productId);
+
+        result.push({
+            ...primary,
+            combo: comboSize,
+            isVariant: false,
+            comboOf
+        });
+
+        for (const variant of variants) {
+            result.push({
+                ...variant,
+                combo: comboSize,
+                isVariant: true
+            });
+        }
+    }
+
+    return result;
 }
 
 function extractProductsFromRsc(rawText, category, config) {
@@ -1066,7 +1128,7 @@ function extractProductsFromRsc(rawText, category, config) {
         });
     }
 
-    return products
+    return applyVariantGrouping(products)
         .slice(0, config.maxProductsPerSearch)
         .map((product, index) => ({
             ...product,
@@ -1471,11 +1533,20 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
 
         // 3. Re-assign rankings per officialSubCategory
         const subCatRankCounters = new Map();
+        const rankByGroupAndSubCat = new Map();
         dedupedProducts.forEach(p => {
             const subCat = p.officialSubCategory || '__unknown__';
-            const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
-            subCatRankCounters.set(subCat, nextRank);
-            p.ranking = nextRank;
+            const groupProductId = p.comboGroupId || p.productId || p.productName || '__unknown_product__';
+            const groupKey = `${subCat}||${groupProductId}`;
+
+            if (!rankByGroupAndSubCat.has(groupKey)) {
+                const nextRank = (subCatRankCounters.get(subCat) || 0) + 1;
+                subCatRankCounters.set(subCat, nextRank);
+                rankByGroupAndSubCat.set(groupKey, nextRank);
+            }
+
+            p.ranking = rankByGroupAndSubCat.get(groupKey);
+            delete p.comboGroupId;
         });
 
         console.log(`📦 Raw products: ${allProducts.length}`);

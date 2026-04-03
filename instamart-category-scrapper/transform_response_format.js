@@ -40,10 +40,64 @@ export function transformInstamartProduct(product, categoryUrl, categoryName, su
 
     // Safely handle values
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
+    const slugSuffix = (value) => safeString(value)
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+    const parseDiscountPercentage = (value) => {
+        if (value === null || value === undefined || value === '') {
+            return 'N/A';
+        }
+        if (typeof value === 'number') {
+            return String(value);
+        }
 
-    const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
-        ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+        const raw = String(value).trim();
+        const match = raw.match(/(\d+(?:\.\d+)?)\s*%/);
+        if (match) {
+            return match[1];
+        }
+        if (/^\d+(?:\.\d+)?$/.test(raw)) {
+            return raw;
+        }
+        return raw || 'N/A';
+    };
+    const toOutOfStock = (value) => {
+        if (typeof value === 'boolean') {
+            return value;
+        }
+
+        const normalized = safeString(value).toLowerCase();
+        if (normalized === 'unavailable' || normalized === 'out_of_stock' || normalized === 'sold_out') {
+            return true;
+        }
+        if (normalized === 'available' || normalized === 'in_stock' || normalized === 'instock') {
+            return false;
+        }
+        return false;
+    };
+
+    const variantValue = safeString(
+        product.variant ||
+        product.weight ||
+        product.productWeight ||
+        product.quantity ||
+        'N/A'
+    );
+    const subCategorySlug = slugSuffix(officialSubCategory);
+    const variantSlug = variantValue !== 'N/A' ? slugSuffix(variantValue) : '';
+
+    const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A' && subCategorySlug)
+        ? '__' + subCategorySlug
         : '';
+    const variantSuffix = variantSlug ? `__${variantSlug}` : '';
+
+    const currentPrice = safeString(product.currentPrice ?? product.price ?? 'N/A');
+    const originalPrice = safeString(product.originalPrice ?? product.mrp ?? 'N/A');
+    const productUrl = safeString(product.productUrl || 'N/A');
+    const rating = safeString(product.rating ?? 'N/A');
+    const isAd = Boolean(product.isAd || product.isSponsored || product.adTrackingContext);
+    const discountPercentage = parseDiscountPercentage(product.discountPercentage ?? product.discount ?? 'N/A');
 
     return {
         category: masterCategory,
@@ -53,24 +107,25 @@ export function transformInstamartProduct(product, categoryUrl, categoryName, su
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.productId) + subCatSuffix,
+        productId: safeString(product.productId) + subCatSuffix + variantSuffix,
         skuId: safeString(product.skuId || 'N/A'),
         brand: safeString(product.brand || product.brandName || 'N/A'),
         productName: safeString(product.productName),
         productImage: safeString(product.productImage),
-        productWeight: safeString(product.productWeight || product.quantity || 'N/A'),
-        quantity: safeString(product.quantity || product.quantity || 'N/A'),
+        variant: variantValue,
+        productWeight: variantValue,
+        quantity: variantValue,
         combo: safeString(product.combo || 'N/A'),
         deliveryTime: safeString(product.deliveryTime),
-        isAd: !!product.isAd,
+        isAd: isAd,
         server: safeString(product.server || 'N/A'),
-        rating: safeString(product.rating),
-        currentPrice: safeString(product.currentPrice),
-        originalPrice: safeString(product.originalPrice),
-        discountPercentage: safeString(product.discountPercentage),
+        rating: rating,
+        currentPrice: currentPrice,
+        originalPrice: originalPrice,
+        discountPercentage: discountPercentage,
         ranking: rank,
-        isOutOfStock: !!product.isOutOfStock,
-        productUrl: safeString(product.productUrl)
+        isOutOfStock: toOutOfStock(product.isOutOfStock ?? product.availability),
+        productUrl: productUrl
     };
 }
 

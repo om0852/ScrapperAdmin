@@ -37,6 +37,10 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
 
     // Safely handle values
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
+    const normalizeCount = (val, fallback = 1) => {
+        const parsed = Number.parseInt(String(val ?? '').trim(), 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+    };
 
     const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
         ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
@@ -69,7 +73,8 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         }
     }
 
-    return {
+    const comboOf = Array.isArray(product.comboOf) ? product.comboOf.map((entry) => safeString(entry)).filter((entry) => entry !== 'N/A') : [];
+    const transformed = {
         category: masterCategory,
         categoryUrl: safeString(categoryUrl),
         officialCategory: officialCategory,
@@ -77,16 +82,17 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.id || product.productId) + subCatSuffix, // DMart raw has 'id'
+        productId: safeString(product.id || product.productId) + subCatSuffix,
         skuId: safeString(product.sku || product.skuId || 'N/A'),
-        brand: safeString(product.brand || 'N/A'),
+        brand: safeString(product.brand || product.manufacturer || 'N/A'),
         productName: safeString(product.name || product.productName),
         productImage: safeString(imgUrl),
         productWeight: safeString(product.weight || product.packSize || product.quantity || 'N/A'),
         quantity: safeString(product.quantity || product.packSize || 'N/A'),
-        combo: safeString(product.combo || 'N/A'),
+        combo: normalizeCount(product.combo, comboOf.length + 1),
         deliveryTime: safeString(product.deliveryTime || 'N/A'),
         isAd: !!product.isAd,
+        isVariant: product.isVariant === true,
         rating: safeString(product.rating || 'N/A'),
         currentPrice: cleanPrice(product.price || product.sellingPrice),
         originalPrice: cleanPrice(product.originalPrice || product.mrp),
@@ -95,6 +101,12 @@ export function transformDMartProduct(product, categoryUrl, categoryName, subCat
         isOutOfStock: !!product.isOutOfStock,
         productUrl: safeString(productLink)
     };
+
+    if (!transformed.isVariant) {
+        transformed.comboOf = comboOf;
+    }
+
+    return transformed;
 }
 
 /**

@@ -573,20 +573,24 @@ app.post('/api/mass-scrape', async (req, res) => {
                                             newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
                                         }
 
+                                        let finalWeight = prod.productWeight || prod.weight || 'N/A';
+                                        if (finalWeight === 'N/A' || finalWeight === '') {
+                                            finalWeight = prod.quantity || 'N/A';
+                                        }
+
                                         // Build the officialSubCategory suffix and update productId
                                         // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
                                         const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
                                             ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
                                             : '';
-                                        // Strip any existing suffix (starting with '__') then re-append
+                                        const variantWeightSuffix = (prod.isVariant === true && finalWeight && finalWeight !== 'N/A')
+                                            ? '__' + String(finalWeight).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+                                            : '';
+                                        // Strip any existing suffix (starting with '__') then re-append the canonical suffixes
                                         const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
-                                        const updatedProductId = baseProductId + subCatSuffix;
+                                        const updatedProductId = baseProductId + subCatSuffix + variantWeightSuffix;
 
                                         // NO DB CHECKS DURING SCRAPING — new field will be set during manual insertion
-                                        let finalWeight = prod.productWeight || prod.weight || 'N/A';
-                                        if (finalWeight === 'N/A' || finalWeight === '') {
-                                            finalWeight = prod.quantity || 'N/A';
-                                        }
 
                                         newProducts.push({
                                             ...prod,
@@ -838,20 +842,23 @@ app.post('/api/manual-ingest', async (req, res) => {
                     newOfficialSubCategory = mapping.officalSubCategory || mapping.officialSubCategory || 'N/A';
                 }
 
-                // Build the officialSubCategory suffix and update productId
-                // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
-                const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
-                    ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-                    : '';
-                // Strip any existing suffix (starting with '__') then re-append
-                const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
-                const updatedProductId = baseProductId + subCatSuffix;
-
                 // Calculate productWeight fallback
                 let finalWeight = prod.productWeight || prod.weight || 'N/A';
                 if (finalWeight === 'N/A' || finalWeight === '') {
                     finalWeight = prod.quantity || 'N/A';
                 }
+
+                // Build the officialSubCategory suffix and update productId
+                // Keep hyphens to differentiate multi-word categories (e.g., fresh-vegetables, not freshvegetables)
+                const subCatSuffix = (newOfficialSubCategory && newOfficialSubCategory !== 'N/A')
+                    ? '__' + newOfficialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+                    : '';
+                const variantWeightSuffix = (prod.isVariant === true && finalWeight && finalWeight !== 'N/A')
+                    ? '__' + String(finalWeight).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+                    : '';
+                // Strip any existing suffix (starting with '__') then re-append the canonical suffixes
+                const baseProductId = String(prod.productId || prod.id || '').replace(/__.*$/, '');
+                const updatedProductId = baseProductId + subCatSuffix + variantWeightSuffix;
 
                 // Check DB for new flag during manual insertion - match dataController logic
                 // Resolve the scraped timestamp

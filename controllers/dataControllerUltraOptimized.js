@@ -37,6 +37,27 @@ const toNum = (val) => {
   return isNaN(n) ? null : n;
 };
 
+const normalizeGroupPrimaryName = (name) => {
+  if (!name) return name;
+  return String(name).replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
+const normalizeBrandName = (name) => {
+  if (!name) return null;
+  const cleaned = String(name)
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+  if (!cleaned) return null;
+  return cleaned.replace(/\b\w/g, char => char.toUpperCase());
+};
+
+const getBrandId = (brandName) => {
+  if (!brandName) return 'N/A';
+  return brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+};
+
 const normalizePlatform = (platform) => {
   const PLATFORM_ENUM = ['zepto', 'blinkit', 'jiomart', 'dmart', 'instamart', 'flipkartMinutes'];
   return PLATFORM_ENUM.find(p => p.toLowerCase() === platform.toLowerCase()) || platform.toLowerCase();
@@ -120,13 +141,15 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
   console.log('⚡ Parallel fetching all required data...');
 
   const productIds = uniqueProducts.map(p => p.id || p.productId);
-  const allBrandNames = uniqueProducts
-    .map(p => (p.brand || '').trim() || p.name?.split(' ')[0] || '')
-    .filter(Boolean);
+  const allBrandIds = [...new Set(uniqueProducts
+    .map(p => normalizeBrandName((p.brand || '').trim() || p.name?.split(' ')[0] || ''))
+    .filter(Boolean)
+    .map(getBrandId)
+  )];
 
   // Execute all DB queries in parallel
   const [existingBrands, lastSnapshots, existingGroupings] = await Promise.all([
-    Brand.find({ brandName: { $in: allBrandNames } }, null, { lean: true }),
+    Brand.find({ brandId: { $in: allBrandIds } }, null, { lean: true }),
     ProductSnapshot.find(
       {
         productId: { $in: productIds },
@@ -145,7 +168,7 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
     )
   ]);
 
-  const brandMap = new Map(existingBrands.map(b => [b.brandName, b]));
+  const brandMap = new Map(existingBrands.map(b => [b.brandId, b]));
   const snapshotMap = new Map(lastSnapshots.map(s => [s.productId, s]));
 
   // Pre-build grouping lookup for fast access
@@ -184,18 +207,25 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
     const discountPercentage = toNum(prod.discountPercent || prod.discountPercentage);
 
     // Brand handling
-    let brandName = (prod.brand || '').trim() || prod.name?.split(' ')[0] || null;
-    if (brandName && !brandMap.has(brandName)) {
-      const brandId = brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
-      brandsToUpsert.push({
-        updateOne: {
-          filter: { brandId },
-          update: { $setOnInsert: { brandName, enabled: true } },
-          upsert: true
-        }
-      });
-      // Add to map to avoid duplicates in this batch
-      brandMap.set(brandName, { brandId, brandName });
+    const rawBrandName = (prod.brand || '').trim() || prod.name?.split(' ')[0] || null;
+    let brandName = null;
+    if (rawBrandName) {
+      const normalizedBrandName = normalizeBrandName(rawBrandName);
+      const brandId = getBrandId(normalizedBrandName);
+      if (!brandMap.has(brandId)) {
+        brandName = normalizedBrandName;
+        brandsToUpsert.push({
+          updateOne: {
+            filter: { brandId },
+            update: { $setOnInsert: { brandName, enabled: true } },
+            upsert: true
+          }
+        });
+        // Add to map to avoid duplicates in this batch
+        brandMap.set(brandId, { brandId, brandName });
+      } else {
+        brandName = brandMap.get(brandId)?.brandName || normalizedBrandName;
+      }
     }
 
     // Handle productId suffix
@@ -339,11 +369,11 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
           document: {
             groupingId: new mongoose.Types.ObjectId().toString(),
             category: decodedCategory.trim(),
-            primaryName: prodInfo.productName,
+            primaryName: normalizeGroupPrimaryName(prodInfo.productName),
             primaryImage: prodInfo.productImage,
             primaryWeight: prodInfo.productWeight,
             brand: prodInfo.brand || '',
-            brandId: (prodInfo.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '-') || 'N/A',
+            brandId: getBrandId(prodInfo.brand),
             products: prodInfo.products,
             totalProducts: prodInfo.products.length
           }

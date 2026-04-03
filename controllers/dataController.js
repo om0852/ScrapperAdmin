@@ -28,6 +28,27 @@ const isValidProductName = (productName) => {
     return true;
 };
 
+const normalizeGroupPrimaryName = (name) => {
+    if (!name) return name;
+    return String(name).replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
+const normalizeBrandName = (name) => {
+    if (!name) return null;
+    const cleaned = String(name)
+        .replace(/-/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+    if (!cleaned) return null;
+    return cleaned.replace(/\b\w/g, char => char.toUpperCase());
+};
+
+const getBrandId = (brandName) => {
+    if (!brandName) return 'N/A';
+    return brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+};
+
 export const processScrapedData = async ({ pincode, platform, category, products }) => {
     // Decode folder-name sanitization: Windows replaces & with _ in directory names.
     // " _ " surrounded by spaces is the tell-tale sign (e.g. "Fruits _ Vegetables").
@@ -91,28 +112,38 @@ export const processScrapedData = async ({ pincode, platform, category, products
 
         // 1. Extract and Upsert Brand
         let brandName = null;
+        let rawBrandName = null;
         if (prod.brand && prod.brand.trim() !== '') {
-            brandName = prod.brand.trim();
+            rawBrandName = prod.brand.trim();
         } else if (prod.name) {
             // Very basic heuristic: first word of product is often brand if brand is missing
-            brandName = prod.name.split(' ')[0];
+            rawBrandName = prod.name.split(' ')[0];
         }
 
-        if (brandName) {
-            const brandId = brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+        if (rawBrandName) {
+            const normalizedBrandName = normalizeBrandName(rawBrandName);
+            const brandId = getBrandId(normalizedBrandName);
             try {
-                await Brand.findOneAndUpdate(
-                    { brandId },
-                    {
-                        $setOnInsert: { brandName, enabled: true }
-                    },
-                    { upsert: true, returnDocument: 'after' }
-                );
+                const existingBrand = await Brand.findOne({ brandId }).lean();
+                if (existingBrand) {
+                    brandName = existingBrand.brandName;
+                } else {
+                    brandName = normalizedBrandName;
+                    await Brand.findOneAndUpdate(
+                        { brandId },
+                        {
+                            $setOnInsert: { brandName, enabled: true }
+                        },
+                        { upsert: true, returnDocument: 'after' }
+                    );
+                }
             } catch (err) {
                 if (err.code !== 11000) {
                     throw err;
                 }
                 // Ignore E11000 duplicate key error for concurrent brand insertions
+                const existingBrand = await Brand.findOne({ brandId }).lean();
+                brandName = existingBrand?.brandName || normalizedBrandName;
             }
         }
 
@@ -290,11 +321,11 @@ export const processScrapedData = async ({ pincode, platform, category, products
                     const newGroup = new ProductGrouping({
                         groupingId: new mongoose.Types.ObjectId().toString(),
                         category: finalCategory,
-                        primaryName: prod.name || prod.productName,
+                        primaryName: normalizeGroupPrimaryName(prod.name || prod.productName),
                         primaryImage: prod.image || prod.image_url || prod.productImage || '',
                         primaryWeight: prod.weight || prod.productWeight || prod.quantity || '',
-                        brand: prod.brand || '',
-                        brandId: (prod.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '-') || 'N/A',
+                        brand: brandName || '',
+                        brandId: getBrandId(brandName),
                         products: [{
                             platform: normalizedPlatform,
                             productId: fullProductId

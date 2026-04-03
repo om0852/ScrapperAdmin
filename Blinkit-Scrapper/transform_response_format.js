@@ -98,11 +98,21 @@ function transformBlinkitProduct(product, categoryUrl, officialCategory, officia
         isOutOfStock: (product.isOutOfStock === true || product.isOutOfStock === 'true') ? true : false,
         productUrl: product.url || product.productUrl || 'N/A',
         
-        // ðŸ” NEW VARIANT FIELDS
-        isVariant: product.isVariant || false,  // True if this is a variant of a parent product
-        variantOf: product.variantOf || null,   // Parent productId if this is a variant
-        comboOf: product.comboOf || product.variantOf || null // Main productId for variants
+        // Variant fields aligned with Flipkart Minutes
+        isVariant: product.isVariant || false
     };
+}
+
+function withBlinkitVariantShape(transformedProduct, rawProduct) {
+    if (!transformedProduct || !rawProduct) {
+        return transformedProduct;
+    }
+
+    if (!transformedProduct.isVariant) {
+        transformedProduct.comboOf = Array.isArray(rawProduct.comboOf) ? rawProduct.comboOf : [];
+    }
+
+    return transformedProduct;
 }
 
 /**
@@ -154,7 +164,8 @@ function transformBlinkitResponse(rawData, categoryUrl, officialCategory, offici
 
     // 2. Transform and Assign Ranking
     const transformed = products.map((product, index) =>
-        transformBlinkitProduct(
+        withBlinkitVariantShape(
+            transformBlinkitProduct(
             product,
             categoryUrl,
             officialCategory,
@@ -162,6 +173,8 @@ function transformBlinkitResponse(rawData, categoryUrl, officialCategory, offici
             pincode,
             index + 1, // Ranking is 1-based index after deduplication
             categoryMapping
+            ),
+            product
         )
     );
 

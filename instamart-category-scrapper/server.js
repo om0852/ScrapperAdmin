@@ -22,7 +22,7 @@ if (!fs.existsSync(SESSION_DIR)) {
 // API Dumps storage directory
 const API_DUMPS_DIR = path.join(__dirname, 'api_dumps');
 if (!fs.existsSync(API_DUMPS_DIR)) {
-    fs.mkdirSync(API_DUMPS_DIR);
+    fs.mkdirSync(API_DUMPS_DIR, { recursive: true });
 }
 
 // === LOAD STANDARDIZATION MODULES (ESM) ===
@@ -48,6 +48,7 @@ let categoryMapper;
 // Function to save API dumps
 function saveApiDump(pincode, url, jsonData, dumpType = 'response') {
     try {
+        fs.mkdirSync(API_DUMPS_DIR, { recursive: true });
         const timestamp = Date.now();
         const urlHash = url.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30);
         const filename = `dump_${pincode}_${dumpType}_${urlHash}_${timestamp}.json`;
@@ -595,7 +596,7 @@ async function scrapeCategoryInContext(context, url, pincode) {
 
 
 app.post('/instamartcategorywrapper', async (req, res) => {
-    const { url, urls, pincode, maxConcurrentTabs = 2, store } = req.body;
+    const { url, urls, pincode, maxConcurrentTabs = 3, store } = req.body;
 
     // Support legacy single URL or new array
     let targetUrls = [];
@@ -648,7 +649,7 @@ app.post('/instamartcategorywrapper', async (req, res) => {
         }
 
         // 2. Parallel Scrape
-        const CONCURRENCY_LIMIT = Math.min(targetUrls.length, maxConcurrentTabs);
+        const CONCURRENCY_LIMIT = Math.min(targetUrls.length, Number(maxConcurrentTabs) || 3, 3);
         const queue = targetUrls.map((u, i) => ({ url: u, index: i }));
         const allResults = [];
 
@@ -713,7 +714,7 @@ app.post('/instamartcategorywrapper', async (req, res) => {
                     };
                 }
 
-                return transformInstamartProduct(
+                const transformedProduct = transformInstamartProduct(
                     product,
                     productCategoryUrl,
                     categoryMapping?.officialCategory || 'N/A',
@@ -722,16 +723,22 @@ app.post('/instamartcategorywrapper', async (req, res) => {
                     index + 1,
                     categoryMapping
                 );
+
+                return {
+                    transformedProduct,
+                    dedupeKey: product.productId
+                        ? `${product.productId}||${transformedProduct.officialSubCategory || 'N/A'}||${productCategoryUrl}`
+                        : `__keep__${index}`
+                };
             });
 
-            // 2. Deduplicate AFTER transform (suffix is now part of the unique key)
+            // 2. Deduplicate only when raw productId + officialSubCategory + categoryUrl are the same
             const seenIds = new Set();
             productsToReturn = transformedAll.filter(p => {
-                const key = p.productId || p.productName;
-                if (!key || seenIds.has(key)) return false;
-                seenIds.add(key);
+                if (seenIds.has(p.dedupeKey)) return false;
+                seenIds.add(p.dedupeKey);
                 return true;
-            });
+            }).map(entry => entry.transformedProduct);
 
             // 3. Re-assign rankings per officialSubCategory
             const subCatRankCounters = new Map();

@@ -206,8 +206,8 @@ function extractProductsWithVariants(item) {
             productWeight,
             combo: 1,
             isVariant: false,
-            variantOf: null,
-            comboOf: null
+            comboGroupId: mainProductId,
+            comboOf: []
         };
         products.push(mainProduct);
         seenProductIds.add(mainProductId);
@@ -284,8 +284,7 @@ function extractProductsWithVariants(item) {
                     brandName: variantBrand,
                     isOutOfStock: variantOutOfStock,
                     isVariant: true,
-                    variantOf: mainProductId,
-                    comboOf: mainProductId
+                    comboGroupId: mainProductId
                 };
 
                 products.push(variantProduct);
@@ -296,10 +295,14 @@ function extractProductsWithVariants(item) {
         });
 
         const comboSize = products.length;
+        const variantProductIds = products
+            .filter((product) => product.isVariant)
+            .map((product) => product.productId)
+            .filter(Boolean);
         products.forEach((product) => {
             product.combo = comboSize;
             if (!product.isVariant) {
-                product.comboOf = null;
+                product.comboOf = variantProductIds;
             }
         });
 
@@ -1151,7 +1154,7 @@ app.post('/blinkitcategoryscrapper', async (req, res) => {
 
         dedupedProducts.forEach((p) => {
             const subCat = p.officialSubCategory || '__unknown__';
-            const groupProductId = (p.comboOf || p.variantOf || p.productId || p.productName || '__unknown_product__');
+            const groupProductId = (p.comboGroupId || p.productId || p.productName || '__unknown_product__');
             const groupKey = `${subCat}||${groupProductId}`;
 
             if (!rankByGroupAndSubCat.has(groupKey)) {
@@ -1212,4 +1215,3 @@ const server = app.listen(PORT, () => {
     console.log(`${colors.green}Blinkit Scraper API running on port ${PORT}${colors.reset}`);
 });
 server.setTimeout(0);
-

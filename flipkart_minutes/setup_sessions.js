@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const PINCODES = {
-    // 'Mumbai': [ '400703','401202',"400706"],
-    'Delhi NCR': [  '122008', '122010', '122016']
+    'Mumbai': [ '400703','401202',"400706"],
+    'Delhi NCR': [  '122008', '122010', '122016',"201303","201014"]
 };
 
 const SESSION_DIR = path.join(__dirname, 'sessions');
@@ -20,7 +20,6 @@ async function setupSession(pincode) {
 
     const browser = await chromium.launch({
         headless: false,
-        executablePath: "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\brave.exe",
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',

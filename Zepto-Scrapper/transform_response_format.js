@@ -48,29 +48,59 @@ export function transformZeptoProduct(product, categoryUrl, categoryName, subCat
     // Checking Blinkit output: ranking is number, prices are strings.
 
     const safeString = (val) => (val !== null && val !== undefined && val !== '') ? String(val) : 'N/A';
+    const normalizeCount = (val, fallback = 1) => {
+        const parsed = Number.parseInt(String(val ?? '').trim(), 10);
+        return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+    };
+    const slugifySuffixPart = (val) => String(val || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
 
     const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
         ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
         : '';
+    const quantitySuffix = slugifySuffixPart(product.quantity || '');
+    const baseIdentity = safeString(product.baseProductId || product.productId || product.skuId || product.productSlug);
+    const variantIdentity = safeString(product.skuId || product.productId || product.productSlug);
+    const transformedProductId = product.isVariant === true
+        ? `${variantIdentity}${subCatSuffix}${quantitySuffix ? `__${quantitySuffix}` : ''}`
+        : `${baseIdentity}${subCatSuffix}`;
 
-    return {
-        category: masterCategory, // Request: 'category' (was masterCategory)
+    const comboOf = Array.isArray(product.comboOf)
+        ? product.comboOf
+            .map((entry) => {
+                const rawId = safeString(entry?.productId || entry);
+                if (rawId === 'N/A') {
+                    return 'N/A';
+                }
+                const entryQuantitySuffix = slugifySuffixPart(entry?.quantity || '');
+                return `${rawId}${subCatSuffix}${entryQuantitySuffix ? `__${entryQuantitySuffix}` : ''}`;
+            })
+            .filter((entry) => entry !== 'N/A')
+        : [];
+
+    const transformed = {
+        category: masterCategory,
         categoryUrl: safeString(categoryUrl),
         officialCategory: officialCategory,
         officialSubCategory: officialSubCategory,
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(product.productId || product.skuId || product.productSlug) + subCatSuffix,
+        comboGroupId: safeString(product.baseProductId || product.productId || product.skuId || product.productSlug),
+        productId: transformedProductId,
         skuId: safeString(product.skuId || product.productSlug || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.productName),
         productImage: safeString(product.productImage),
-        productWeight: safeString(product.quantity || 'N/A'), // Fallback to quantity
-        quantity: safeString(product.quantity || 'N/A'), // Maps to pack size usually
-        combo: safeString(product.combo || 'N/A'),
+        productWeight: safeString(product.quantity || 'N/A'),
+        quantity: safeString(product.quantity || 'N/A'),
+        combo: normalizeCount(product.combo, comboOf.length + 1),
         deliveryTime: safeString(product.deliveryTime),
         isAd: !!product.isAd,
+        isVariant: product.isVariant === true,
         rating: safeString(product.rating),
         currentPrice: safeString(product.currentPrice),
         originalPrice: safeString(product.originalPrice),
@@ -79,6 +109,12 @@ export function transformZeptoProduct(product, categoryUrl, categoryName, subCat
         isOutOfStock: !!product.isOutOfStock,
         productUrl: safeString(product.productUrl)
     };
+
+    if (!transformed.isVariant) {
+        transformed.comboOf = comboOf;
+    }
+
+    return transformed;
 }
 
 /**

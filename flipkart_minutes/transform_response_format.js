@@ -14,6 +14,29 @@ function isUsefulValue(value) {
     return value !== null && value !== undefined && value !== '' && value !== 'N/A';
 }
 
+function slugifySuffixPart(value) {
+    return String(value || '')
+        .trim()
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '');
+}
+
+function buildSubCategorySuffix(officialSubCategory) {
+    const slug = slugifySuffixPart(officialSubCategory);
+    return slug ? `__${slug}` : '';
+}
+
+function buildWeightSuffix(productWeight) {
+    const slug = slugifySuffixPart(productWeight);
+    return slug ? `__${slug}` : '';
+}
+
+function normalizeComboCount(value, fallback = 0) {
+    const parsed = Number.parseInt(String(value ?? '').trim(), 10);
+    return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
 function extractCanonicalProductId(product) {
     const productUrl = String(product?.productUrl || '').trim();
     if (productUrl) {
@@ -49,8 +72,15 @@ function buildDeduplicationKey(product) {
     const categoryUrl = String(product?.categoryUrl || 'unknown_category').trim();
     const productName = String(product?.productName || '').trim().toLowerCase();
     const productUrl = String(product?.productUrl || '').trim().toLowerCase();
+    const variantWeightKey = product?.isVariant
+        ? slugifySuffixPart(product?.productWeight || product?.quantity || '')
+        : '';
 
-    return canonicalId || productUrl || `${productName}|${categoryUrl}`;
+    if (canonicalId) {
+        return variantWeightKey ? `${canonicalId}|${variantWeightKey}` : canonicalId;
+    }
+
+    return productUrl || `${productName}|${categoryUrl}`;
 }
 
 function scoreProductQuality(product) {
@@ -84,12 +114,16 @@ function mergeDuplicateProducts(existing, incoming) {
         'productWeight',
         'quantity',
         'combo',
+        'comboOf',
+        'comboOfRefs',
         'deliveryTime',
         'rating',
         'currentPrice',
         'originalPrice',
         'discountPercentage',
         'productUrl',
+        'parentProductId',
+        'isVariant',
         'officialCategory',
         'officialSubCategory',
         'category',
@@ -104,6 +138,35 @@ function mergeDuplicateProducts(existing, incoming) {
 
     merged.isAd = Boolean(existing?.isAd || incoming?.isAd);
     merged.inStock = Boolean(existing?.inStock || incoming?.inStock);
+    merged.isVariant = existing?.isVariant === false || incoming?.isVariant === false
+        ? false
+        : Boolean(existing?.isVariant || incoming?.isVariant);
+    merged.combo = Math.max(normalizeComboCount(existing?.combo), normalizeComboCount(incoming?.combo), 1);
+
+    const mergeUniqueEntries = (left, right, keyBuilder) => {
+        const combined = [];
+        const seen = new Set();
+
+        for (const source of [left, right]) {
+            if (!Array.isArray(source)) continue;
+            source.forEach((entry) => {
+                if (!entry) return;
+                const key = keyBuilder(entry);
+                if (!key || seen.has(key)) return;
+                seen.add(key);
+                combined.push(entry);
+            });
+        }
+
+        return combined;
+    };
+
+    merged.comboOf = mergeUniqueEntries(existing?.comboOf, incoming?.comboOf, (entry) => String(entry));
+    merged.comboOfRefs = mergeUniqueEntries(
+        existing?.comboOfRefs,
+        incoming?.comboOfRefs,
+        (entry) => `${entry?.productId || ''}|${entry?.productWeight || ''}`
+    );
 
     return merged;
 }
@@ -146,13 +209,26 @@ export function transformFlipkartProduct(product, categoryUrl, categoryName, sub
         return null;
     }
 
-    const subCatSuffix = (officialSubCategory && officialSubCategory !== 'N/A')
-        ? '__' + officialSubCategory.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-        : '';
-
     const canonicalProductId = extractCanonicalProductId(product) || safeString(product.productId);
+    const subCatSuffix = buildSubCategorySuffix(officialSubCategory);
+    const variantWeight = safeString(product.productWeight || product.quantity || 'N/A');
+    const isVariant = !!product.isVariant;
+    const variantWeightSuffix = isVariant ? buildWeightSuffix(variantWeight) : '';
+    const transformedProductId = safeString(canonicalProductId) + subCatSuffix + variantWeightSuffix;
+    const comboOfRefs = Array.isArray(product.comboOfRefs) ? product.comboOfRefs : [];
+    const comboOf = comboOfRefs
+        .map((entry) => {
+            const rawVariantId = extractCanonicalProductId(entry) || safeString(entry?.productId || '');
+            if (!rawVariantId || rawVariantId === 'N/A') {
+                return '';
+            }
 
-    return {
+            return safeString(rawVariantId) + subCatSuffix + buildWeightSuffix(entry?.productWeight || entry?.quantity || '');
+        })
+        .filter(Boolean);
+    const comboCount = normalizeComboCount(product.combo, comboOf.length + 1 || 1);
+
+    const transformedProduct = {
         category: masterCategory,
         categoryUrl: safeString(categoryUrl),
         officialCategory: officialCategory,
@@ -160,16 +236,17 @@ export function transformFlipkartProduct(product, categoryUrl, categoryName, sub
         pincode: safeString(pincode),
         platform: PLATFORM_NAME,
         scrapedAt: product.scrapedAt || scrapedAt,
-        productId: safeString(canonicalProductId) + subCatSuffix,
+        productId: transformedProductId,
         skuId: safeString(product.skuId || 'N/A'),
         brand: safeString(product.brand || 'N/A'),
         productName: safeString(product.productName),
         productImage: safeString(product.productImage ? product.productImage.replace(/{@width}/g, '400').replace(/{@height}/g, '400') : ''),
-        productWeight: safeString(product.productWeight || product.quantity || 'N/A'),
+        productWeight: variantWeight,
         quantity: safeString(product.quantity || 'N/A'),
-        combo: safeString(product.combo || 'N/A'),
+        combo: comboCount,
         deliveryTime: safeString(product.deliveryTime),
         isAd: !!product.isAd,
+        isVariant: isVariant,
         rating: safeString(product.rating),
         currentPrice: safeString(product.currentPrice),
         originalPrice: safeString(product.originalPrice),
@@ -178,6 +255,12 @@ export function transformFlipkartProduct(product, categoryUrl, categoryName, sub
         inStock: product.inStock !== undefined ? !!product.inStock : true,
         productUrl: safeString(product.productUrl)
     };
+
+    if (!isVariant) {
+        transformedProduct.comboOf = comboOf;
+    }
+
+    return transformedProduct;
 }
 
 /**

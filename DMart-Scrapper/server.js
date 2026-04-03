@@ -141,42 +141,64 @@ async function scrapeDMart(pincode, urls, maxConcurrentTabs = 1) {
 
                     // Raw format expected by transform_response_format.js
                     // Mirrors the working dmart_bulk_scraper.js field mapping exactly
-                    const rawItems = productsList.map(item => {
-                        const sku = item.sKUs && item.sKUs.length > 0 ? item.sKUs[0] : {};
-
-                        // Build image URL exactly as working bulk scraper does
-                        let productImage = '';
-                        if (sku.imageKey) {
-                            productImage = `https://cdn.dmart.in/images/products/${sku.imageKey}_5_P.jpg`;
-                        }
-
-                        // Build product URL exactly as working bulk scraper does
-                        const productUrl = item.seo_token_ntk
-                            ? `https://www.dmart.in/product/${item.seo_token_ntk}?selectedProd=${sku.skuUniqueID}`
-                            : '';
-
-                        return {
-                            ...item,
-                            // Direct fields used by transformer
-                            productImage,           // transformer checks product.productImage first
-                            brand: item.manufacturer || '',  // Brand/manufacturer from API
-                            productUrl,             // transformer checks product.productUrl first
-                            // SKU-level fields
-                            sku: sku.skuUniqueID || 'N/A',
-                            skuId: sku.skuUniqueID || 'N/A',
-                            price: sku.priceSALE ? parseFloat(sku.priceSALE) : 0,
-                            originalPrice: sku.priceMRP ? parseFloat(sku.priceMRP) : 0,
-                            packSize: sku.variantTextValue || '',
-                            quantity: sku.variantTextValue || '',
-                            invType: sku.invType,
-                            imageKey: sku.imageKey || '',
-                            // Product-level fields
-                            productId: item.productId,
-                            productName: item.name,
-                            isOutOfStock: sku.invType !== 'A',
-                            categoryUrl: url,
-                            discountPercentage: sku.savingPercentage || 0
+                    const rawItems = productsList.flatMap(item => {
+                        const skuList = Array.isArray(item.sKUs) && item.sKUs.length > 0 ? item.sKUs : [{}];
+                        const defaultSku = skuList.find((sku) => String(sku?.defaultVariant || '').toUpperCase() === 'Y') || skuList[0] || {};
+                        const comboSize = Math.max(1, skuList.length);
+                        const familyProductId = String(item.productId || '').trim();
+                        const buildWeightSuffix = (value) => String(value || '')
+                            .trim()
+                            .toLowerCase()
+                            .replace(/[^a-z0-9]+/g, '-')
+                            .replace(/^-+|-+$/g, '');
+                        const buildVariantProductId = (sku, fallbackSkuId = '') => {
+                            const baseId = String(sku?.skuUniqueID || fallbackSkuId || familyProductId || '').trim();
+                            const weightSuffix = buildWeightSuffix(sku?.variantTextValue || '');
+                            return weightSuffix ? `${baseId}__${weightSuffix}` : baseId;
                         };
+
+                        return skuList.map((sku) => {
+                            let productImage = '';
+                            if (sku.imageKey) {
+                                productImage = `https://cdn.dmart.in/images/products/${sku.imageKey}_5_P.jpg`;
+                            }
+
+                            const productUrl = item.seo_token_ntk
+                                ? `https://www.dmart.in/product/${item.seo_token_ntk}?selectedProd=${sku.skuUniqueID}`
+                                : '';
+
+                            const isPrimarySku = sku === defaultSku;
+                            const comboOf = isPrimarySku
+                                ? skuList
+                                    .filter((entry) => entry && entry !== defaultSku)
+                                    .map((entry) => buildVariantProductId(entry, entry?.skuUniqueID))
+                                    .filter(Boolean)
+                                : undefined;
+
+                            return {
+                                ...item,
+                                productImage,
+                                brand: item.manufacturer || item.brand || '',
+                                productUrl,
+                                sku: sku.skuUniqueID || 'N/A',
+                                skuId: sku.skuUniqueID || 'N/A',
+                                price: sku.priceSALE ? parseFloat(sku.priceSALE) : 0,
+                                originalPrice: sku.priceMRP ? parseFloat(sku.priceMRP) : 0,
+                                packSize: sku.variantTextValue || '',
+                                quantity: sku.variantTextValue || '',
+                                invType: sku.invType,
+                                imageKey: sku.imageKey || '',
+                                productId: isPrimarySku ? familyProductId : buildVariantProductId(sku, sku.skuUniqueID),
+                                parentProductId: familyProductId || 'N/A',
+                                productName: item.name,
+                                isOutOfStock: sku.invType !== 'A',
+                                categoryUrl: url,
+                                discountPercentage: sku.savingPercentage || 0,
+                                combo: comboSize,
+                                isVariant: !isPrimarySku,
+                                comboOf
+                            };
+                        });
                     });
 
                     console.log(`  -> Found ${rawItems.length} products on page ${currentPage}.`);

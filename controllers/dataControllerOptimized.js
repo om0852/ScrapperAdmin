@@ -36,6 +36,27 @@ const toNum = (val) => {
   return isNaN(n) ? null : n;
 };
 
+const normalizeGroupPrimaryName = (name) => {
+  if (!name) return name;
+  return String(name).replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
+};
+
+const normalizeBrandName = (name) => {
+  if (!name) return null;
+  const cleaned = String(name)
+    .replace(/-/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .toLowerCase();
+  if (!cleaned) return null;
+  return cleaned.replace(/\b\w/g, char => char.toUpperCase());
+};
+
+const getBrandId = (brandName) => {
+  if (!brandName) return 'N/A';
+  return brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+};
+
 /**
  * Normalize platform name to enum value
  */
@@ -139,12 +160,14 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   const productIdMap = new Map(); // Track product ID → group mapping
 
   // Fetch all brands and snapshots we need in ONE query each
-  const allBrandNames = uniqueProducts
-    .map(p => (p.brand || '').trim() || p.name?.split(' ')[0] || '')
-    .filter(Boolean);
+  const allBrandIds = [...new Set(uniqueProducts
+    .map(p => normalizeBrandName((p.brand || '').trim() || p.name?.split(' ')[0] || ''))
+    .filter(Boolean)
+    .map(getBrandId)
+  )];
 
-  const existingBrands = await Brand.find({ brandName: { $in: allBrandNames } }).lean();
-  const brandMap = new Map(existingBrands.map(b => [b.brandName, b]));
+  const existingBrands = await Brand.find({ brandId: { $in: allBrandIds } }).lean();
+  const brandMap = new Map(existingBrands.map(b => [b.brandId, b]));
 
   // Fetch all last snapshots for these products
   const productIds = uniqueProducts.map(p => buildProductIdWithSuffix(p));
@@ -167,16 +190,19 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
     const discountPercentage = toNum(prod.discountPercent || prod.discountPercentage);
 
     // ─ Brand handling with caching
-    let brandName = (prod.brand || '').trim() || prod.name?.split(' ')[0] || null;
-    if (brandName) {
-      const brandId = brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const rawBrandName = (prod.brand || '').trim() || prod.name?.split(' ')[0] || null;
+    let brandName = null;
+    if (rawBrandName) {
+      const normalizedBrandName = normalizeBrandName(rawBrandName);
+      const brandId = getBrandId(normalizedBrandName);
 
       // Check local map first, then Redis cache
-      if (!brandMap.has(brandName)) {
+      if (!brandMap.has(brandId)) {
         const cachedBrand = await redisCache.getBrand(brandId);
         if (cachedBrand) {
-          brandMap.set(brandName, cachedBrand);
+          brandMap.set(brandId, cachedBrand);
         } else {
+          brandName = normalizedBrandName;
           // Queue for batch upsert
           brandsToUpsert.push({
             updateOne: {
@@ -185,7 +211,12 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
               upsert: true
             }
           });
+          brandMap.set(brandId, { brandId, brandName });
         }
+      }
+
+      if (!brandName) {
+        brandName = brandMap.get(brandId)?.brandName || normalizedBrandName;
       }
     }
 
@@ -290,51 +321,74 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   }
 
   // ═══════════════════════════════════════════════════════════════════
-  // STEP 8: PROCESS GROUPINGS IN PARALLEL BATCHES
+  // STEP 8: PROCESS GROUPINGS (LOCAL GROUPING BY BASE ID)
   // ═══════════════════════════════════════════════════════════════════
   if (productIdMap.size > 0) {
-    const groupingOps = [];
+    const productsByBaseId = new Map();
 
+    // Group items from the current batch by their baseProductId
     for (const [fullProductId, prodInfo] of productIdMap.entries()) {
       const baseProductId = String(fullProductId).replace(/__.*$/, '');
+      if (!productsByBaseId.has(baseProductId)) {
+        productsByBaseId.set(baseProductId, {
+          productName: prodInfo.productName,
+          productImage: prodInfo.productImage,
+          productWeight: prodInfo.productWeight,
+          brand: prodInfo.brand,
+          category: prodInfo.category,
+          products: []
+        });
+      }
+      productsByBaseId.get(baseProductId).products.push({
+        platform: prodInfo.platform,
+        productId: fullProductId
+      });
+    }
 
-      // Try to find existing group
+    const groupingOps = [];
+
+    // Process each baseProductId group
+    for (const [baseProductId, prodGroup] of productsByBaseId.entries()) {
+      // Try to find existing group using a regex that matches baseId with optional suffix
+      // Escape special characters in baseProductId for regex safety
+      const escapedBaseId = baseProductId.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      
       const existingGroup = await ProductGrouping.findOne({
-        category: prodInfo.category,
-        "products.productId": { $regex: `^${baseProductId}(__[a-z0-9-]*)?$` }
+        category: prodGroup.category,
+        "products.productId": { $regex: `^${escapedBaseId}(__[a-z0-9-]*)?$` }
       });
 
       if (existingGroup) {
-        // Add to existing group
-        const productExists = existingGroup.products.some(
-          p => p.productId === fullProductId && p.platform === normalizedPlatform
+        // Filter out products that are already in the group to avoid duplicates
+        const newProductsToAdd = prodGroup.products.filter(newProd => 
+          !existingGroup.products.some(p => p.productId === newProd.productId && p.platform === newProd.platform)
         );
 
-        if (!productExists) {
+        if (newProductsToAdd.length > 0) {
           groupingOps.push({
             updateOne: {
               filter: { _id: existingGroup._id },
               update: {
-                $push: { products: { platform: normalizedPlatform, productId: fullProductId } },
-                $inc: { totalProducts: 1 }
+                $push: { products: { $each: newProductsToAdd } },
+                $inc: { totalProducts: newProductsToAdd.length }
               }
             }
           });
         }
       } else {
-        // Create new group
+        // No group found in DB - create ONE group for all products with this baseId in the batch
         groupingOps.push({
           insertOne: {
             document: {
               groupingId: new mongoose.Types.ObjectId().toString(),
-              category: prodInfo.category,
-              primaryName: prodInfo.productName,
-              primaryImage: prodInfo.productImage,
-              primaryWeight: prodInfo.productWeight,
-              brand: prodInfo.brand || '',
-              brandId: (prodInfo.brand || '').toLowerCase().replace(/[^a-z0-9]/g, '-') || 'N/A',
-              products: [{ platform: normalizedPlatform, productId: fullProductId }],
-              totalProducts: 1
+              category: prodGroup.category,
+              primaryName: normalizeGroupPrimaryName(prodGroup.productName),
+              primaryImage: prodGroup.productImage,
+              primaryWeight: prodGroup.productWeight,
+              brand: prodGroup.brand || '',
+              brandId: getBrandId(prodGroup.brand),
+              products: prodGroup.products,
+              totalProducts: prodGroup.products.length
             }
           }
         });
@@ -344,12 +398,12 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
 
     // Execute grouping operations in batches
     if (groupingOps.length > 0) {
-      const BATCH_SIZE = 50; // Process in chunks to avoid timeout
+      const BATCH_SIZE = 50; 
       for (let i = 0; i < groupingOps.length; i += BATCH_SIZE) {
         const batch = groupingOps.slice(i, i + BATCH_SIZE);
         try {
           await ProductGrouping.bulkWrite(batch, { ordered: false });
-          console.log(`✅ Processed grouping batch ${Math.floor(i / BATCH_SIZE) + 1}`);
+          console.log(`✅ Processed grouping batch ${Math.floor(i / BATCH_SIZE) + 1} (${batch.length} operations)`);
         } catch (err) {
           console.warn(`⚠️ Grouping batch error:`, err.message);
         }

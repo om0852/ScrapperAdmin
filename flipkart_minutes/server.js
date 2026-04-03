@@ -81,6 +81,7 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
 
         // Flatten results from multiple URLs into one list
         const allProducts = results.flat();
+        const dedupedRawProducts = deduplicateRawProducts ? deduplicateRawProducts(allProducts) : allProducts;
         console.log(`[API] Raw Products Scraped: ${allProducts.length}`);
 
         // === APPLY STANDARDIZED FORMAT ===
@@ -88,7 +89,7 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
 
         if (deduplicateRawProducts && transformFlipkartProduct) {
             // 1. Transform and Enrich first (suffix gets added here)
-            const transformedAll = allProducts.map((product, index) => {
+            const transformedAll = dedupedRawProducts.map((product, index) => {
                 const productCategoryUrl = product.categoryUrl || 'N/A';
                 const officialCategory = product.categoryName || 'Unknown';
 
@@ -129,7 +130,7 @@ app.post('/scrape-flipkart-minutes', async (req, res) => {
                 p.ranking = nextRank;
             });
 
-            console.log(`[API] Raw: ${allProducts.length}, After transform+dedup: ${productsToReturn.length} unique products`);
+            console.log(`[API] Raw: ${allProducts.length}, After raw-dedup: ${dedupedRawProducts.length}, After transform+dedup: ${productsToReturn.length} unique products`);
         
         // === SAVE TRANSFORMED API DUMP ===
         const transformedDumpFilename = saveApiDump(pincode, targetUrls.join('|'), productsToReturn, 'transformed_response');

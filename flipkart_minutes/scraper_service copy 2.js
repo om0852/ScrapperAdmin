@@ -38,7 +38,6 @@ const SCRAPER_BROWSER_ARGS = [
     '--no-first-run',
     '--no-default-browser-check'
 ];
-
 class FlipkartScrapeSignalError extends Error {
     constructor(code, message, details = {}) {
         super(message);
