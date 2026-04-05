@@ -94,6 +94,25 @@ function normalizePincode(pincode) {
     return String(pincode || '').trim();
 }
 
+function extractActiveSessionPincode(storageState) {
+    if (!storageState || !Array.isArray(storageState.origins)) {
+        return '';
+    }
+
+    for (const originEntry of storageState.origins) {
+        if (!originEntry || !Array.isArray(originEntry.localStorage)) {
+            continue;
+        }
+
+        const myPinEntry = originEntry.localStorage.find((item) => item && item.name === 'mypin' && item.value);
+        if (myPinEntry) {
+            return normalizePincode(myPinEntry.value);
+        }
+    }
+
+    return '';
+}
+
 let endpointPreferenceMap = loadEndpointPreferenceMap();
 
 function getPinnedApiEndpoint(pincode) {
@@ -408,10 +427,9 @@ async function setupSession(pincode, options = {}) {
         await page.waitForTimeout(2000);
 
         // Check for Serviceability Error (Try again / Not available)
-        const unserviceableMsg = page.getByText('Not serviceable', { exact: false }).first();
-        const tryAgainBtn = page.getByRole('button', { name: /Try Again|Retry/i }).first();
+        const unserviceableMsg = page.getByText(/Not serviceable|not available at this location|unable to service/i).first();
 
-        if (await unserviceableMsg.isVisible() || await tryAgainBtn.isVisible()) {
+        if (await unserviceableMsg.isVisible()) {
             log(`[Setup] Location ${pincode} appears to be UNSERVICEABLE. Aborting setup.`, 'ERROR');
             throw new Error(`Location ${pincode} is not serviceable on Flipkart Minutes.`);
         }
@@ -460,9 +478,12 @@ async function setupSession(pincode, options = {}) {
 
 async function scrapeUrlDirectApiInContext(context, url, pincode) {
     const page = await context.newPage();
+    const storageState = await context.storageState();
+    const activeSessionPincode = extractActiveSessionPincode(storageState);
+    const effectivePincode = activeSessionPincode || normalizePincode(pincode);
     const sessionCookies = await context.cookies();
     const dcId = extractDcIdFromCookies(sessionCookies);
-    const pinnedEndpoint = getPinnedApiEndpoint(pincode);
+    const pinnedEndpoint = getPinnedApiEndpoint(effectivePincode);
     const API_PATH = '/api/4/page/fetch';
     const DEFAULT_X_USER_AGENT =
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36 FKUA/msite/0.0.4/msite/Mobile';
@@ -786,7 +807,7 @@ async function scrapeUrlDirectApiInContext(context, url, pincode) {
             const result = await fetchPageWithRetry(candidateUrl, headers, requestBody);
             if (result.ok && result.data) {
                 requestUrl = resolveApiEndpointUrl(result.requestUrl || candidateUrl) || candidateUrl;
-                rememberApiEndpointForPin(pincode, requestUrl);
+                rememberApiEndpointForPin(effectivePincode, requestUrl);
                 return result;
             }
 
@@ -796,7 +817,7 @@ async function scrapeUrlDirectApiInContext(context, url, pincode) {
                 const nextHost = new URL(candidateUrls[index + 1]).host;
                 if (isDcChangeResult(result)) {
                     requestUrl = candidateUrls[index + 1];
-                    rememberApiEndpointForPin(pincode, requestUrl);
+                    rememberApiEndpointForPin(effectivePincode, requestUrl);
                 }
                 log(`[${url}] ${phaseLabel} failed on ${fromHost} (${result.status || 'network'}). Retrying on ${nextHost}...`, 'WARN');
             }
@@ -888,7 +909,7 @@ async function scrapeUrlDirectApiInContext(context, url, pincode) {
         const capturedTemplatePageNumber = getPageNumber(capturedRequestBody);
         requestUrl = normalizeRequestUrl(capturedRequestUrl || API_ENDPOINT_PRIMARY);
         const headers = buildDirectHeaders(capturedHeaders);
-        let requestBody = sanitizeCapturedRequestBody(capturedRequestBody, url, pincode);
+        let requestBody = sanitizeCapturedRequestBody(capturedRequestBody, url, effectivePincode);
 
         if (capturedTemplatePageNumber > 1) {
             log(`[${url}] Captured API template started at page ${capturedTemplatePageNumber}. Resetting replay to page 1.`, 'INFO');
@@ -1022,9 +1043,10 @@ async function scrapeUrlDirectApiInContext(context, url, pincode) {
             {
                 metadata: {
                     pincode,
+                    effectivePincode,
                     sourceUrl: url,
                     endpoint: requestUrl,
-                    pinnedEndpoint: getPinnedApiEndpoint(pincode) || null,
+                    pinnedEndpoint: getPinnedApiEndpoint(effectivePincode) || null,
                     mode: 'direct_api_pagination',
                     responsesCaptured: collectedData.length,
                     productsExtracted: finalProducts.length,
@@ -1463,6 +1485,7 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
         let sharedRepairPromise = null;
         let sharedRepairAttempted = false;
         let sharedRepairSucceeded = false;
+        let sharedSessionVersion = 0;
 
         log(`Starting parallel scrape for ${urls.length} URLs with Pincode: ${pincode}`, 'INFO');
         log(`Processing ${urls.length} URLs with concurrency ${concurrencyLimit}...`, 'INFO');
@@ -1480,6 +1503,9 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
             sharedRepairPromise = repairLocationSession(sessionFile, pincode, reason, { headless })
                 .then((fixed) => {
                     sharedRepairSucceeded = fixed;
+                    if (fixed) {
+                        sharedSessionVersion += 1;
+                    }
                     return fixed;
                 })
                 .finally(() => {
@@ -1491,9 +1517,11 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
 
         const workers = Array(Math.min(urls.length, concurrencyLimit)).fill(null).map(async () => {
             let workerBrowser = null;
+            let workerSessionVersion = -1;
 
             const ensureBrowser = async () => {
-                if (!workerBrowser || !workerBrowser.isConnected()) {
+                const needsFreshBrowser = workerSessionVersion !== sharedSessionVersion;
+                if (!workerBrowser || !workerBrowser.isConnected() || needsFreshBrowser) {
                     if (workerBrowser) {
                         try { await workerBrowser.close(); } catch (_) {}
                     }
@@ -1504,6 +1532,7 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
                     workerBrowser.on('disconnected', () => {
                         log('DEBUG: Worker browser disconnected!', 'WARN');
                     });
+                    workerSessionVersion = sharedSessionVersion;
                 }
 
                 return workerBrowser;
@@ -1519,7 +1548,7 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
                 let attempts = 0;
                 let success = false;
                 let products = [];
-                const maxAttempts = 2;
+                const maxAttempts = 3;
 
                 while (attempts < maxAttempts && !success) {
                     attempts += 1;
@@ -1545,15 +1574,27 @@ async function scrapeMultiple(urls, pincode, maxConcurrentTabs, headless = true)
                             if (error instanceof FlipkartScrapeSignalError && error.code === 'LOCATION_NOT_SET') {
                                 log(error.message, 'WARN');
                                 if (attempts < maxAttempts) {
-                                    await ensureLocationRepairedOnce(`location gate detected from ${url}`);
+                                    const repaired = await ensureLocationRepairedOnce(`location gate detected from ${url}`);
+                                    if (repaired && workerBrowser) {
+                                        try { await workerBrowser.close(); } catch (_) {}
+                                        workerBrowser = null;
+                                    }
                                 }
                             } else if (error instanceof FlipkartScrapeSignalError && error.code === 'DC_CHANGE') {
                                 log(error.message, 'WARN');
                                 if (attempts < maxAttempts) {
                                     if (sharedRepairSucceeded || sharedRepairAttempted) {
                                         log(`[${url}] DC changed after session refresh. Retrying with the newest saved session...`, 'INFO');
+                                        if (workerBrowser) {
+                                            try { await workerBrowser.close(); } catch (_) {}
+                                            workerBrowser = null;
+                                        }
                                     } else {
-                                        await ensureLocationRepairedOnce(`DC change detected from ${url}`);
+                                        const repaired = await ensureLocationRepairedOnce(`DC change detected from ${url}`);
+                                        if (repaired && workerBrowser) {
+                                            try { await workerBrowser.close(); } catch (_) {}
+                                            workerBrowser = null;
+                                        }
                                     }
                                 }
                             } else {
@@ -1771,10 +1812,9 @@ async function ensureLocation(page, pincode) {
             await page.waitForTimeout(2000);
 
             // Check for Serviceability Error (Try again / Not available)
-            const unserviceableMsg = page.getByText('Not serviceable', { exact: false }).first();
-            const tryAgainBtn = page.getByRole('button', { name: /Try Again|Retry/i }).first();
+            const unserviceableMsg = page.getByText(/Not serviceable|not available at this location|unable to service/i).first();
 
-            if (await unserviceableMsg.isVisible() || await tryAgainBtn.isVisible()) {
+            if (await unserviceableMsg.isVisible()) {
                 log(`Location ${pincode} appears to be UNSERVICEABLE. Aborting.`, 'ERROR');
                 return false;
             }

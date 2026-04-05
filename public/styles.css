@@ -577,6 +577,175 @@ body {
     background: linear-gradient(135deg, var(--primary), #13d4a0);
 }
 
+/* Manual Ingest Progress */
+.ingest-progress-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(19, 236, 164, 0.18);
+    background:
+        radial-gradient(circle at top right, rgba(19, 236, 164, 0.12), transparent 35%),
+        linear-gradient(180deg, rgba(11, 17, 15, 0.9), rgba(22, 34, 30, 0.92));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.02), 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.ingest-progress-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.ingest-progress-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(19, 236, 164, 0.92);
+    margin-bottom: 0.4rem;
+}
+
+.ingest-progress-file {
+    font-size: 0.98rem;
+    font-weight: 600;
+    color: var(--text-main);
+    word-break: break-word;
+}
+
+.ingest-status-badge {
+    padding: 0.45rem 0.8rem;
+    border-radius: var(--radius-full);
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border: 1px solid transparent;
+    white-space: nowrap;
+}
+
+.ingest-status-badge.idle {
+    color: var(--text-muted);
+    background: rgba(148, 163, 184, 0.08);
+    border-color: rgba(148, 163, 184, 0.18);
+}
+
+.ingest-status-badge.running {
+    color: var(--color-info);
+    background: rgba(59, 130, 246, 0.12);
+    border-color: rgba(59, 130, 246, 0.28);
+}
+
+.ingest-status-badge.success {
+    color: var(--color-success);
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.28);
+}
+
+.ingest-status-badge.warning {
+    color: var(--color-warning);
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.28);
+}
+
+.ingest-status-badge.error {
+    color: var(--color-danger);
+    background: rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.28);
+}
+
+.ingest-progress-stats {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.8rem;
+}
+
+.ingest-progress-stat {
+    padding: 0.9rem 1rem;
+    border-radius: var(--radius-lg);
+    background: rgba(11, 17, 15, 0.46);
+    border: 1px solid rgba(40, 57, 51, 0.9);
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.ingest-progress-stat span {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.ingest-progress-stat strong {
+    font-size: 1.1rem;
+    color: var(--text-main);
+    font-family: var(--font-mono);
+}
+
+.ingest-progress-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.ingest-progress-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+.ingest-progress-bar {
+    width: 100%;
+    height: 0.8rem;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    background: rgba(11, 17, 15, 0.75);
+    border: 1px solid rgba(40, 57, 51, 0.9);
+}
+
+.ingest-progress-bar.secondary {
+    height: 0.65rem;
+}
+
+.ingest-progress-fill {
+    width: 0%;
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg, #13eca4, #14b8a6);
+    box-shadow: 0 0 16px rgba(19, 236, 164, 0.3);
+    transition: width 0.35s ease;
+}
+
+.ingest-progress-meta {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+@media (max-width: 900px) {
+    .ingest-progress-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 640px) {
+    .ingest-progress-header,
+    .ingest-progress-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .ingest-progress-stats {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* Terminal */
 .terminal-container {
     height: 16rem;

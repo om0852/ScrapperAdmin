@@ -187,124 +187,52 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Atta%2C+Rice+and+Dal&filterId=6903b01ed2c61b000112ba37&filterName=Soya+Chunk+%26+Badi&offset=0&showAgeConsent=false&storeId=1314371&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Oil & Ghee",
-      "officalSubCategory": "All Oils",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "All",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Oils+and+Ghee&filterId=6822eeeded32000001e25aee&filterName=Sunflower+%26+Other+Oils&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&storeId=1404592&offset=0&filterName=&taxonomyType=taxonomy%205&showAgeConsent=false"
     },
     {
-      "officalCategory": "Oil & Ghee",
-      "officalSubCategory": "Ghee",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Sugar and Jaggery",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Oils+and+Ghee&filterId=6822eeeded32000001e25af0&filterName=Ghee&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693ad23e53de7a00011ff897&filterName=Sugar+and+Jaggery&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Powdered Spices",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Salt",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25afb&filterName=Powdered+Spices&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693ad23e53de7a00011ff896&filterName=Salt&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Salt",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Whole Spices",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25afc&filterName=Salt&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693ad23e53de7a00011ff898&filterName=Whole+Spices&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Sugar & Jaggery",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Ready Masala",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25afd&filterName=Sugar+and+Jaggery&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693ad23e53de7a00011ff895&filterName=Ready+Masala&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Whole Spices",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Herbs & Seasoning",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25afe&filterName=Whole+Spices&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693a7ac953de7a00011ff890&filterName=Herbs+%26+Seasoning&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Ready Masala",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Paste and Puree",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b00&filterName=Ready+Masala&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693a9dc1eb607300012621a5&filterName=Paste+and+Puree&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Paste & Puree",
+      "officialCategory": "Masalas",
+      "officialSubCategory": "Newly Added",
       "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b01&filterName=Paste+and+Puree&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Herbs & Seasoning",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b02&filterName=Herbs+%26+Seasoning&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Pickles & Chutney",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b03&filterName=Pickles+%26+Chutney&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Papad & Fryums",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b04&filterName=Papad+%26+Fryums&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Masalas",
-      "officalSubCategory": "Coconut Milk & Powder",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=6822eeeded32000001e25b05&filterName=Coconut+Milk+%26+Powder&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Mixed Dry Fruits",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b08&filterName=Mixed+Dry+Fruits&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Almonds",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b09&filterName=Almonds&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Cashews",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b0a&filterName=Cashews&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Dates",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b0b&filterName=Dates&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Pista & Walnuts",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b0d&filterName=Pista+%26+Walnuts&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Makhana & Seeds",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b0e&filterName=Makhana+and+Seeds&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Dried Fruits & Berries",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b0f&filterName=Dried+Fruits+and+Berries&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
-    },
-    {
-      "officalCategory": "Dry Fruits & Seeds Mix",
-      "officalSubCategory": "Nuts & Seeds Mix",
-      "masterCategory": "Masala, Dry Fruits & More",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Dry+Fruits+and+Seeds+Mix&filterId=6822eeeded32000001e25b10&filterName=Nuts+and+Seeds+Mix&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693a7ac953de7a00011ff891&filterName=Newly+Added&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
       "officalCategory": "Cereals & Breakfast",
@@ -902,7 +830,7 @@
       "masterCategory": "Home Needs",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Kitchen+and+Dining&filterId=6822eef009ab2e00019aa5fc&filterName=Bakeware+%26+BBQ&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Health+and+Wellness+Stores"
     },
- 
+
     {
       "officalCategory": "Books & Stationary",
       "officalSubCategory": "Pens Pencils Highlighters",
@@ -1143,7 +1071,7 @@
       "masterCategory": "Bath & Body",
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Bath+and+Body&filterId=6822eeefed32000001e25b52&filterName=Hand+wash+and+Sanitizers&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Supermarket"
     },
-   
+
     {
       "officalCategory": "Bath & Body",
       "officalSubCategory": "Conditioner",
@@ -1931,37 +1859,37 @@
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Base Tints",
-      "url": "https://www.zepto.com/cn/face/base-tints/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/d76b2bc9-4287-4c20-a6fb-153ba1919bc1"
+      "url": "https://www.zepto.com/cn/makeup-beauty/base-tints/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/d76b2bc9-4287-4c20-a6fb-153ba1919bc1"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Conceal & Correct",
-      "url": "https://www.zepto.com/cn/face/conceal-correct/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/61b246f9-9b11-4eca-aaca-51ef7afdc157"
+      "url": "https://www.zepto.com/cn/makeup-beauty/conceal-correct/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/61b246f9-9b11-4eca-aaca-51ef7afdc157"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Fix & Remove",
-      "url": "https://www.zepto.com/cn/face/fix-remove/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/5d9be0bd-9393-42cf-868e-597ede5d3db6"
+      "url": "https://www.zepto.com/cn/makeup-beauty/fix-remove/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/5d9be0bd-9393-42cf-868e-597ede5d3db6"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Powders",
-      "url": "https://www.zepto.com/cn/face/powders/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/0d778cf0-0550-46c4-8ef4-c96c35e85a98"
+      "url": "https://www.zepto.com/cn/makeup-beauty/powders/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/0d778cf0-0550-46c4-8ef4-c96c35e85a98"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Primers",
-      "url": "https://www.zepto.com/cn/face/primers/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/9e92b66f-2da0-4662-b24e-5ddbfcf8a888"
+      "url": "https://www.zepto.com/cn/makeup-beauty/primers/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/9e92b66f-2da0-4662-b24e-5ddbfcf8a888"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Lip & Cheek Tint",
-      "url": "https://www.zepto.com/cn/face/lip-cheek-tint/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/43b67c20-a53a-470a-8f42-d7e1fc35883f"
+      "url": "https://www.zepto.com/cn/makeup-beauty/lip-cheek-tint/cid/709dbfea-1df2-4817-b721-33d6ec113e3d/scid/43b67c20-a53a-470a-8f42-d7e1fc35883f"
     },
     {
       "masterCategory": "Beauty",
@@ -1973,43 +1901,43 @@
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Eye Liner",
-      "url": "https://www.zepto.com/cn/eyes/eye-liner/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/d458b0b4-3e33-43d7-8061-63e6f517645b"
+      "url": "https://www.zepto.com/cn/makeup-beauty/eye-liner/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/d458b0b4-3e33-43d7-8061-63e6f517645b"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Mascara",
-      "url": "https://www.zepto.com/cn/eyes/mascara/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/f0b374d6-144f-4638-a4eb-b1eb939927ff"
+      "url": "https://www.zepto.com/cn/makeup-beauty/mascara/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/f0b374d6-144f-4638-a4eb-b1eb939927ff"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Eye Shadow",
-      "url": "https://www.zepto.com/cn/eyes/eye-shadow/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/81528148-9507-4875-8d80-f4ec04e20f0d"
+      "url": "https://www.zepto.com/cn/makeup-beauty/eye-shadow/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/81528148-9507-4875-8d80-f4ec04e20f0d"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Eyebrow Enhancer",
-      "url": "https://www.zepto.com/cn/eyes/eyebrow-enhancer/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/8c2b7925-6450-471f-9e9a-8f6f927268c4"
+      "url": "https://www.zepto.com/cn/makeup-beauty/eyebrow-enhancer/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/8c2b7925-6450-471f-9e9a-8f6f927268c4"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Eyelash Essentials",
-      "url": "https://www.zepto.com/cn/eyes/eyelash-essentials/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/a3d91938-ebb9-42f4-8575-56a6970bdca2"
+      "url": "https://www.zepto.com/cn/makeup-beauty/eyelash-essentials/cid/7102b1f9-30d1-4069-8bc6-e4f1107544f4/scid/a3d91938-ebb9-42f4-8575-56a6970bdca2"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Liquid Lipstick",
-      "url": "https://www.zepto.com/cn/lips/liquid-lipstick/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/155e55b2-ffb8-4cda-85c4-2404cad2c862"
+      "url": "https://www.zepto.com/cn/makeup-beauty/liquid-lipstick/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/155e55b2-ffb8-4cda-85c4-2404cad2c862"
     },
     {
       "masterCategory": "Beauty",
       "officialCategory": "Makeup & Beauty",
       "officialSubCategory": "Lipsticks",
-      "url": "https://www.zepto.com/cn/lips/lipsticks/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/f9b83893-043a-4c9e-ba3c-1e1d201aead7"
+      "url": "https://www.zepto.com/cn/makeup-beauty/lipsticks/cid/cb5479b0-c11f-4f17-af34-3d1faf4b08cc/scid/f9b83893-043a-4c9e-ba3c-1e1d201aead7"
     },
     {
       "url": "https://www.zepto.com/cn/home-furnishing/crazy-deals/cid/bcabf057-0078-4a8b-9d98-cf375a924845/scid/f9305f91-6fe3-454c-8001-51fab1816353",
@@ -6517,44 +6445,42 @@
     }
   ],
   "DMart": [
-    
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Soft Drinks",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soft-drinks-aesc-soft-drinkssc2"
-  },
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Fruit Mixes",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/fruit-mixes"
-  },
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Juices",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/juices-aesc-juicessc2"
-  },
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Soda & Water",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soda---water-aesc-soda---watersc2"
-  },
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Non-Alcoholic Beer",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/non-alcoholic-beer"
-  },
-  {
-    "masterCategory": "Cold Drinks & Juices",
-    "officialCategory": "Beverages",
-    "officialSubCategory": "Energy Drinks",
-    "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/energy-drinks-aesc-energy-drinkssc2"
-  }
-,
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Soft Drinks",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soft-drinks-aesc-soft-drinkssc2"
+    },
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Fruit Mixes",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/fruit-mixes"
+    },
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Juices",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/juices-aesc-juicessc2"
+    },
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Soda & Water",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/soda---water-aesc-soda---watersc2"
+    },
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Non-Alcoholic Beer",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/non-alcoholic-beer"
+    },
+    {
+      "masterCategory": "Cold Drinks & Juices",
+      "officialCategory": "Beverages",
+      "officialSubCategory": "Energy Drinks",
+      "url": "https://www.dmart.in/category/dairy-and-beverages/beverages-aesc-beverages/energy-drinks-aesc-energy-drinkssc2"
+    },
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fruits",

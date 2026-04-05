@@ -200,6 +200,61 @@
                                         <span id="pauseIngestText">Pause</span>
                                     </button>
                                 </div>
+
+                                <div id="manualIngestProgressPanel" class="ingest-progress-panel hidden">
+                                    <div class="ingest-progress-header">
+                                        <div>
+                                            <div class="ingest-progress-title">Live Ingestion Progress</div>
+                                            <div id="manualIngestCurrentFile" class="ingest-progress-file">No active ingestion job</div>
+                                        </div>
+                                        <div id="manualIngestStatusBadge" class="ingest-status-badge idle">Idle</div>
+                                    </div>
+
+                                    <div class="ingest-progress-stats">
+                                        <div class="ingest-progress-stat">
+                                            <span>Files</span>
+                                            <strong id="manualIngestFilesStat">0 / 0</strong>
+                                        </div>
+                                        <div class="ingest-progress-stat">
+                                            <span>Inserted</span>
+                                            <strong id="manualIngestInsertedStat">0</strong>
+                                        </div>
+                                        <div class="ingest-progress-stat">
+                                            <span>New</span>
+                                            <strong id="manualIngestNewStat">0</strong>
+                                        </div>
+                                        <div class="ingest-progress-stat">
+                                            <span>Updated</span>
+                                            <strong id="manualIngestUpdatedStat">0</strong>
+                                        </div>
+                                        <div class="ingest-progress-stat">
+                                            <span>Groups</span>
+                                            <strong id="manualIngestGroupsStat">0</strong>
+                                        </div>
+                                    </div>
+
+                                    <div class="ingest-progress-group">
+                                        <div class="ingest-progress-row">
+                                            <span>Current File</span>
+                                            <span id="manualIngestProductsLabel">0 / 0 products</span>
+                                        </div>
+                                        <div class="ingest-progress-bar">
+                                            <div id="manualIngestProductsBar" class="ingest-progress-fill"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="ingest-progress-group">
+                                        <div class="ingest-progress-row">
+                                            <span>Selected Files</span>
+                                            <span id="manualIngestFilesLabel">0 / 0 files</span>
+                                        </div>
+                                        <div class="ingest-progress-bar secondary">
+                                            <div id="manualIngestFilesBar" class="ingest-progress-fill"></div>
+                                        </div>
+                                    </div>
+
+                                    <div id="manualIngestBatchMeta" class="ingest-progress-meta">Waiting to start...</div>
+                                </div>
                             </form>
                         </div>
                     </section>

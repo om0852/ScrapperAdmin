@@ -9,7 +9,6 @@ import fetch from 'node-fetch';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import dataRoutes from './routes/dataRoutes.js';
-import ProductSnapshot from './models/ProductSnapshot.js';
 
 dotenv.config();
 
@@ -18,6 +17,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 7000;
+const INGESTION_SERVICE_BASE_URL = process.env.INGESTION_SERVICE_URL || `http://127.0.0.1:${process.env.INGESTION_PORT || PORT}`;
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI)
@@ -797,6 +797,85 @@ app.get('/api/scraped-files', (req, res) => {
     if (!fs.existsSync(targetDir)) return res.json([]);
     const files = fs.readdirSync(targetDir).filter(f => f.endsWith('.json'));
     res.json(files);
+});
+
+app.post('/api/manual-ingest-v2', async (req, res) => {
+    const { category, file, dateOverride } = req.body;
+    if (!category || !file) return res.status(400).json({ error: 'Category and file required' });
+
+    await awaitResume('ingest');
+
+    const filePath = path.join(__dirname, 'scraped_data', category, file);
+    if (!fs.existsSync(filePath)) return res.status(404).json({ error: 'File not found' });
+
+    try {
+        log('INFO', 'Orchestrator', `Starting batched manual ingest job for ${file} via ${INGESTION_SERVICE_BASE_URL}`);
+
+        const ingestRes = await fetch(`${INGESTION_SERVICE_BASE_URL}/api/data/ingest-file-job`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                filePath,
+                dateOverride
+            })
+        });
+
+        if (ingestRes.ok || ingestRes.status === 202) {
+            const ingestJson = await ingestRes.json();
+            return res.status(202).json({
+                success: true,
+                file,
+                jobId: ingestJson.jobId,
+                statusEndpoint: `/api/manual-ingest-v2/status/${ingestJson.jobId}`,
+                job: ingestJson.job || null
+            });
+        }
+
+        const errStatus = ingestRes.status;
+        const isConnErr = errStatus === 503 || errStatus === 504;
+        let failureBody = { error: 'Database ingestion failed internally.' };
+
+        try {
+            failureBody = await ingestRes.json();
+        } catch (_) {
+            // Ignore non-JSON failures from the ingestion service.
+        }
+
+        if (isConnErr && !jobState.ingest.paused) {
+            jobState.ingest.paused = true;
+            log('ERROR', 'Orchestrator', `Ingestion error (Status ${errStatus}) - ingestion auto-paused for ${file}`);
+            log('WARNING', 'Orchestrator', `Waiting for resume signal via /api/job/resume?type=ingest ...`);
+        } else {
+            log('ERROR', 'Orchestrator', `Ingestion service failed with Status: ${errStatus} for ${file}`);
+        }
+
+        return res.status(errStatus).json({
+            error: failureBody.error || failureBody.message || 'Database ingestion failed internally.',
+            file: failureBody.file || file
+        });
+    } catch (err) {
+        log('ERROR', 'Orchestrator', `Manual ingest error: ${err.message}`);
+        return res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/manual-ingest-v2/status/:jobId', async (req, res) => {
+    try {
+        const ingestRes = await fetch(`${INGESTION_SERVICE_BASE_URL}/api/data/ingest-file-job/${req.params.jobId}`);
+        const responseText = await ingestRes.text();
+
+        let parsedBody = null;
+        try {
+            parsedBody = JSON.parse(responseText);
+        } catch (_) {
+            parsedBody = { error: responseText || 'Failed to read ingestion job status' };
+        }
+
+        return res.status(ingestRes.status).json(parsedBody);
+    } catch (err) {
+        log('ERROR', 'Orchestrator', `Manual ingest status error: ${err.message}`);
+        return res.status(500).json({ error: err.message });
+    }
 });
 
 app.post('/api/manual-ingest', async (req, res) => {

@@ -315,7 +315,6 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
 
             const page = await context.newPage();
             console.log(`Starting direct API scrape [Attempt ${attempt}] for: ${category.name}`);
-
             const capturedItems = [];
             const interceptedIds = new Set();
             const capturedHeaders = {};

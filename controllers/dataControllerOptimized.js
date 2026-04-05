@@ -81,6 +81,19 @@ const buildProductIdWithSuffix = (product) => {
   return fullProductId;
 };
 
+const fetchSnapshotRowsForDate = async ({ platform, pincode, category, scrapedAt }) => {
+  if (!scrapedAt) {
+    return [];
+  }
+
+  return ProductSnapshot.find({
+    platform,
+    pincode: pincode.trim(),
+    category: category.trim(),
+    scrapedAt
+  }).select({ productId: 1, _id: 1 }).lean();
+};
+
 /**
  * Process products in batch with Redis caching and bulk operations
  * ✅ 20-50x FASTER than sequential processing
@@ -89,6 +102,8 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   const startTime = Date.now();
   const decodedCategory = category.replace(/ _ /g, ' & ');
   const normalizedPlatform = normalizePlatform(platform);
+  const normalizedPincode = pincode.trim();
+  const normalizedCategory = decodedCategory.trim();
 
   if (dateOverride) {
     console.log(`⏰ Using date override: ${new Date(dateOverride).toISOString()}`);
@@ -124,6 +139,12 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   // ═══════════════════════════════════════════════════════════════════
   const rankCounters = {};
   uniqueProducts.forEach(prod => {
+    const existingRanking = Number(prod.rank ?? prod.ranking);
+    if (Number.isFinite(existingRanking) && existingRanking > 0) {
+      prod.ranking = existingRanking;
+      return;
+    }
+
     const subCat = (prod.officialSubCategory || prod.officalSubCategory || 'Unknown').trim();
     if (!rankCounters[subCat]) rankCounters[subCat] = 1;
     prod.ranking = rankCounters[subCat]++;
@@ -132,24 +153,96 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   // ═══════════════════════════════════════════════════════════════════
   // STEP 3: CACHE LATEST SNAPSHOT DATE FOR CATEGORY
   // ═══════════════════════════════════════════════════════════════════
-  const resolvedScrapedAt = dateOverride ? new Date(dateOverride) : (uniqueProducts[0]?.time || uniqueProducts[0]?.scrapedAt || new Date());
+  const resolvedScrapedAt = new Date(
+    dateOverride || uniqueProducts[0]?.time || uniqueProducts[0]?.scrapedAt || Date.now()
+  );
+
+  if (Number.isNaN(resolvedScrapedAt.getTime())) {
+    throw new Error(`Invalid scrapedAt/dateOverride provided for ${normalizedPlatform}/${normalizedCategory}`);
+  }
+
   console.log(`📅 Using scrapedAt: ${resolvedScrapedAt.toISOString()}`);
-  let latestPreviousSnapshot = await redisCache.getCategoryLatestDate(normalizedPlatform, pincode, decodedCategory);
+
+  const cachedCategoryIndex = await redisCache.getCategoryProductIndex(
+    normalizedPlatform,
+    normalizedPincode,
+    normalizedCategory
+  );
+
+  let latestKnownSnapshotDate = cachedCategoryIndex?.scrapedAt || null;
+  let latestPreviousSnapshot = null;
+  let previousProductIdSet = new Set();
+  let previousSnapshotIdMap = new Map();
+  let comparisonSource = 'none';
+
+  const applyComparisonRows = (rows, snapshotDate, source) => {
+    latestPreviousSnapshot = snapshotDate;
+    previousProductIdSet = new Set(rows.map(row => row.productId));
+    previousSnapshotIdMap = new Map(rows.map(row => [row.productId, row._id]));
+    comparisonSource = source;
+  };
+
+  if (!latestKnownSnapshotDate) {
+    const latestSnapshotDoc = await ProductSnapshot.findOne({
+      platform: normalizedPlatform,
+      pincode: normalizedPincode,
+      category: normalizedCategory
+    }).sort({ scrapedAt: -1 }).select({ scrapedAt: 1 }).lean();
+
+    if (latestSnapshotDoc?.scrapedAt) {
+      latestKnownSnapshotDate = latestSnapshotDoc.scrapedAt;
+
+      const latestSnapshotRows = await fetchSnapshotRowsForDate({
+        platform: normalizedPlatform,
+        pincode: normalizedPincode,
+        category: normalizedCategory,
+        scrapedAt: latestKnownSnapshotDate
+      });
+
+      await redisCache.setCategoryProductIndex(normalizedPlatform, normalizedPincode, normalizedCategory, {
+        scrapedAt: latestKnownSnapshotDate,
+        productIds: latestSnapshotRows.map(row => row.productId)
+      });
+      await redisCache.setCategoryLatestDate(
+        normalizedPlatform,
+        normalizedPincode,
+        normalizedCategory,
+        latestKnownSnapshotDate
+      );
+
+      if (latestKnownSnapshotDate < resolvedScrapedAt) {
+        applyComparisonRows(latestSnapshotRows, latestKnownSnapshotDate, 'db-latest-cache-prime');
+      }
+    }
+  } else if (latestKnownSnapshotDate < resolvedScrapedAt) {
+    latestPreviousSnapshot = latestKnownSnapshotDate;
+    previousProductIdSet = new Set(cachedCategoryIndex.productIds);
+    comparisonSource = 'redis-product-index';
+  }
 
   if (!latestPreviousSnapshot) {
-    // Cache miss - fetch from DB
-    const dbSnapshot = await ProductSnapshot.findOne({
+    const latestPreviousSnapshotDoc = await ProductSnapshot.findOne({
       platform: normalizedPlatform,
-      pincode: pincode.trim(),
-      category: decodedCategory.trim(),
-      scrapedAt: { $lt: new Date(resolvedScrapedAt) }
-    }).sort({ scrapedAt: -1 }).lean();
+      pincode: normalizedPincode,
+      category: normalizedCategory,
+      scrapedAt: { $lt: resolvedScrapedAt }
+    }).sort({ scrapedAt: -1 }).select({ scrapedAt: 1 }).lean();
 
-    if (dbSnapshot) {
-      latestPreviousSnapshot = dbSnapshot.scrapedAt;
-      await redisCache.setCategoryLatestDate(normalizedPlatform, pincode, decodedCategory, latestPreviousSnapshot);
+    if (latestPreviousSnapshotDoc?.scrapedAt) {
+      const previousSnapshotRows = await fetchSnapshotRowsForDate({
+        platform: normalizedPlatform,
+        pincode: normalizedPincode,
+        category: normalizedCategory,
+        scrapedAt: latestPreviousSnapshotDoc.scrapedAt
+      });
+
+      applyComparisonRows(previousSnapshotRows, latestPreviousSnapshotDoc.scrapedAt, 'db-previous-snapshot');
     }
   }
+
+  console.log(
+    `🧠 Previous snapshot source: ${comparisonSource}, snapshot: ${latestPreviousSnapshot ? latestPreviousSnapshot.toISOString() : 'none'}, ids: ${previousProductIdSet.size}`
+  );
 
   // ═══════════════════════════════════════════════════════════════════
   // STEP 4: BATCH PREPARE DATA & FETCH REQUIRED INFO
@@ -160,26 +253,25 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
   const productIdMap = new Map(); // Track product ID → group mapping
 
   // Fetch all brands and snapshots we need in ONE query each
-  const allBrandIds = [...new Set(uniqueProducts
+  const normalizedBrandNames = [...new Set(uniqueProducts
     .map(p => normalizeBrandName((p.brand || '').trim() || p.name?.split(' ')[0] || ''))
     .filter(Boolean)
-    .map(getBrandId)
   )];
 
-  const existingBrands = await Brand.find({ brandId: { $in: allBrandIds } }).lean();
-  const brandMap = new Map(existingBrands.map(b => [b.brandId, b]));
+  const allBrandIds = [...new Set(normalizedBrandNames.map(getBrandId))];
 
-  // Fetch all last snapshots for these products
-  const productIds = uniqueProducts.map(p => buildProductIdWithSuffix(p));
-  const lastSnapshots = await ProductSnapshot.find({
-    productId: { $in: productIds },
-    platform: normalizedPlatform,
-    pincode: pincode.trim(),
-    category: decodedCategory.trim(),
-    scrapedAt: latestPreviousSnapshot
+  const existingBrands = await Brand.find({
+    $or: [
+      { brandId: { $in: allBrandIds } },
+      { brandName: { $in: normalizedBrandNames } }
+    ]
   }).lean();
-
-  const snapshotMap = new Map(lastSnapshots.map(s => [s.productId, s]));
+  const brandMap = new Map(existingBrands.map(b => [b.brandId, b]));
+  const brandNameMap = new Map(
+    existingBrands
+      .filter(brand => brand?.brandName)
+      .map(brand => [String(brand.brandName).toLowerCase(), brand])
+  );
 
   // ═══════════════════════════════════════════════════════════════════
   // STEP 5: PROCESS EACH PRODUCT
@@ -195,28 +287,42 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
     if (rawBrandName) {
       const normalizedBrandName = normalizeBrandName(rawBrandName);
       const brandId = getBrandId(normalizedBrandName);
+      const existingBrandByName = brandNameMap.get(normalizedBrandName.toLowerCase());
 
       // Check local map first, then Redis cache
       if (!brandMap.has(brandId)) {
-        const cachedBrand = await redisCache.getBrand(brandId);
-        if (cachedBrand) {
-          brandMap.set(brandId, cachedBrand);
+        if (existingBrandByName) {
+          brandMap.set(brandId, existingBrandByName);
         } else {
-          brandName = normalizedBrandName;
-          // Queue for batch upsert
-          brandsToUpsert.push({
-            updateOne: {
-              filter: { brandId },
-              update: { $setOnInsert: { brandName, enabled: true } },
-              upsert: true
+          const cachedBrand = await redisCache.getBrand(brandId);
+          if (cachedBrand) {
+            brandMap.set(brandId, cachedBrand);
+            if (cachedBrand.brandName) {
+              brandNameMap.set(String(cachedBrand.brandName).toLowerCase(), cachedBrand);
             }
-          });
-          brandMap.set(brandId, { brandId, brandName });
+          } else {
+            brandName = normalizedBrandName;
+            // Queue for batch upsert
+            brandsToUpsert.push({
+              updateOne: {
+                filter: { brandId },
+                update: { $setOnInsert: { brandName, enabled: true } },
+                upsert: true
+              }
+            });
+            const pendingBrand = { brandId, brandName };
+            brandMap.set(brandId, pendingBrand);
+            brandNameMap.set(normalizedBrandName.toLowerCase(), pendingBrand);
+          }
         }
       }
 
       if (!brandName) {
         brandName = brandMap.get(brandId)?.brandName || normalizedBrandName;
+      }
+
+      if (brandName) {
+        brandNameMap.set(String(brandName).toLowerCase(), { brandId, brandName });
       }
     }
 
@@ -224,7 +330,7 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
     const fullProductId = buildProductIdWithSuffix(prod);
 
     // ─ Create snapshot document
-    const isNewProduct = !snapshotMap.has(fullProductId);
+    const isNewProduct = !previousProductIdSet.has(fullProductId);
     // ✅ Use masterCategory from categories_with_urls.json mapping
     const finalCategory = (prod.masterCategory || prod.category || decodedCategory).trim();
     const finalOfficialCategory = (prod.officialCategory || prod.officalCategory || 'N/A').trim();
@@ -235,7 +341,7 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
       categoryUrl: prod.categoryUrl || 'N/A',
       officialCategory: finalOfficialCategory,
       officialSubCategory: finalOfficialSubCategory,
-      pincode: pincode.trim(),
+      pincode: normalizedPincode,
       platform: normalizedPlatform,
       scrapedAt: new Date(resolvedScrapedAt),
       productId: fullProductId,
@@ -258,7 +364,7 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
       skuId: prod.skuId || 'N/A',
       savings: toNum(prod.savings || 0),
       new: isNewProduct,
-      lastComparedWith: snapshotMap.get(fullProductId)?._id || null
+      lastComparedWith: previousSnapshotIdMap.get(fullProductId) || null
     };
 
     snapshotsToInsert.push(snapshotDoc);
@@ -308,6 +414,33 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
         throw err;
       }
     }
+  }
+
+  const shouldRefreshLatestIndex = (() => {
+    if (!snapshotsToInsert.length) {
+      return false;
+    }
+
+    if (!latestKnownSnapshotDate) {
+      return true;
+    }
+
+    return resolvedScrapedAt >= latestKnownSnapshotDate;
+  })();
+
+  if (shouldRefreshLatestIndex) {
+    const currentProductIds = snapshotsToInsert.map(doc => doc.productId);
+
+    await redisCache.setCategoryProductIndex(normalizedPlatform, normalizedPincode, normalizedCategory, {
+      scrapedAt: resolvedScrapedAt,
+      productIds: currentProductIds
+    });
+    await redisCache.setCategoryLatestDate(
+      normalizedPlatform,
+      normalizedPincode,
+      normalizedCategory,
+      resolvedScrapedAt
+    );
   }
 
   // ═══════════════════════════════════════════════════════════════════

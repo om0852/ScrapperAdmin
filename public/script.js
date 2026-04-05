@@ -23,6 +23,200 @@ const jobControl = {
     scrapePaused: false
 };
 
+const manualIngestProgress = {
+    totalFiles: 0,
+    completedFiles: 0,
+    successCount: 0,
+    failCount: 0,
+    completedTotals: {
+        totalProducts: 0,
+        processedProducts: 0,
+        inserted: 0,
+        new: 0,
+        updated: 0,
+        newGroups: 0
+    },
+    currentJob: null,
+    status: 'idle'
+};
+
+function clampPercent(value) {
+    if (!Number.isFinite(value)) return 0;
+    return Math.max(0, Math.min(100, value));
+}
+
+function setManualIngestProgressVisible(visible) {
+    const panel = document.getElementById('manualIngestProgressPanel');
+    if (!panel) return;
+    panel.classList.toggle('hidden', !visible);
+}
+
+function resetManualIngestProgress(totalFiles) {
+    manualIngestProgress.totalFiles = totalFiles;
+    manualIngestProgress.completedFiles = 0;
+    manualIngestProgress.successCount = 0;
+    manualIngestProgress.failCount = 0;
+    manualIngestProgress.completedTotals = {
+        totalProducts: 0,
+        processedProducts: 0,
+        inserted: 0,
+        new: 0,
+        updated: 0,
+        newGroups: 0
+    };
+    manualIngestProgress.currentJob = null;
+    manualIngestProgress.status = 'running';
+    setManualIngestProgressVisible(true);
+    renderManualIngestProgress();
+}
+
+function renderManualIngestProgress() {
+    const panel = document.getElementById('manualIngestProgressPanel');
+    if (!panel) return;
+
+    const currentJob = manualIngestProgress.currentJob;
+    const totalFiles = manualIngestProgress.totalFiles;
+    const filesDone = manualIngestProgress.completedFiles;
+
+    const displayInserted = manualIngestProgress.completedTotals.inserted + (currentJob?.inserted || 0);
+    const displayNew = manualIngestProgress.completedTotals.new + (currentJob?.new || 0);
+    const displayUpdated = manualIngestProgress.completedTotals.updated + (currentJob?.updated || 0);
+    const displayGroups = manualIngestProgress.completedTotals.newGroups + (currentJob?.newGroups || 0);
+
+    const currentProcessed = Number(currentJob?.processedProducts || 0);
+    const currentTotal = Number(currentJob?.totalProducts || 0);
+    const currentBatch = Number(currentJob?.currentBatch || 0);
+    const totalBatches = Number(currentJob?.totalBatches || 0);
+
+    const filesStat = document.getElementById('manualIngestFilesStat');
+    const insertedStat = document.getElementById('manualIngestInsertedStat');
+    const newStat = document.getElementById('manualIngestNewStat');
+    const updatedStat = document.getElementById('manualIngestUpdatedStat');
+    const groupsStat = document.getElementById('manualIngestGroupsStat');
+    const currentFile = document.getElementById('manualIngestCurrentFile');
+    const statusBadge = document.getElementById('manualIngestStatusBadge');
+    const productsLabel = document.getElementById('manualIngestProductsLabel');
+    const filesLabel = document.getElementById('manualIngestFilesLabel');
+    const productsBar = document.getElementById('manualIngestProductsBar');
+    const filesBar = document.getElementById('manualIngestFilesBar');
+    const batchMeta = document.getElementById('manualIngestBatchMeta');
+
+    filesStat.textContent = `${filesDone} / ${totalFiles}`;
+    insertedStat.textContent = String(displayInserted);
+    newStat.textContent = String(displayNew);
+    updatedStat.textContent = String(displayUpdated);
+    groupsStat.textContent = String(displayGroups);
+
+    if (currentJob) {
+        currentFile.textContent = `${currentJob.fileName || 'Current file'} (${currentJob.fileIndex || filesDone + 1}/${totalFiles})`;
+        productsLabel.textContent = `${currentProcessed} / ${currentTotal || 0} products`;
+        batchMeta.textContent = totalBatches > 0
+            ? `Batch ${currentBatch}/${totalBatches} • ${currentJob.message || 'Processing'}`
+            : (currentJob.message || 'Processing');
+    } else if (manualIngestProgress.status === 'success') {
+        currentFile.textContent = 'All selected files processed successfully';
+        productsLabel.textContent = 'Completed';
+        batchMeta.textContent = `${manualIngestProgress.successCount} succeeded • ${manualIngestProgress.failCount} failed`;
+    } else if (manualIngestProgress.status === 'warning') {
+        currentFile.textContent = 'Batch completed with some failures';
+        productsLabel.textContent = 'Completed with warnings';
+        batchMeta.textContent = `${manualIngestProgress.successCount} succeeded • ${manualIngestProgress.failCount} failed`;
+    } else if (manualIngestProgress.status === 'error') {
+        currentFile.textContent = 'Current ingestion job failed';
+        productsLabel.textContent = `${currentProcessed} / ${currentTotal || 0} products`;
+        batchMeta.textContent = currentJob?.error || 'Ingestion failed';
+    } else {
+        currentFile.textContent = 'No active ingestion job';
+        productsLabel.textContent = '0 / 0 products';
+        batchMeta.textContent = 'Waiting to start...';
+    }
+
+    filesLabel.textContent = `${filesDone} / ${totalFiles} files`;
+    productsBar.style.width = `${clampPercent(currentTotal > 0 ? (currentProcessed / currentTotal) * 100 : 0)}%`;
+    filesBar.style.width = `${clampPercent(totalFiles > 0 ? (filesDone / totalFiles) * 100 : 0)}%`;
+
+    statusBadge.className = `ingest-status-badge ${manualIngestProgress.status}`;
+    statusBadge.textContent =
+        manualIngestProgress.status === 'running' ? 'Running' :
+        manualIngestProgress.status === 'success' ? 'Completed' :
+        manualIngestProgress.status === 'warning' ? 'Completed' :
+        manualIngestProgress.status === 'error' ? 'Failed' :
+        'Idle';
+}
+
+function updateManualIngestProgressFromJob(fileContext, jobStatus) {
+    manualIngestProgress.status = jobStatus.status === 'failed' ? 'error' : 'running';
+    manualIngestProgress.currentJob = {
+        ...jobStatus,
+        fileIndex: fileContext.fileIndex,
+        fileName: fileContext.fileName
+    };
+    renderManualIngestProgress();
+}
+
+function finalizeManualIngestProgress(fileContext, jobStatus, success) {
+    const stats = jobStatus?.result?.stats || jobStatus?.stats || {};
+
+    manualIngestProgress.completedFiles += 1;
+    manualIngestProgress.completedTotals.totalProducts += Number(stats.totalProducts || jobStatus?.totalProducts || 0);
+    manualIngestProgress.completedTotals.processedProducts += Number(stats.processedProducts || jobStatus?.processedProducts || 0);
+    manualIngestProgress.completedTotals.inserted += Number(stats.inserted || jobStatus?.inserted || 0);
+    manualIngestProgress.completedTotals.new += Number(stats.new || jobStatus?.new || 0);
+    manualIngestProgress.completedTotals.updated += Number(stats.updated || jobStatus?.updated || 0);
+    manualIngestProgress.completedTotals.newGroups += Number(stats.newGroups || jobStatus?.newGroups || 0);
+
+    if (success) {
+        manualIngestProgress.successCount += 1;
+    } else {
+        manualIngestProgress.failCount += 1;
+    }
+
+    manualIngestProgress.currentJob = null;
+
+    if (manualIngestProgress.completedFiles >= manualIngestProgress.totalFiles) {
+        manualIngestProgress.status = manualIngestProgress.failCount > 0 ? 'warning' : 'success';
+    } else {
+        manualIngestProgress.status = 'running';
+    }
+
+    renderManualIngestProgress();
+}
+
+async function waitForManualIngestJob(jobId, fileContext) {
+    let transientFailures = 0;
+
+    while (true) {
+        try {
+            const response = await fetch(`/api/manual-ingest-v2/status/${encodeURIComponent(jobId)}`);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || 'Failed to fetch ingestion progress');
+            }
+
+            transientFailures = 0;
+            updateManualIngestProgressFromJob(fileContext, data);
+
+            if (data.status === 'completed') {
+                return data;
+            }
+
+            if (data.status === 'failed') {
+                const jobError = new Error(data.error || data.message || 'Ingestion job failed');
+                jobError.jobStatus = data;
+                throw jobError;
+            }
+        } catch (error) {
+            transientFailures += 1;
+            if (transientFailures >= 5) {
+                throw error;
+            }
+        }
+
+        await new Promise(resolve => setTimeout(resolve, 1200));
+    }
+}
+
 // Auto-pause ingestion when network goes offline
 window.addEventListener('offline', () => {
     if (!jobControl.ingestPaused) {
@@ -482,7 +676,7 @@ function handlePlatformFilterChange(e) {
     renderManualFileCheckboxes(filteredFiles);
 }
 
-async function handleManualIngest(e) {
+async function handleManualIngestLegacy(e) {
     e.preventDefault();
 
     const category = document.getElementById('manualCategorySelect').value;
@@ -554,7 +748,7 @@ async function handleManualIngest(e) {
         addLog(`▶ [${current}/${total}] Ingesting: ${file}`, 'info');
 
         try {
-            const res = await fetch('/api/manual-ingest', {
+            const res = await fetch('/api/manual-ingest-v2', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ category, file, dateOverride })
@@ -585,6 +779,131 @@ async function handleManualIngest(e) {
     addLog(`━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`, 'info');
 
     // Clean up UI
+    jobControl.ingestPaused = false;
+    pauseBtn.style.display = 'none';
+    btn.disabled = false;
+    btn.innerHTML = originalText;
+}
+
+async function handleManualIngest(e) {
+    e.preventDefault();
+
+    const category = document.getElementById('manualCategorySelect').value;
+    const checkedNodes = document.querySelectorAll('.manual-file-cb:checked');
+    const selectedFiles = Array.from(checkedNodes).map(node => node.value);
+    const dateOverride = document.getElementById('manualDateOverride').value;
+
+    if (!category || selectedFiles.length === 0) {
+        alert('Please select both a category and at least one file.');
+        return;
+    }
+
+    const btn = document.getElementById('startManualIngestBtn');
+    const pauseBtn = document.getElementById('pauseIngestBtn');
+    btn.disabled = true;
+    const originalText = btn.innerHTML;
+
+    jobControl.ingestPaused = false;
+    setIngestPauseUI(false);
+    pauseBtn.style.display = 'inline-flex';
+
+    const total = selectedFiles.length;
+    let successCount = 0;
+    let failCount = 0;
+
+    resetManualIngestProgress(total);
+
+    addLog(`Manual ingestion queued for ${total} file${total > 1 ? 's' : ''}.`, 'info');
+
+    for (let index = 0; index < selectedFiles.length; index += 1) {
+        const file = selectedFiles[index];
+        const current = index + 1;
+        const fileContext = {
+            fileIndex: current,
+            fileName: file
+        };
+
+        if (jobControl.ingestPaused) {
+            btn.innerHTML = `Paused (${current}/${total})`;
+            addLog(`[${current}/${total}] Paused before: ${file}. Click Resume to continue.`, 'warning');
+
+            await new Promise(resolve => {
+                const interval = setInterval(async () => {
+                    if (jobControl.ingestPaused) {
+                        return;
+                    }
+
+                    try {
+                        const health = await fetch('/api/health/check').then(response => response.json());
+                        if (health.healthy) {
+                            addLog(`[${current}/${total}] Connectivity OK. Resuming ${file}.`, 'success');
+                            clearInterval(interval);
+                            resolve();
+                        } else {
+                            const reason = !health.internet ? 'No internet' : 'MongoDB offline';
+                            addLog(`[${current}/${total}] ${reason}. Waiting...`, 'warning');
+                            jobControl.ingestPaused = true;
+                            setIngestPauseUI(true);
+                        }
+                    } catch (_) {
+                        addLog(`[${current}/${total}] Server unreachable. Waiting...`, 'warning');
+                    }
+                }, 2000);
+            });
+        }
+
+        btn.innerHTML = `Processing... (${current}/${total})`;
+        addLog(`[${current}/${total}] Ingesting ${file}`, 'info');
+
+        try {
+            const startResponse = await fetch('/api/manual-ingest-v2', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ category, file, dateOverride })
+            });
+
+            const startData = await startResponse.json();
+
+            if (!startResponse.ok || !startData.success || !startData.jobId) {
+                finalizeManualIngestProgress(fileContext, startData || {}, false);
+                addLog(`[${current}/${total}] Failed to start ${file}`, 'error');
+                addLog(`Reason: ${startData.error || startData.message || 'Unknown error'}`, 'error');
+                failCount += 1;
+                continue;
+            }
+
+            updateManualIngestProgressFromJob(fileContext, startData.job || {
+                status: 'queued',
+                fileName: file,
+                processedProducts: 0,
+                totalProducts: 0,
+                inserted: 0,
+                new: 0,
+                updated: 0,
+                newGroups: 0,
+                currentBatch: 0,
+                totalBatches: 0,
+                message: 'Queued'
+            });
+
+            const finalJob = await waitForManualIngestJob(startData.jobId, fileContext);
+            const stats = finalJob.result?.stats || finalJob.stats || {};
+
+            finalizeManualIngestProgress(fileContext, finalJob, true);
+            addLog(`[${current}/${total}] Done: ${file}`, 'success');
+            addLog(`Inserted: ${stats.inserted ?? 0} | New: ${stats.new ?? 0} | Updated: ${stats.updated ?? 0} | Groups: ${stats.newGroups ?? 0}`, 'success');
+            successCount += 1;
+        } catch (error) {
+            finalizeManualIngestProgress(fileContext, error.jobStatus || manualIngestProgress.currentJob || { error: error.message }, false);
+            addLog(`[${current}/${total}] Network or job error for ${file}: ${error.message}`, 'error');
+            jobControl.ingestPaused = true;
+            setIngestPauseUI(true);
+            failCount += 1;
+        }
+    }
+
+    addLog(`Batch complete. ${successCount} succeeded, ${failCount} failed, ${total} total.`, successCount > 0 && failCount === 0 ? 'success' : 'info');
+
     jobControl.ingestPaused = false;
     pauseBtn.style.display = 'none';
     btn.disabled = false;
