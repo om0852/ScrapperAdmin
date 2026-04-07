@@ -1,13 +1,18 @@
 @echo off
 REM One-time setup script - Run this once to install all dependencies
+REM IMPORTANT: Run this from Command Prompt, not by double-clicking!
 
+setlocal enabledelayedexpansion
+cd /d D:\creatosaurus-intership\quick-commerce-scrappers\mainserver
+
+echo.
 echo ========================================
 echo    SETUP: Installing All Dependencies
 echo ========================================
 echo.
 echo This will:
 echo   1. Install npm packages for main server
-echo   2. Install npm packages for each scraper
+echo   2. Install npm packages for each scraper  
 echo   3. Install Playwright browsers
 echo.
 echo Estimated time: 5-10 minutes

@@ -49,6 +49,15 @@ const getBrandId = (brandName) => {
     return brandName.toLowerCase().replace(/[^a-z0-9]/g, '-');
 };
 
+const toBool = (val) => {
+    if (typeof val === 'string') {
+        const normalized = val.trim().toLowerCase();
+        if (normalized === 'true' || normalized === '1') return true;
+        if (normalized === 'false' || normalized === '0' || normalized === '') return false;
+    }
+    return !!val;
+};
+
 export const processScrapedData = async ({ pincode, platform, category, products }) => {
     // Decode folder-name sanitization: Windows replaces & with _ in directory names.
     // " _ " surrounded by spaces is the tell-tale sign (e.g. "Fruits _ Vegetables").
@@ -221,8 +230,9 @@ export const processScrapedData = async ({ pincode, platform, category, products
             discountPercentage: discountPercentage,
             ranking: prod.rank || prod.ranking || 999,
 
-            isOutOfStock: prod.outOfStock || prod.isOutOfStock || false,
-            isAd: prod.isAd || false,
+            isOutOfStock: toBool(prod.outOfStock || prod.isOutOfStock),
+            isAd: toBool(prod.isAd),
+            isQuick: toBool(prod.isQuick),
             deliveryTime: prod.deliveryTime || '',
             brand: brandName,
             quantity: prod.quantity || '',
@@ -255,7 +265,8 @@ export const processScrapedData = async ({ pincode, platform, category, products
                     {
                         $set: {
                             productUrl: newSnapshot.productUrl,
-                            ranking: newSnapshot.ranking
+                            ranking: newSnapshot.ranking,
+                            isQuick: newSnapshot.isQuick
                         }
                     }
                 );

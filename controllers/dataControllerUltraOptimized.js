@@ -37,6 +37,15 @@ const toNum = (val) => {
   return isNaN(n) ? null : n;
 };
 
+const toBool = (val) => {
+  if (typeof val === 'string') {
+    const normalized = val.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') return true;
+    if (normalized === 'false' || normalized === '0' || normalized === '') return false;
+  }
+  return !!val;
+};
+
 const normalizeGroupPrimaryName = (name) => {
   if (!name) return name;
   return String(name).replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
@@ -264,8 +273,9 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
       originalPrice,
       discountPercentage,
       ranking: prod.rank || prod.ranking || 999,
-      isOutOfStock: prod.outOfStock || prod.isOutOfStock || false,
-      isAd: prod.isAd || false,
+      isOutOfStock: toBool(prod.outOfStock || prod.isOutOfStock),
+      isAd: toBool(prod.isAd),
+      isQuick: toBool(prod.isQuick),
       deliveryTime: prod.deliveryTime || '',
       brand: brandName,
       quantity: prod.quantity || '',
@@ -316,8 +326,26 @@ export const processScrapedDataUltraOptimized = async ({ pincode, platform, cate
       console.log(`✅ Inserted ${insertedCount} snapshots in ${Date.now() - startTime}ms\n`);
     } catch (err) {
       if (err.code === 11000) {
-        console.warn(`⚠️ Some duplicates detected (${err.writeErrors?.length || 'unknown'} items), skipping...\n`);
+        console.warn(`⚠️ Some duplicates detected (${err.writeErrors?.length || 'unknown'} items), patching existing snapshots...\n`);
         insertedCount = snapshotsToInsert.length - (err.writeErrors?.length || 0);
+        for (const doc of snapshotsToInsert) {
+          await ProductSnapshot.updateOne(
+            {
+              scrapedAt: doc.scrapedAt,
+              category: doc.category,
+              platform: doc.platform,
+              pincode: doc.pincode,
+              productId: doc.productId
+            },
+            {
+              $set: {
+                productUrl: doc.productUrl,
+                ranking: doc.ranking,
+                isQuick: doc.isQuick
+              }
+            }
+          );
+        }
       } else {
         throw err;
       }

@@ -61,6 +61,10 @@ const ProductSnapshotSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  isQuick: {
+    type: Boolean,
+    default: false
+  },
   rating: Number,
 
   // Pricing information

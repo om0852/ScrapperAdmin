@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: manual-ingestion-service
+    env: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm ci
+    startCommand: npm run ingest:server
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_VERSION
+        value: 20

@@ -36,6 +36,15 @@ const toNum = (val) => {
   return isNaN(n) ? null : n;
 };
 
+const toBool = (val) => {
+  if (typeof val === 'string') {
+    const normalized = val.trim().toLowerCase();
+    if (normalized === 'true' || normalized === '1') return true;
+    if (normalized === 'false' || normalized === '0' || normalized === '') return false;
+  }
+  return !!val;
+};
+
 const normalizeGroupPrimaryName = (name) => {
   if (!name) return name;
   return String(name).replace(/-/g, ' ').replace(/\s+/g, ' ').trim();
@@ -353,8 +362,9 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
       originalPrice,
       discountPercentage,
       ranking: prod.rank || prod.ranking || prod.ranking || 999,
-      isOutOfStock: prod.outOfStock || prod.isOutOfStock || false,
-      isAd: prod.isAd || false,
+      isOutOfStock: toBool(prod.outOfStock || prod.isOutOfStock),
+      isAd: toBool(prod.isAd),
+      isQuick: toBool(prod.isQuick),
       deliveryTime: prod.deliveryTime || '',
       brand: brandName,
       quantity: prod.quantity || '',
@@ -407,7 +417,26 @@ export const processScrapedDataOptimized = async ({ pincode, platform, category,
             await ProductSnapshot.insertOne(doc);
             insertedCount++;
           } catch (e) {
-            if (e.code !== 11000) throw e;
+            if (e.code === 11000) {
+              await ProductSnapshot.updateOne(
+                {
+                  scrapedAt: doc.scrapedAt,
+                  category: doc.category,
+                  platform: doc.platform,
+                  pincode: doc.pincode,
+                  productId: doc.productId
+                },
+                {
+                  $set: {
+                    productUrl: doc.productUrl,
+                    ranking: doc.ranking,
+                    isQuick: doc.isQuick
+                  }
+                }
+              );
+              continue;
+            }
+            throw e;
           }
         }
       } else {

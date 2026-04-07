@@ -4,12 +4,33 @@
  * Handles deduplication, field mapping, N/A values, and category enrichment
  */
 
-import fs from 'fs';
-import path from 'path';
 import { enrichProductWithCategoryMapping, loadCategoryMappings } from '../enrich_categories.js';
 
 // === CONSTANTS ===
 const PLATFORM_NAME = 'Jiomart';
+
+const parseBoolean = (value) => {
+    if (typeof value === 'string') {
+        const normalized = value.trim().toLowerCase();
+        if (normalized === 'true') return true;
+        if (normalized === 'false') return false;
+    }
+    return !!value;
+};
+
+/**
+ * Check if product is Quick/Fast delivery
+ * Based on: If product is ONLY available as 1P (Reliance Retail), it's quick
+ * If available from 3P sellers, it's regular delivery
+ * 
+ * Field: available_at_3p_seller
+ * - "false" = Only 1P (Reliance) = QUICK ✅
+ * - "true" = Available from 3P sellers = NOT QUICK
+ */
+const hasJiomartQuickLabel = (variantAttributes = {}) => {
+    const available_at_3p_seller = variantAttributes.available_at_3p_seller?.text?.[0];
+    return available_at_3p_seller === "false";
+};
 
 /**
  * Standardize a single Jiomart product
@@ -78,10 +99,12 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         let originalPrice = 'N/A';
         let discount = 'N/A';
         let isOutOfStock = false; // Default to in-stock if data not available
+        let isQuick = false;
 
         // Try direct avg fields first
         if (p.variants && p.variants.length > 0) {
             const vAttr = p.variants[0].attributes;
+            isQuick = hasJiomartQuickLabel(vAttr);
             if (vAttr.avg_selling_price && vAttr.avg_selling_price.numbers) {
                 currentPrice = safeString(vAttr.avg_selling_price.numbers[0]);
             }
@@ -159,6 +182,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
             combo: safeString(product.combo || p.combo || 'N/A'),
             deliveryTime: '20 to 30 minutes', // Hardcoded as per user request
             isAd,
+            isQuick,
             rating: 'N/A', // vAttr.popularity is number, not rating
             currentPrice: cleanPrice(currentPrice),
             originalPrice: cleanPrice(originalPrice),
@@ -192,6 +216,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         combo: safeString(product.combo || 'N/A'),
         deliveryTime: safeString(product.deliveryTime),
         isAd: !!product.isAd,
+        isQuick: parseBoolean(product.isQuick),
         rating: safeString(product.rating),
         currentPrice: cleanPrice(product.price || product.sellingPrice),
         originalPrice: cleanPrice(product.originalPrice || product.mrp),

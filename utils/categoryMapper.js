@@ -13,6 +13,21 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 let CATEGORY_CACHE = null;
 
+const PLATFORM_ALIASES = {
+  flipkartminutes: 'flipkart',
+  flipkart_minutes: 'flipkart'
+};
+
+function resolvePlatformMappingKey(mappings, platform = '') {
+  const normalizedPlatform = String(platform || '').trim().toLowerCase();
+  const aliasTarget = PLATFORM_ALIASES[normalizedPlatform] || normalizedPlatform;
+
+  return Object.keys(mappings).find(key => {
+    const normalizedKey = key.toLowerCase();
+    return normalizedKey === normalizedPlatform || normalizedKey === aliasTarget;
+  });
+}
+
 /**
  * Master category mapping for categoryName → masterCategory
  * Used when URL matching is not available
@@ -111,9 +126,7 @@ function extractCategoryFromUrl(categoryUrl, platform = 'Instamart') {
   const mappings = loadCategoryMappings();
   
   // 🔧 FIX: Case-insensitive platform lookup
-  const platformKey = Object.keys(mappings).find(
-    key => key.toLowerCase() === (platform || '').toLowerCase()
-  );
+  const platformKey = resolvePlatformMappingKey(mappings, platform);
   
   if (!platformKey) {
     console.warn(`⚠️  Platform "${platform}" not found in category mappings`);
@@ -210,7 +223,8 @@ function batchMapProductCategories(products, platform = 'Instamart') {
  */
 function getAvailableCategoriesForPlatform(platform = 'Instamart') {
   const mappings = loadCategoryMappings();
-  const platformMappings = mappings[platform] || [];
+  const platformKey = resolvePlatformMappingKey(mappings, platform);
+  const platformMappings = platformKey ? (mappings[platformKey] || []) : [];
   
   const categories = new Set();
   platformMappings.forEach(m => {
