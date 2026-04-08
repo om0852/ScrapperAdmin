@@ -5,8 +5,9 @@
   "description": "Main server orchestrator for managing all platform scrapers",
   "main": "orchestrator.js",
   "scripts": {
-    "start": "xtra run npm run dev",
+    "start": "node ingestion-server.js",
     "dev": "nodemon --ignore scraped_data/ --ignore api_dumps/ --ignore DMart-Scrapper/ --ignore Blinkit-Scrapper/ --ignore flipkart_minutes/ --ignore instamart-category-scrapper/ --ignore Jiomart-Scrapper/ --ignore Zepto-Scrapper/ orchestrator.js",
+    "orchestrator": "xtra run npm run dev",
     "ingest:server": "node ingestion-server.js",
     "ingest:dev": "nodemon ingestion-server.js"
   },
