@@ -995,7 +995,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
                     if (r) results.push(r);
                 });
 
-                await fs.writeFile(DATA_FILE, JSON.stringify(existingData, null, 2));
+                await fs.writeFile(DATA_FILE, JSON.stringify(existingData));
                 console.log(`ðŸ’¾ Saved ${allProducts.length} total products so far to ${DATA_FILE}`);
 
             } catch (err) {
@@ -1084,7 +1084,7 @@ app.post('/jiomartcategoryscrapper', async (req, res) => {
         }
 
         const filepath = path.join(storageDir, filename);
-        await fs.writeFile(filepath, JSON.stringify(responsePayload, null, 2));
+        await fs.writeFile(filepath, JSON.stringify(responsePayload));
         console.log(`[Storage] Saved response to ${filepath}`);
         responsePayload.meta.storedFile = filename;
 
@@ -1132,7 +1132,7 @@ async function saveScrapedDataToFolder(data, pincode, categoryName = 'Uncategori
         
         // Write to temp file first, then rename (atomic operation)
         const tempPath = filepath + '.tmp';
-        await fs.writeFile(tempPath, JSON.stringify(data, null, 2));
+        await fs.writeFile(tempPath, JSON.stringify(data));
         await fs.rename(tempPath, filepath); // Atomic rename
         
         console.log(`ðŸ’¾ [SAVED] ${categoryName}/${filename} (${data.products?.length || 0} products)`);
