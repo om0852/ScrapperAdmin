@@ -351,17 +351,39 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             const pushResults = (payload, pageNumber = 1) => {
                 if (!payload || !Array.isArray(payload.results)) return 0;
                 let added = 0;
-                for (let idx = 0; idx < payload.results.length; idx += 1) {
-                    const item = payload.results[idx];
+                const results = payload.results;
+                const resultsLen = results.length;
+                const capturedLen = capturedItems.length;
+                
+                for (let idx = 0; idx < resultsLen; idx += 1) {
+                    const item = results[idx];
                     if (!item || typeof item !== 'object') continue;
-                    const key = String(item.id || item.product?.name || item.product?.title || `idx_${capturedItems.length}`);
+                    
+                    // Fast key extraction - prioritize item.id (most common case)
+                    const key = item.id || item.product?.name || item.product?.title || `idx_${capturedLen + added}`;
                     if (interceptedIds.has(key)) continue;
                     interceptedIds.add(key);
+
+                    // Pre-calculate candidate IDs for later ad annotation
+                    const candidateIds = new Set();
+                    const id = item.id;
+                    if (id) {
+                        candidateIds.add(id);
+                        if (String(id).endsWith('_P')) {
+                            candidateIds.add(String(id).slice(0, -2));
+                        }
+                    }
+                    const productName = item.product?.name;
+                    if (productName) {
+                        const pathId = productName.split('/').pop();
+                        if (pathId) candidateIds.add(pathId);
+                    }
 
                     // Preserve exact listing order from trex/search.
                     item.__pageNumber = pageNumber;
                     item.__positionInPage = idx + 1;
-                    item.__websitePosition = capturedItems.length + 1;
+                    item.__websitePosition = capturedLen + added + 1;
+                    item.__candidateIds = candidateIds; // Cache for ad annotation
 
                     capturedItems.push(item);
                     added += 1;
@@ -441,8 +463,9 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 let adTaggedCount = 0;
 
                 for (const item of capturedItems) {
-                    const candidateIds = resolveCandidateProductIds(item);
-                    const matchedId = candidateIds.find((id) => sponsoredProductMap.has(id));
+                    // Use cached candidate IDs from pushResults
+                    const candidateIds = item.__candidateIds || new Set();
+                    const matchedId = Array.from(candidateIds).find((id) => sponsoredProductMap.has(id));
 
                     if (matchedId) {
                         const adMeta = sponsoredProductMap.get(matchedId) || {};
@@ -664,88 +687,101 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             if (nextPageToken) seenTokens.add(nextPageToken);
 
             let pageCount = 1;
-            while (nextPageToken && pageCount < 200) {
-                const requestBody = {
-                    ...requestBodyBase,
-                    pageToken: nextPageToken
-                };
+            let tokensToFetch = [nextPageToken]; // Queue of tokens for parallel fetching
 
-                let result = null;
-                for (let retry = 1; retry <= 3; retry += 1) {
-                    result = await page.evaluate(
-                        async ({ endpoint, headers, body }) => {
-                            try {
-                                const res = await fetch(endpoint, {
-                                    method: 'POST',
-                                    credentials: 'include',
-                                    headers,
-                                    body: JSON.stringify(body)
-                                });
+            while (tokensToFetch.length > 0 && pageCount < 200) {
+                // Prepare up to 2 concurrent API calls (dual parallel mode)
+                const currentBatch = tokensToFetch.splice(0, 2).filter(Boolean);
+                
+                const fetchPromises = currentBatch.map(async (token) => {
+                    const requestBody = {
+                        ...requestBodyBase,
+                        pageToken: token
+                    };
 
-                                const raw = await res.text();
-                                let data = null;
-                                if (raw) {
-                                    try {
-                                        data = JSON.parse(raw);
-                                    } catch (_) {
-                                        data = null;
+                    let result = null;
+                    for (let retry = 1; retry <= 3; retry += 1) {
+                        result = await page.evaluate(
+                            async ({ endpoint, headers, body }) => {
+                                try {
+                                    const res = await fetch(endpoint, {
+                                        method: 'POST',
+                                        credentials: 'include',
+                                        headers,
+                                        body: JSON.stringify(body)
+                                    });
+
+                                    const raw = await res.text();
+                                    let data = null;
+                                    if (raw) {
+                                        try {
+                                            data = JSON.parse(raw);
+                                        } catch (_) {
+                                            data = null;
+                                        }
                                     }
+
+                                    return {
+                                        ok: res.ok,
+                                        status: res.status,
+                                        data,
+                                        error: res.ok ? null : raw.slice(0, 240)
+                                    };
+                                } catch (error) {
+                                    return {
+                                        ok: false,
+                                        status: 0,
+                                        data: null,
+                                        error: error.message
+                                    };
                                 }
+                            },
+                            { endpoint: API_ENDPOINT, headers: extraHeaders, body: requestBody }
+                        );
 
-                                return {
-                                    ok: res.ok,
-                                    status: res.status,
-                                    data,
-                                    error: res.ok ? null : raw.slice(0, 240)
-                                };
-                            } catch (error) {
-                                return {
-                                    ok: false,
-                                    status: 0,
-                                    data: null,
-                                    error: error.message
-                                };
-                            }
-                        },
-                        { endpoint: API_ENDPOINT, headers: extraHeaders, body: requestBody }
-                    );
+                        if (result.ok && result.data) break;
 
-                    if (result.ok && result.data) break;
+                        const retriable = result.status === 0 || result.status === 429 || result.status >= 500;
+                        if (!retriable || retry === 3) break;
+                        await delay(200 * (2 ** (retry - 1)), 300 * (2 ** (retry - 1)));
+                    }
 
-                    const retriable = result.status === 0 || result.status === 429 || result.status >= 500;
-                    if (!retriable || retry === 3) break;
-                    await delay(400 * (2 ** (retry - 1)), 500 * (2 ** (retry - 1)));
-                }
-
-                if (!result || !result.ok || !result.data) {
-                    console.warn(`Pagination stopped for ${category.name}: ${result?.status || 0} ${result?.error || 'unknown error'}`);
-                    break;
-                }
-
-                pageCount += 1;
-                const added = pushResults(result.data, pageCount);
-                console.log(`Page ${pageCount}: +${added} items (total ${capturedItems.length})`);
-                apiResponses.push({
-                    pageNumber: pageCount,
-                    pageTokenUsed: nextPageToken,
-                    response: result.data
+                    return { result, token };
                 });
 
-                const candidateToken = result.data?.nextPageToken || null;
-                if (!candidateToken) break;
-                if (seenTokens.has(candidateToken)) {
-                    console.warn(`Pagination loop token detected for ${category.name}, stopping.`);
-                    break;
-                }
+                // Execute both API calls in parallel
+                const results = await Promise.all(fetchPromises);
 
-                nextPageToken = candidateToken;
-                seenTokens.add(nextPageToken);
+                for (const { result, token } of results) {
+                    if (!result || !result.ok || !result.data) {
+                        console.warn(`Pagination API call failed for ${category.name}: ${result?.status || 0} ${result?.error || 'unknown error'}`);
+                        continue;
+                    }
+
+                    pageCount += 1;
+                    const added = pushResults(result.data, pageCount);
+                    console.log(`Page ${pageCount}: +${added} items (total ${capturedItems.length})`);
+                    apiResponses.push({
+                        pageNumber: pageCount,
+                        pageTokenUsed: token,
+                        response: result.data
+                    });
+
+                    const candidateToken = result.data?.nextPageToken || null;
+                    if (candidateToken && !seenTokens.has(candidateToken) && pageCount < 200 && (totalSize <= 0 || capturedItems.length < totalSize)) {
+                        seenTokens.add(candidateToken);
+                        tokensToFetch.push(candidateToken);
+                    }
+                }
 
                 if (totalSize > 0 && capturedItems.length >= totalSize) {
                     break;
                 }
 
-                await delay(220, 450);
+                // Reduced delay between batches
+                if (tokensToFetch.length > 0) {
+                    await delay(100, 150);
+                }
             }
 
             if (capturedItems.length === 0) {

@@ -235,89 +235,100 @@
       "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Masalas&filterId=693a7ac953de7a00011ff891&filterName=Newly+Added&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Muesli & Granola",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25acc&filterName=Muesli+%26+Granola&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals%20and%20Breakfast&storeId=1404592&offset=0&filterName=&taxonomyType=taxonomy%205&showAgeConsent=false",
+      "officialSubCategory": "",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Oats",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25acd&filterName=Oats&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=698d7038c63f8300011b530c&filterName=Protein+Oats+%26+Cereals&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Protein Oats & Cereals",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Kids Cereals",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ace&filterName=Kids+Cereals&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b0b&filterName=Oats&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Oats",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Flakes",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25acf&filterName=Flakes&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b0d&filterName=Flakes&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Flakes",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Regional Favourites",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=68f24c70b4fbaf0001977060&filterName=Regional+Favourites&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b0c&filterName=Kids+Cereals&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Kids Cereals",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Energy Bars",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=68f24c70b4fbaf0001977060&filterName=Energy+Bars&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b0e&filterName=Regional+Favourites&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Regional Favourites",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Ready Mixes",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad2&filterName=Ready+Mixes&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b10&filterName=Energy+Bars&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Energy Bars",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Pancake Mixes",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad3&filterName=Pancake+Mixes&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b11&filterName=Ready+Mixes&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Ready Mixes",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Peanut Butters",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad4&filterName=Peanut+Butters&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b0f&filterName=Newly+Added&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Newly Added",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Chocolate Spreads",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad5&filterName=Chocolate+Spreads&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=696e2e1fb6373a00010b3a92&filterName=Imported&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Imported",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Mayo & Spreads",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad6&filterName=Mayo+%26+Spreads&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b13&filterName=Pancake+Mixes&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Pancake Mixes",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Instant Oats",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad7&filterName=Instant+Oats&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b14&filterName=Peanut+Butters&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Peanut Butters",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Seeds & Trail mixes",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25ad8&filterName=Seeds+and+trail+Mixes&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b15&filterName=Chocolate+Spreads&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Chocolate Spreads",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
-
     {
-      "officalCategory": "Cereals & Breakfast",
-      "officalSubCategory": "Jams",
-      "masterCategory": "Breakfast & Sauces",
-      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=6822eeeded32000001e25adb&filterName=Jams&offset=0&showAgeConsent=false&storeId=1404643&taxonomyType=Speciality+taxonomy+1"
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b16&filterName=Mayo+%26+Spreads&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Mayo & Spreads",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=698499a8e171b800015b5d68&filterName=Masala+Oats&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Masala Oats",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
+    },
+    {
+      "url": "https://www.swiggy.com/instamart/category-listing?categoryName=Cereals+and+Breakfast&filterId=69492faa195bc000019a3b18&filterName=Seeds+and+trail+Mixes&offset=0&showAgeConsent=false&storeId=1404592&taxonomyType=taxonomy+5",
+      "officialSubCategory": "Seeds and trail Mixes",
+      "officialCategory": "Cereals and Breakfast",
+      "masterCategory": "Breakfast & Sauces"
     },
     {
       "officalCategory": "Noodles, Pasta & Vermicelli",
@@ -1550,138 +1561,6 @@
       "url": "https://www.jiomart.com/c/groceries/kitchenware/flask-bottle-tiffin-boxes/30005"
     },
     {
-      "officalCategory": "Kitchenware",
-      "officalSubCategory": "Cutting & Chopping",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/kitchenware/cutting-chopping/30002"
-    },
-    {
-      "officalCategory": "Kitchenware",
-      "officalSubCategory": "Kitchen Tools",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/kitchenware/kitchen-tools/19696"
-    },
-    {
-      "officalCategory": "Kitchenware",
-      "officalSubCategory": "Bakeware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/kitchenware/bakeware/30006"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Dining",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/dining/30195"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Serveware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/serveware/30426"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Cups, Mugs & More",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/cups-mugs-more/30423"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Glassware & Drinkware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/glassware-drinkware/30425"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Cutlery",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/cutlery/32906"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Barware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/barware/30017"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Serving Aids",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/serving-aids/32907"
-    },
-    {
-      "officalCategory": "Tableware",
-      "officalSubCategory": "Table Accessories",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/tableware/table-accessories/30422"
-    },
-    {
-      "officalCategory": "Disposables",
-      "officalSubCategory": "Food Wrapping Essentials",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/disposables/food-wrapping-essentials/32899"
-    },
-    {
-      "officalCategory": "Disposables",
-      "officalSubCategory": "Home Hygiene",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/disposables/home-hygiene/32900"
-    },
-    {
-      "officalCategory": "Disposables",
-      "officalSubCategory": "Plates & Cutlery",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/disposables/plates-cutlery/32901"
-    },
-    {
-      "officalCategory": "Disposables",
-      "officalSubCategory": "Tissues & Napkins",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/disposables/tissues-napkins/32902"
-    },
-    {
-      "officalCategory": "Crafts of India",
-      "officalSubCategory": "Kitchenware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/crafts-of-india/kitchenware/30190"
-    },
-    {
-      "officalCategory": "Crafts of India",
-      "officalSubCategory": "Bathroom & Laundry Accessories",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/crafts-of-india/bathroom-laundry-accessories/30432"
-    },
-    {
-      "officalCategory": "Crafts of India",
-      "officalSubCategory": "Tableware",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/crafts-of-india/tableware/30433"
-    },
-    {
-      "officalCategory": "Crafts of India",
-      "officalSubCategory": "Pooja Needs",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/crafts-of-india/pooja-needs/30434"
-    },
-    {
-      "officalCategory": "Crafts of India",
-      "officalSubCategory": "Bottles, Boxes & Containers",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/crafts-of-india/bottles-boxes-containers/33032"
-    },
-    {
-      "officalCategory": "Kitchen & Dining",
-      "officalSubCategory": "Drinkware & Storage",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/kitchen-dining/drinkware-storage/45016"
-    },
-    {
-      "officalCategory": "Kitchen & Dining",
-      "officalSubCategory": "Kitchen Tools & Accessories",
-      "masterCategory": "Home Needs",
-      "url": "https://www.jiomart.com/c/groceries/kitchen-dining/kitchen-tools-accessories/45017"
-    },
-    {
       "officalCategory": "School, Office & Stationery",
       "officalSubCategory": "Notebooks & Paper Products",
       "masterCategory": "School, Office & Stationery",
@@ -2225,82 +2104,94 @@
       "url": "https://www.zepto.com/cn/tools/nail-care/cid/75e32bdc-779d-4fe4-bff9-6565842a4a7a/scid/439197e1-6aca-488a-805a-63b28d33779d"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
-      "officialSubCategory": "Gift Set",
-      "url": "https://www.zepto.com/cn/school-supplies/gift-set/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/4ff0a16c-2124-4c06-b4d8-409ced7f792e"
+      "url": "https://www.zepto.com/cn/stationery-books/pencil/cid/4361fa01-55d1-4362-803a-363983b2b1e9/scid/d5bff2b9-3636-4303-b9b6-35e05c1238ce",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Pencil",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
-      "officialSubCategory": "Scale, Eraser & More",
-      "url": "https://www.zepto.com/cn/school-supplies/scale-eraser-more/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/fd07d23b-5415-456d-bf63-a9e4211f3050"
+      "url": "https://www.zepto.com/cn/stationery-books/pen/cid/4361fa01-55d1-4362-803a-363983b2b1e9/scid/427e43d1-f078-4f46-a406-3aa5cbebfaf5",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Pen",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
+      "url": "https://www.zepto.com/cn/stationery-books/marker/cid/4361fa01-55d1-4362-803a-363983b2b1e9/scid/2934cdbb-5633-415d-b950-068d20452d9e",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Marker",
+      "masterCategory": "School, Office & Stationery"
+    },
+    {
+      "url": "https://www.zepto.com/cn/stationery-books/highlighter/cid/4361fa01-55d1-4362-803a-363983b2b1e9/scid/84982787-556c-45a6-bc6e-7e8b0433c1b3",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Highlighter",
+      "masterCategory": "School, Office & Stationery"
+    },
+    {
+      "url": "https://www.zepto.com/cn/stationery-books/everyday-stationery/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/4ff0a16c-2124-4c06-b4d8-409ced7f792e",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Everyday Stationery",
+      "masterCategory": "School, Office & Stationery"
+    },
+    {
+      "url": "https://www.zepto.com/cn/stationery-books/exam-pad/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/50518f0a-00be-490e-987c-e944d904a965",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Exam Pad",
+      "masterCategory": "School, Office & Stationery"
+    },
+    {
+      "url": "https://www.zepto.com/cn/stationery-books/stationery-kit-pouch/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/7a28c886-4def-46db-90d1-60b3856b916c",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Stationery Kit & Pouch",
+      "masterCategory": "School, Office & Stationery"
+    },
+    {
+      "url": "https://www.zepto.com/cn/stationery-books/geometry-box/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/80f454f6-6ef3-4d20-9205-b3ff5c0604ef",
+      "officialCategory": "Stationery & Books",
       "officialSubCategory": "Geometry Box",
-      "url": "https://www.zepto.com/cn/school-supplies/geometry-box/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/80f454f6-6ef3-4d20-9205-b3ff5c0604ef"
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
-      "officialSubCategory": "School Bag & Bottle",
-      "url": "https://www.zepto.com/cn/school-supplies/school-bag-bottle/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/5e424290-a361-42af-913c-5870bf8552b9"
+      "url": "https://www.zepto.com/cn/stationery-books/school-bag-more/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/5e424290-a361-42af-913c-5870bf8552b9",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "School Bag & More",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
-      "officialSubCategory": "Exam Pad & Whiteboard",
-      "url": "https://www.zepto.com/cn/school-supplies/exam-pad-whiteboard/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/50518f0a-00be-490e-987c-e944d904a965"
+      "url": "https://www.zepto.com/cn/stationery-books/other-stationery-needs/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/2e5d4c5b-a0c0-41e4-8f30-d53ab24ee28c",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Other Stationery Needs",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "School Supplies",
-      "officialSubCategory": "Chart, Painting & Other Paper",
-      "url": "https://www.zepto.com/cn/school-supplies/chart-painting-other-paper/cid/65c979ec-09f5-4168-b18c-d5f15530c7c0/scid/2e5d4c5b-a0c0-41e4-8f30-d53ab24ee28c"
+      "url": "https://www.zepto.com/cn/stationery-books/a4-a3-paper/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/012a8d13-c55c-4ad5-ae89-1141413ae847",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "A4 & A3 Paper",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "A4 Paper",
-      "url": "https://www.zepto.com/cn/office-supplies/a4-paper/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/012a8d13-c55c-4ad5-ae89-1141413ae847"
+      "url": "https://www.zepto.com/cn/stationery-books/file-folder-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/534bab16-ddef-4cee-b6ad-46d3f8443859",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "File Folder & More",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "Pen Stand & More",
-      "url": "https://www.zepto.com/cn/office-supplies/pen-stand-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/b4d030c6-d2bc-4ada-ae1c-d1b0dcdb601b"
+      "url": "https://www.zepto.com/cn/stationery-books/office-desk-essentials/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/af5bc61e-b7ac-4ce9-a2d1-7cfbe9d4ad70",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Office Desk Essentials",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "File, Folder & More",
-      "url": "https://www.zepto.com/cn/office-supplies/file-folder-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/534bab16-ddef-4cee-b6ad-46d3f8443859"
+      "url": "https://www.zepto.com/cn/stationery-books/sticky-notes-board/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/5eec61d5-2be1-46d3-973f-86f8842c1526",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Sticky Notes & Board",
+      "masterCategory": "School, Office & Stationery"
     },
     {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "Calendar & Journal",
-      "url": "https://www.zepto.com/cn/office-supplies/calendar-journal/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/46a236cd-306a-49df-8373-46ce0550ffc1"
-    },
-    {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "Calculator & Stapler",
-      "url": "https://www.zepto.com/cn/office-supplies/calculator-stapler/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/c33039ad-aba6-442f-b8cb-719ffa82685a"
-    },
-    {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "Punching Machine & More",
-      "url": "https://www.zepto.com/cn/office-supplies/punching-machine-more/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/af5bc61e-b7ac-4ce9-a2d1-7cfbe9d4ad70"
-    },
-    {
-      "masterCategory": "School, Office & Stationery",
-      "officialCategory": "Office Supplies",
-      "officialSubCategory": "Sticky Notes",
-      "url": "https://www.zepto.com/cn/office-supplies/sticky-notes/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/5eec61d5-2be1-46d3-973f-86f8842c1526"
+      "url": "https://www.zepto.com/cn/stationery-books/other-office-essentials/cid/14c7badf-34e4-4915-be65-e7419216a6fd/scid/b4d030c6-d2bc-4ada-ae1c-d1b0dcdb601b",
+      "officialCategory": "Stationery & Books",
+      "officialSubCategory": "Other Office Essentials",
+      "masterCategory": "School, Office & Stationery"
     },
     {
       "url": "https://www.zepto.com/cn/baby-care/baby-care/cid/0118c4f5-750c-4929-a734-b4ef454e265b/scid/b998e39c-6948-42f2-84bb-947f07f2ceca",
@@ -5562,6 +5453,54 @@
     }
   ],
   "Flipkart": [
+    {
+      "officalSubCategory": "Face Wash",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/mezy/pr?sid=hloc%2Fom9m%2Fmezy&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Face Scrub",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/zelh/pr?sid=hloc%2Fom9m%2Fzelh&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Face Masks",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/qfuc/pr?sid=hloc%2Fom9m%2Fqfuc&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Toner",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/wtcu/pr?sid=hloc%2Fom9m%2Fwtcu&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Face Serums",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/hhpb/pr?sid=hloc%2Fom9m%2Fhhpb&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Sunscreen",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/nrkl/pr?sid=hloc%2Fom9m%2Fnrkl&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Lip Balm",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/mzsb/pr?sid=hloc%2Fom9m%2Fmzsb&marketplace=HYPERLOCAL"
+    },
+    {
+      "officalSubCategory": "Facial Kit",
+      "officalCategory": "Skincare",
+      "masterCategory": "Skincare",
+      "url": "https://www.flipkart.com/hyperlocal/Fruits/pr?sid=hloc%2Fom9m&marketplace=HYPERLOCAL&param=76578438&BU=Minutes&pageUID=1775704504883#https://www.flipkart.com/hyperlocal/hloc/iqjt/pr?sid=hloc%2Fom9m%2Fiqjt&marketplace=HYPERLOCAL"
+    },
     {
       "officalCategory": "Fruits & Vegetables",
       "officalSubCategory": "Fresh Vegetable",

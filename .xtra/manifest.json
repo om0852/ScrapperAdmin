@@ -1,47 +1,47 @@
 {
   "projectId": "69a7cffeed38bb77b2ddfa97",
   "environment": "development",
-  "lastSyncedAt": "2026-04-07T13:37:36.973Z",
+  "lastSyncedAt": "2026-04-10T15:06:21.875Z",
   "secrets": {
     "PORT": {
       "hash": "b698d86c67a2cff80405bd47af322216c552fd3a52f9c58a70f7b3a3313895b1",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.877Z"
     },
     "MONGODB_URI": {
       "hash": "e90bc0ef6f492d6d05e7debad7f52e04a3e5a6ccc0336e0d9df251af0b5e3fde",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.877Z"
     },
     "UPSTASH_REDIS_URL": {
       "hash": "30cb3987704f5de618b3794b192f38af68c8f2b9bc07e84c9c65068e8154567c",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "UPSTASH_REDIS_TOKEN": {
       "hash": "d49e005905a7d56f5388b6d6e2ffc0767f9fd750c9e7d4846ab560d0da53cf5f",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "PROXY_URL": {
       "hash": "0202c4ca33ad201fd5dd4c3da46ed5b3e9306dd2575fca22233f3d427044f1f2",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "NODE_ENV": {
       "hash": "875b9380866e9d56e7110b0ee310962c16d9d4ae103f829d62bdffd2cbe7c61d",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "UPSTASH_PRODUCT_INDEX_REDIS_URL": {
       "hash": "5b91344beec31a99ff47994d00b2a74aa170537c0bd5824fca99f2218127f51f",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "UPSTASH_PRODUCT_INDEX_REDIS_TOKEN": {
       "hash": "f547fbf31a5193b5f043c97b82783b05fa7b3ab94c159cb7df24f501ee169d03",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "INGESTION_PORT": {
       "hash": "e36deec09aa73922d53279f29380a56ac3c593dd591855dd7aca1161aa501890",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     },
     "INGESTION_SERVICE_URL": {
       "hash": "ac643837bc101a1810cc5d63969c863ec696c9660c4aa29b65aaee3744fcd15a",
-      "updatedAt": "2026-04-07T13:37:36.976Z"
+      "updatedAt": "2026-04-10T15:06:21.878Z"
     }
   }
 }

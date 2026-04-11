@@ -91,6 +91,17 @@ const prepareProductsForIngestion = ({
 }) => {
   let productsToIngest = Array.isArray(products) ? products : [];
 
+  // Filter JioMart products to only include those with isQuick = true
+  const normalizedPlatform = normalizePlatform(platform);
+  if (normalizedPlatform === 'jiomart') {
+    const originalCount = productsToIngest.length;
+    productsToIngest = productsToIngest.filter(product => product.isQuick === true);
+    const filteredCount = originalCount - productsToIngest.length;
+    if (filteredCount > 0) {
+      console.log(`⚠️  JioMart Filter: Removed ${filteredCount} products without isQuick=true (${originalCount} → ${productsToIngest.length})`);
+    }
+  }
+
   if (!skipCategoryMapping) {
     console.log('Enhancing products for manual ingestion...');
 
