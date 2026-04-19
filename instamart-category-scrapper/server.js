@@ -45,16 +45,57 @@ let categoryMapper;
     }
 })();
 
-// Function to save API dumps
+// Enhanced Function to save API dumps with metadata tracking
 function saveApiDump(pincode, url, jsonData, dumpType = 'response') {
     try {
-        fs.mkdirSync(API_DUMPS_DIR, { recursive: true });
-        const timestamp = Date.now();
-        const urlHash = url.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 30);
+        // Create organized directory structure
+        const pincodeDumpDir = path.join(API_DUMPS_DIR, `pincode_${pincode}`);
+        fs.mkdirSync(pincodeDumpDir, { recursive: true });
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+        const urlHash = url.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 25);
         const filename = `dump_${pincode}_${dumpType}_${urlHash}_${timestamp}.json`;
-        const filepath = path.join(API_DUMPS_DIR, filename);
-        fs.writeFileSync(filepath, JSON.stringify(jsonData, null, 2));
-        console.log(`✓ API dump saved: ${filename}`);
+        const filepath = path.join(pincodeDumpDir, filename);
+
+        // Convert to JSON string
+        const jsonString = JSON.stringify(jsonData, null, 2);
+        const byteSize = Buffer.byteLength(jsonString, 'utf8');
+
+        // Save the dump
+        fs.writeFileSync(filepath, jsonString);
+
+        // Track metadata
+        const metadataPath = path.join(API_DUMPS_DIR, 'api_dumps_metadata.json');
+        let metadata = { dumps: [] };
+        
+        if (fs.existsSync(metadataPath)) {
+            try {
+                metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+            } catch (e) {
+                metadata = { dumps: [] };
+            }
+        }
+
+        metadata.dumps.push({
+            timestamp,
+            pincode,
+            dumpType,
+            url,
+            filename,
+            filepath,
+            byteSize,
+            dataPoints: Array.isArray(jsonData) ? jsonData.length : 1
+        });
+
+        // Keep only last 500 metadata entries
+        if (metadata.dumps.length > 500) {
+            metadata.dumps = metadata.dumps.slice(-500);
+        }
+
+        fs.writeFileSync(metadataPath, JSON.stringify(metadata, null, 2));
+
+        const sizeMB = (byteSize / 1024 / 1024).toFixed(2);
+        console.log(`✓ API dump saved: ${filename} (${sizeMB}MB, type: ${dumpType})`);
         return filename;
     } catch (err) {
         console.error(`✗ Failed to save API dump: ${err.message}`);
@@ -420,45 +461,46 @@ async function scrapeCategoryInContext(context, url, pincode) {
         });
         // -----------------------------------------------
 
-        // API Interceptor
+        // Enhanced API Interceptor - Capture All Instamart API Responses
         page.on('response', async response => {
             const resUrl = response.url();
             const resourceType = response.request().resourceType();
+            const status = response.status();
 
-            // Capture Logic
+            // Capture ALL api/instamart responses
             if (resUrl.includes('api/instamart/') && (resourceType === 'fetch' || resourceType === 'xhr')) {
-                // Special Debug for Filter API
-                if (resUrl.includes('category-listing/filter')) {
-                    try {
-                        const json = await response.json();
-                        // Save API dump
-                        saveApiDump(pincode, url, json, 'filter_api');
-                        const parsed = processCapturedJson(json);
-                        if (parsed.length > 0) {
-                            parsed.forEach(p => capturedProducts.set(p.productId, p));
-                        }
-                    } catch (e) { }
-                }
+                try {
+                    // Only process 2xx responses
+                    if (status >= 200 && status < 300) {
+                        const json = await response.json().catch(() => null);
+                        
+                        if (json) {
+                            // Determine API type based on URL pattern
+                            let apiType = 'other_api';
+                            if (resUrl.includes('category-listing/filter')) apiType = 'filter_api';
+                            else if (resUrl.includes('category/list') || resUrl.includes('listing')) apiType = 'listing_api';
+                            else if (resUrl.includes('item/v2')) apiType = 'item_api';
+                            else if (resUrl.includes('search')) apiType = 'search_api';
+                            else if (resUrl.includes('recommendation')) apiType = 'recommendation_api';
 
-                // General Listing Capture
-                if (resUrl.includes('category/list') || resUrl.includes('listing') || resUrl.includes('api/instamart/item/v2/')) {
-                    try {
-                        const status = response.status();
-                        if (status >= 200 && status < 300) {
-                            const json = await response.json();
-                            // Save API dump
-                            saveApiDump(pincode, url, json, 'listing_api');
-                            // Process immediately
+                            // Save the API dump
+                            saveApiDump(pincode, url, json, apiType);
+
+                            // Process and extract products
                             const parsed = processCapturedJson(json);
-                            if (parsed.length > 0) {
+                            if (parsed && parsed.length > 0) {
                                 parsed.forEach(p => {
                                     if (!capturedProducts.has(p.productId)) {
                                         capturedProducts.set(p.productId, p);
                                     }
                                 });
                             }
+
+                            console.log(`✓ Captured ${apiType} (${parsed?.length || 0} products)`);
                         }
-                    } catch (e) { }
+                    }
+                } catch (e) {
+                    console.log(`[API Interception] Error processing ${resUrl}: ${e.message}`);
                 }
             }
         });
@@ -802,6 +844,162 @@ app.get('/status', (req, res) => {
         uptime: process.uptime()
     });
 });
+
+// 🔹 NEW ENDPOINTS FOR API DUMP MANAGEMENT
+
+// Get metadata about all API dumps
+app.get('/api/dumps/metadata', (req, res) => {
+    try {
+        const metadataPath = path.join(API_DUMPS_DIR, 'api_dumps_metadata.json');
+        if (!fs.existsSync(metadataPath)) {
+            return res.json({ dumps: [], total: 0, message: 'No dumps found yet' });
+        }
+        const metadata = JSON.parse(fs.readFileSync(metadataPath, 'utf-8'));
+        res.json({
+            total: metadata.dumps.length,
+            dumps: metadata.dumps.slice(-50) // Return last 50
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// List all API dumps for a specific pincode
+app.get('/api/dumps/:pincode', (req, res) => {
+    try {
+        const { pincode } = req.params;
+        const pincodeDir = path.join(API_DUMPS_DIR, `pincode_${pincode}`);
+        
+        if (!fs.existsSync(pincodeDir)) {
+            return res.json({ pincode, dumps: [], total: 0 });
+        }
+
+        const files = fs.readdirSync(pincodeDir)
+            .filter(f => f.endsWith('.json'))
+            .map(f => {
+                const fullPath = path.join(pincodeDir, f);
+                const stats = fs.statSync(fullPath);
+                return {
+                    filename: f,
+                    size: stats.size,
+                    sizeKB: (stats.size / 1024).toFixed(2),
+                    modified: stats.mtime
+                };
+            })
+            .sort((a, b) => b.modified - a.modified);
+
+        res.json({
+            pincode,
+            total: files.length,
+            dumps: files
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get a specific API dump
+app.get('/api/dumps/:pincode/:filename', (req, res) => {
+    try {
+        const { pincode, filename } = req.params;
+        const filepath = path.join(API_DUMPS_DIR, `pincode_${pincode}`, filename);
+        
+        // Security check: prevent path traversal
+        if (!filepath.startsWith(API_DUMPS_DIR)) {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+
+        if (!fs.existsSync(filepath)) {
+            return res.status(404).json({ error: 'Dump not found' });
+        }
+
+        const data = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+        res.json(data);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Consolidate all dumps for a pincode into a single master file
+app.post('/api/dumps/:pincode/consolidate', (req, res) => {
+    try {
+        const { pincode } = req.params;
+        const pincodeDir = path.join(API_DUMPS_DIR, `pincode_${pincode}`);
+
+        if (!fs.existsSync(pincodeDir)) {
+            return res.status(404).json({ error: 'No dumps found for this pincode' });
+        }
+
+        const files = fs.readdirSync(pincodeDir)
+            .filter(f => f.endsWith('.json') && f.startsWith('dump_'));
+
+        const consolidatedData = {
+            pincode,
+            consolidatedAt: new Date().toISOString(),
+            totalDumps: files.length,
+            dumps: []
+        };
+
+        files.forEach(filename => {
+            try {
+                const filepath = path.join(pincodeDir, filename);
+                const data = JSON.parse(fs.readFileSync(filepath, 'utf-8'));
+                consolidatedData.dumps.push({
+                    source: filename,
+                    data: data,
+                    timestamp: fs.statSync(filepath).mtime
+                });
+            } catch (e) {
+                console.error(`Failed to read ${filename}:`, e.message);
+            }
+        });
+
+        // Save consolidated file
+        const consolidatedFilename = `consolidated_${pincode}_${Date.now()}.json`;
+        const consolidatedPath = path.join(API_DUMPS_DIR, consolidatedFilename);
+        fs.writeFileSync(consolidatedPath, JSON.stringify(consolidatedData, null, 2));
+
+        res.json({
+            success: true,
+            message: `Consolidated ${files.length} dumps`,
+            filename: consolidatedFilename,
+            size: fs.statSync(consolidatedPath).size
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get summary statistics about API dumps
+app.get('/api/dumps/stats/summary', (req, res) => {
+    try {
+        const metadataPath = path.join(API_DUMPS_DIR, 'api_dumps_metadata.json');
+        const metadata = fs.existsSync(metadataPath) 
+            ? JSON.parse(fs.readFileSync(metadataPath, 'utf-8'))
+            : { dumps: [] };
+
+        const stats = {
+            totalDumps: metadata.dumps.length,
+            totalBytes: metadata.dumps.reduce((sum, d) => sum + (d.byteSize || 0), 0),
+            totalMB: (metadata.dumps.reduce((sum, d) => sum + (d.byteSize || 0), 0) / 1024 / 1024).toFixed(2),
+            byType: {},
+            byPincode: {},
+            oldestDump: metadata.dumps[0]?.timestamp,
+            newestDump: metadata.dumps[metadata.dumps.length - 1]?.timestamp
+        };
+
+        metadata.dumps.forEach(dump => {
+            stats.byType[dump.dumpType] = (stats.byType[dump.dumpType] || 0) + 1;
+            stats.byPincode[dump.pincode] = (stats.byPincode[dump.pincode] || 0) + 1;
+        });
+
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 🔹 END API DUMP ENDPOINTS
 
 const server = app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);

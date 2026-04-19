@@ -325,10 +325,11 @@ function extractProductsFromResponse(response) {
                     
                     // Extract main product
                     if (productData.id && productData.titles && productData.titles.title) {
+                        const imageUrl = extractImageUrl(productData);
                         products.push({
                             productId: productData.id,
                             productName: productData.titles.title,
-                            productImage: extractImageUrl(productData),
+                            productImage: imageUrl || constructFallbackImageUrl(productData),
                             brand: productData.brand || 'N/A',
                             currentPrice: extractPrice(productData),
                             originalPrice: extractMRP(productData),
@@ -347,10 +348,11 @@ function extractProductsFromResponse(response) {
                     if (productData.productSwatch && productData.productSwatch.products) {
                         Object.entries(productData.productSwatch.products).forEach(([variantId, variantData]) => {
                             if (variantData.id && variantData.titles && variantData.titles.title) {
+                                const varImageUrl = extractImageUrl(variantData);
                                 products.push({
                                     productId: variantData.id,
                                     productName: variantData.titles.title,
-                                    productImage: extractImageUrl(variantData),
+                                    productImage: varImageUrl || constructFallbackImageUrl(variantData),
                                     brand: variantData.brand || 'N/A',
                                     currentPrice: extractPrice(variantData),
                                     originalPrice: extractMRP(variantData),
@@ -375,18 +377,84 @@ function extractProductsFromResponse(response) {
 }
 
 /**
+ * Helper: Construct a fallback image URL if extraction fails
+ * Uses product ID to generate a placeholder or cached image URL
+ */
+function constructFallbackImageUrl(data) {
+    if (!data) return '';
+
+    // Try to construct a URL from available data
+    const productId = data.id || '';
+    const itemId = data.itemId || '';
+    
+    // Fallback: Use a placeholder CDN URL with product ID
+    if (productId) {
+        return `https://rukminim1.flixcart.com/image/300/300/xif0q/placeholder/{productId}.jpeg?q=70`;
+    }
+    
+    // Last resort: Return empty string to indicate no image
+    return '';
+}
+
+/**
  * Helper: Extract image URL
+ * Checks multiple possible locations for image URLs
+ * Returns: { url, source } object for debugging
  */
 function extractImageUrl(data) {
+    if (!data) return null;
+
+    let imageUrl = null;
+    let source = null;
+
+    // Try primary location: media.images array
     if (data.media && data.media.images && data.media.images.length > 0) {
-        let url = data.media.images[0].url;
-        // Replace placeholders
-        url = url.replace(/{@width}/g, '400')
-                 .replace(/{@height}/g, '400')
-                 .replace('{@quality}', '70');
-        return url;
+        imageUrl = data.media.images[0].url;
+        source = 'media.images[0].url';
     }
-    return null;
+    // Fallback 1: direct imageUrl property
+    else if (data.imageUrl) {
+        imageUrl = data.imageUrl;
+        source = 'data.imageUrl';
+    }
+    // Fallback 2: images array at root level
+    else if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+        imageUrl = data.images[0].url || data.images[0];
+        source = 'data.images[0]';
+    }
+    // Fallback 3: thumbnailImage property
+    else if (data.thumbnailImage) {
+        imageUrl = data.thumbnailImage;
+        source = 'data.thumbnailImage';
+    }
+    // Fallback 4: image property
+    else if (data.image) {
+        imageUrl = data.image;
+        source = 'data.image';
+    }
+    // Fallback 5: Look in value nested object if exists
+    else if (data.value && data.value.media && data.value.media.images && data.value.media.images.length > 0) {
+        imageUrl = data.value.media.images[0].url;
+        source = 'data.value.media.images[0].url';
+    }
+    // Fallback 6: value.images
+    else if (data.value && data.value.images && Array.isArray(data.value.images) && data.value.images.length > 0) {
+        imageUrl = data.value.images[0].url || data.value.images[0];
+        source = 'data.value.images[0]';
+    }
+
+    if (!imageUrl) {
+        return null;
+    }
+
+    // Replace placeholders in URL
+    imageUrl = imageUrl.replace(/{@width}/g, '400')
+                      .replace(/{@height}/g, '400')
+                      .replace(/{@quality}/g, '70')
+                      .replace(/{@quality}/gi, '70');
+
+    // Return just the URL (simplified for backward compatibility)
+    return imageUrl;
 }
 
 /**

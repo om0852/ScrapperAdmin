@@ -20,14 +20,18 @@ const parseBoolean = (value) => {
 
 /**
  * Check if product is Quick/Fast delivery
- * Based on: If product is ONLY available as 1P (Reliance Retail), it's quick
- * If available from 3P sellers, it's regular delivery
+ * Based on: If product is from seller "1" (Reliance Retail) AND only available as 1P, it's quick
  * 
- * Field: available_at_3p_seller
- * - "false" = Only 1P (Reliance) = QUICK ✅
- * - "true" = Available from 3P sellers = NOT QUICK
+ * Conditions:
+ * 1. seller_ids must contain "1" (Reliance/JioMart 1P)
+ * 2. available_at_3p_seller must be "false" (NOT from 3P sellers)
  */
 const hasJiomartQuickLabel = (variantAttributes = {}) => {
+    // Condition 1: Must be seller "1" (Reliance/JioMart)
+    const sellerIds = variantAttributes.seller_ids?.text || [];
+    if (!sellerIds.includes("1")) return false;
+    
+    // Condition 2: Must NOT be available from 3P sellers
     const available_at_3p_seller = variantAttributes.available_at_3p_seller?.text?.[0];
     return available_at_3p_seller === "false";
 };

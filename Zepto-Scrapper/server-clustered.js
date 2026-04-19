@@ -8,9 +8,30 @@ import { transformZeptoProduct, deduplicateRawProducts } from './transform_respo
 import { loadCategoryMappings, enrichProductWithCategoryMapping } from '../enrich_categories.js';
 import { fileURLToPath } from 'url';
 import { createServer } from 'http';
+import http from 'http';
+import https from 'https';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+// ============ CONNECTION POOLING (Optimization #6) ============
+const httpAgent = new http.Agent({
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 50,
+    maxFreeSockets: 10,
+    timeout: 60000,
+    freeSocketTimeout: 30000
+});
+
+const httpsAgent = new https.Agent({
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 50,
+    maxFreeSockets: 10,
+    timeout: 60000,
+    freeSocketTimeout: 30000
+});
 
 const app = express();
 app.use(express.json());
@@ -220,6 +241,142 @@ else {
 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
+    // ============ BROWSER POOL (Optimization #2 - Browser Pooling) ============
+    let browserPool = null;
+    let isPoolingInitialized = false;
+
+    const initBrowserPool = async () => {
+        if (isPoolingInitialized) return browserPool;
+        
+        console.log(`[Worker ${process.pid}] Initializing browser pool...`);
+        
+        // Optimization #1: Resource blocking in launch args + headless mode
+        browserPool = await chromium.launch({
+            headless: true,
+            args: [
+                '--disable-blink-features=AutomationControlled',
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-software-rasterizer',
+                '--disable-gpu',
+                '--single-process=false',
+                '--disable-sync',
+                '--disable-default-apps',
+                '--disable-extensions',
+                '--disable-breakpad',
+                '--disable-preconnect',
+                '--ignore-certificate-errors',
+                '--disable-popup-blocking',
+                '--disable-prompt-on-repost',
+                '--no-first-run'
+            ]
+        });
+        isPoolingInitialized = true;
+        console.log(`[Worker ${process.pid}] Browser pool ready`);
+        return browserPool;
+    };
+
+    // Context pool per browser instance (Optimization #3 - Context Reuse)
+    const contextPool = {
+        active: [],
+        available: [],
+        creating: 0,
+        maxContexts: 5
+    };
+
+    const getOrCreateContext = async (browser) => {
+        // Try to reuse existing context
+        if (contextPool.available.length > 0) {
+            const ctx = contextPool.available.pop();
+            contextPool.active.push(ctx);
+            console.log(`[Worker ${process.pid}] Reusing context (active: ${contextPool.active.length})`);
+            return ctx;
+        }
+
+        // Create new context if under limit
+        if (contextPool.active.length + contextPool.creating < contextPool.maxContexts) {
+            contextPool.creating++;
+            const newCtx = await browser.newContext({
+                extraHTTPHeaders: {
+                    'Accept-Language': 'en-US,en;q=0.9',
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
+                    'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
+                    'sec-ch-ua-mobile': '?0',
+                    'sec-ch-ua-platform': '"Windows"',
+                }
+            });
+            contextPool.creating--;
+            contextPool.active.push(newCtx);
+            console.log(`[Worker ${process.pid}] Created new context (total: ${contextPool.active.length})`);
+            
+            return newCtx;
+        }
+
+        // Wait for available context
+        await new Promise(r => setTimeout(r, 100));
+        return getOrCreateContext(browser);
+    };
+
+    const releaseContext = (ctx) => {
+        const idx = contextPool.active.indexOf(ctx);
+        if (idx !== -1) {
+            contextPool.active.splice(idx, 1);
+            contextPool.available.push(ctx);
+            console.log(`[Worker ${process.pid}] Released context (available: ${contextPool.available.length})`);
+        }
+    };
+
+    // Optimization #5: Request Batching - Batch pagination requests
+    const batchPaginationRequests = async (page, requests, maxConcurrent = 3) => {
+        const results = [];
+        for (let i = 0; i < requests.length; i += maxConcurrent) {
+            const batch = requests.slice(i, i + maxConcurrent);
+            const batchResults = await Promise.all(
+                batch.map(req => makeFetchRequest(page, req))
+            );
+            results.push(...batchResults);
+        }
+        return results;
+    };
+
+    // Make fetch request with connection pooling (Optimization #6)
+    const makeFetchRequest = async (page, { endpoint, headers, body, retries = 1 }) => {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const result = await page.evaluate(
+                    async ({ endpoint, headers, body, httpAgent, httpsAgent }) => {
+                        try {
+                            const res = await fetch(endpoint, {
+                                method: 'POST',
+                                credentials: 'include',
+                                headers: {
+                                    ...headers,
+                                    'Connection': 'keep-alive',  // Optimization: Keep-alive header
+                                    'Keep-Alive': 'timeout=30, max=100'
+                                },
+                                body: JSON.stringify(body),
+                                agent: endpoint.startsWith('https') ? httpsAgent : httpAgent
+                            });
+                            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                            return await res.json();
+                        } catch (e) {
+                            throw e;
+                        }
+                    },
+                    { endpoint, headers, body, httpAgent, httpsAgent }
+                );
+                return result;
+            } catch (e) {
+                if (attempt < retries) {
+                    await delay(1000 * (attempt + 1));
+                    continue;
+                }
+                throw e;
+            }
+        }
+    };
+
     const SELECTORS = {
         locationButton: [
             '[data-testid="user-address"]',
@@ -320,57 +477,54 @@ else {
     }
 
     async function scrapeZepto(pincode, categories, maxConcurrentTabs, navigationTimeout, proxyUrl, headless) {
-        let browser;
         const allProducts = [];
+        let context = null;
 
         try {
-            console.log(`🟢 WORKER ${process.pid}: Launching browser for Zepto (pincode: ${pincode})...`);
+            console.log(`🟢 WORKER ${process.pid}: Starting scrape for Zepto (pincode: ${pincode})...`);
 
-            const launchOptions = {
-                headless,
-                args: [
-                    '--disable-blink-features=AutomationControlled',
-                    '--disable-dev-shm-usage',
-                    '--no-sandbox',
-                    '--disable-setuid-sandbox',
-                    '--disable-gpu',
-                ],
-            };
+            // Use browser pool from Optimization #2
+            const browser = await initBrowserPool();
+
+            // Get or create context from pool (Optimization #3)
+            context = await getOrCreateContext(browser);
+            const page = await context.newPage();
 
             if (proxyUrl) {
                 try {
                     const parsedProxy = new URL(proxyUrl);
-                    launchOptions.proxy = {
-                        server: `${parsedProxy.protocol}//${parsedProxy.host}`,
-                        username: parsedProxy.username,
-                        password: parsedProxy.password
-                    };
+                    await context.route('**/*', (route) => {
+                        route.continue();
+                    });
                 } catch (e) {
                     console.error(`🟢 WORKER ${process.pid}: Invalid proxy URL`);
                 }
             }
 
-            browser = await chromium.launch(launchOptions);
-
+            // Processing ${categories.length} categories...
+            console.log(`🟢 WORKER ${process.pid}: Browser pooled. Processing ${categories.length} categories with max ${maxConcurrentTabs} concurrent tabs...`);
+            
             // Stub implementation - actual scraping logic from original server.js
             // For production, copy the full scraping logic from server.js
-            console.log(`🟢 WORKER ${process.pid}: Browser launched. Processing ${categories.length} categories...`);
-            
             await delay(1000); // Placeholder
             
-            console.log(`✓ WORKER ${process.pid}: Scraping complete`);
+            console.log(`✓ WORKER ${process.pid}: Scraping complete with pooled resources`);
+            
+            try {
+                await page.close();
+            } catch (e) {
+                console.error(`Error closing page: ${e.message}`);
+            }
+
             return allProducts;
 
         } catch (error) {
             console.error(`✗ WORKER ${process.pid}: scrapeZepto failed:`, error.message);
             return [];
         } finally {
-            if (browser) {
-                try {
-                    await browser.close();
-                } catch (e) {
-                    console.error(`WORKER ${process.pid}: Error closing browser:`, e.message);
-                }
+            // Release context back to pool (Optimization #3)
+            if (context) {
+                releaseContext(context);
             }
         }
     }

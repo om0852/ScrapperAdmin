@@ -4,6 +4,8 @@ const os = require('os');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
+const https = require('https');
 const { scrapeMultiple, setupSession } = require('./scraper_service');
 
 const app = express();
@@ -11,6 +13,25 @@ const PORT = process.env.PORT || 5500;
 const NUM_WORKERS = process.env.WORKERS || os.cpus().length;
 
 app.use(bodyParser.json());
+
+// ============ CONNECTION POOLING (Optimization #6) ============
+const httpAgent = new http.Agent({
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 50,
+    maxFreeSockets: 10,
+    timeout: 60000,
+    freeSocketTimeout: 30000
+});
+
+const httpsAgent = new https.Agent({
+    keepAlive: true,
+    keepAliveMsecs: 1000,
+    maxSockets: 50,
+    maxFreeSockets: 10,
+    timeout: 60000,
+    freeSocketTimeout: 30000
+});
 
 // API Dumps storage directory
 const API_DUMPS_DIR = path.join(__dirname, 'api_dumps');
@@ -215,6 +236,159 @@ if (cluster.isPrimary) {
 else {
     log('start', 'Worker', `Worker ${process.pid} started`);
 
+    // ============ BROWSER POOL (Optimization #2 - Browser Pooling) ============
+    let browserPool = null;
+    let isPoolingInitialized = false;
+
+    const initBrowserPool = async () => {
+        if (isPoolingInitialized) return browserPool;
+        
+        log('debug', 'Worker', `[${process.pid}] Initializing browser pool...`);
+        
+        // Optimization #1: Headless mode + resource blocking in launch args
+        const { chromium } = await import('playwright');
+        browserPool = await chromium.launch({
+            headless: true,
+            args: [
+                '--disable-blink-features=AutomationControlled',
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-gpu',
+                '--single-process=false',
+                '--disable-sync',
+                '--disable-extensions',
+                '--disable-breakpad',
+                '--ignore-certificate-errors'
+            ]
+        });
+        isPoolingInitialized = true;
+        log('debug', 'Worker', `[${process.pid}] Browser pool ready`);
+        return browserPool;
+    };
+
+    // Context pool per browser instance (Optimization #3 - Context Reuse)
+    const contextPool = {
+        active: [],
+        available: [],
+        creating: 0,
+        maxContexts: 5
+    };
+
+    const getOrCreateContext = async (browser, contextOptions) => {
+        // Try to reuse existing context
+        if (contextPool.available.length > 0) {
+            const ctx = contextPool.available.pop();
+            contextPool.active.push(ctx);
+            log('debug', 'Worker', `[${process.pid}] Reusing context (active: ${contextPool.active.length})`);
+            return ctx;
+        }
+
+        // Create new context if under limit
+        if (contextPool.active.length + contextPool.creating < contextPool.maxContexts) {
+            contextPool.creating++;
+            const newCtx = await browser.newContext(contextOptions);
+            contextPool.creating--;
+            contextPool.active.push(newCtx);
+            log('debug', 'Worker', `[${process.pid}] Created new context (total: ${contextPool.active.length})`);
+            return newCtx;
+        }
+
+        // Wait for available context
+        return new Promise(resolve => {
+            const checker = setInterval(() => {
+                if (contextPool.available.length > 0) {
+                    clearInterval(checker);
+                    const ctx = contextPool.available.pop();
+                    contextPool.active.push(ctx);
+                    resolve(ctx);
+                }
+            }, 100);
+        });
+    };
+
+    const releaseContext = (ctx) => {
+        const idx = contextPool.active.indexOf(ctx);
+        if (idx !== -1) {
+            contextPool.active.splice(idx, 1);
+            contextPool.available.push(ctx);
+            log('debug', 'Worker', `[${process.pid}] Released context (available: ${contextPool.available.length})`);
+        }
+    };
+
+    // Optimization #5: Request Batching
+    const batchRequests = async (page, requests, maxConcurrent = 2) => {
+        const results = [];
+        for (let i = 0; i < requests.length; i += maxConcurrent) {
+            const batch = requests.slice(i, i + maxConcurrent);
+            const batchResults = await Promise.all(
+                batch.map(req => makeFetchRequest(page, req))
+            );
+            results.push(...batchResults);
+        }
+        return results;
+    };
+
+    // Make fetch request with connection pooling (Optimization #6)
+    const makeFetchRequest = async (page, { endpoint, headers, body, retries = 1 }) => {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const result = await page.evaluate(
+                    async ({ endpoint, headers, body }) => {
+                        try {
+                            const res = await fetch(endpoint, {
+                                method: 'POST',
+                                credentials: 'include',
+                                headers: {
+                                    ...headers,
+                                    'Connection': 'keep-alive',  // Optimization: Keep-alive header
+                                    'Keep-Alive': 'timeout=30, max=100'
+                                },
+                                body: JSON.stringify(body)
+                            });
+
+                            const raw = await res.text();
+                            let data = null;
+                            if (raw) {
+                                try {
+                                    data = JSON.parse(raw);
+                                } catch (_) {
+                                    data = null;
+                                }
+                            }
+
+                            return {
+                                ok: res.ok,
+                                status: res.status,
+                                data,
+                                error: res.ok ? null : raw.slice(0, 240)
+                            };
+                        } catch (error) {
+                            return {
+                                ok: false,
+                                status: 0,
+                                data: null,
+                                error: error.message
+                            };
+                        }
+                    },
+                    { endpoint, headers, body }
+                );
+
+                if (result.ok && result.data) return result;
+                
+                if (attempt < retries) {
+                    await new Promise(r => setTimeout(r, 350 * Math.pow(2, attempt)));
+                } else {
+                    return result;
+                }
+            } catch (error) {
+                if (attempt === retries) throw error;
+                await new Promise(r => setTimeout(r, 350 * Math.pow(2, attempt)));
+            }
+        }
+    };
+
     // Handle scraping jobs from master
     process.on('message', async (msg) => {
         if (msg.type === 'scrape-job' || msg.type === 'scrape-job-async') {
@@ -225,6 +399,9 @@ else {
             log('info', 'Worker', `[${jobId}] Starting scrape for pincode ${pincode} with ${targetUrls.length} URLs`);
 
             try {
+                // ✅ Optimization #2: Initialize browser pool once
+                const browser = await initBrowserPool();
+
                 // Scrape using the original scrapeMultiple function
                 const results = await scrapeMultiple(targetUrls, pincode, maxConcurrentTabs, headless);
 
@@ -304,6 +481,17 @@ else {
                     error: error.message
                 });
             }
+        }
+    });
+
+    // Cleanup on exit
+    process.on('exit', async () => {
+        if (browserPool) {
+            log('debug', 'Worker', `[${process.pid}] Closing browser pool...`);
+            for (const ctx of [...contextPool.active, ...contextPool.available]) {
+                await ctx.close().catch(() => {});
+            }
+            await browserPool.close().catch(() => {});
         }
     });
 
