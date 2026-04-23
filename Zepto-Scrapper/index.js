@@ -2,6 +2,7 @@ import { Actor } from 'apify';
 import { Dataset, log } from 'crawlee';
 import { chromium } from 'playwright';
 import fs from 'fs';
+import { createMacChromeContext } from './browserFingerprint.js';
 
 // Initialize Actor
 await Actor.init();
@@ -519,11 +520,7 @@ try {
         log.info(`ℹ️ No stored state for pincode ${pincode}, will set manually.`);
     }
 
-    const context = await browser.newContext({
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-        viewport: { width: 1920, height: 1080 },
-        locale: 'en-US',
-        timezoneId: 'Asia/Kolkata',
+    const { context } = await createMacChromeContext(browser, {
         storageState: storageState,
         httpCredentials: proxyUrl ? {
             username: new URL(proxyUrl).username,

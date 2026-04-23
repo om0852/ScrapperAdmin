@@ -120,6 +120,43 @@ function extractBrandName(item, cartItem) {
     return 'N/A';
 }
 
+/**
+ * Extract AD status from multiple sources in the API response
+ * Checks: tracking.common_attributes.badge, overlay_badges, impression_map
+ */
+function extractAdStatus(item) {
+    // Primary check: tracking.common_attributes.badge
+    if (item.tracking?.common_attributes?.badge === 'AD') {
+        return true;
+    }
+
+    // Fallback 1: Check overlay_badges for AD icon
+    if (Array.isArray(item.overlay_badges)) {
+        const hasAdBadge = item.overlay_badges.some(badge => 
+            badge.image?.url?.toLowerCase().includes('ad') || 
+            badge.label?.toLowerCase().includes('ad')
+        );
+        if (hasAdBadge) {
+            return true;
+        }
+    }
+
+    // Fallback 2: Check impression_map overlay_badges field
+    if (item.tracking?.impression_map?.overlay_badges) {
+        const badgeStr = String(item.tracking.impression_map.overlay_badges).toLowerCase();
+        if (badgeStr.includes('ad')) {
+            return true;
+        }
+    }
+
+    // Fallback 3: Direct badge field
+    if (item.badge === 'AD' || item.meta?.badge === 'AD') {
+        return true;
+    }
+
+    return false;
+}
+
 function extractProductsWithVariants(item) {
     try {
         // Blinkit API structure: product data is in atc_action.add_to_cart.cart_item
@@ -153,7 +190,7 @@ function extractProductsWithVariants(item) {
 
         const brand = extractBrandName(item, cartItem);
 
-        const isAd = item.tracking?.common_attributes?.badge === 'AD';
+        const isAd = extractAdStatus(item);
 
         let url = '';
         if (id && name) {
@@ -268,6 +305,9 @@ function extractProductsWithVariants(item) {
                 const slug = String(variantName || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
                 const variantUrl = variantId && slug ? `https://blinkit.com/prn/${slug}/prid/${variantId}` : baseProduct.url;
 
+                // Extract variant-specific AD status instead of inheriting from main product
+                const variantIsAd = extractAdStatus(variantData);
+
                 const variantProduct = {
                     ...baseProduct,
                     id: variantId,
@@ -283,6 +323,7 @@ function extractProductsWithVariants(item) {
                     brand: variantBrand,
                     brandName: variantBrand,
                     isOutOfStock: variantOutOfStock,
+                    isAd: variantIsAd,
                     isVariant: true,
                     comboGroupId: mainProductId
                 };

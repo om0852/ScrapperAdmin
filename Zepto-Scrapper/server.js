@@ -5,6 +5,7 @@ import path from 'path';
 import { transformZeptoProduct, deduplicateRawProducts } from './transform_response_format.js';
 import { loadCategoryMappings, enrichProductWithCategoryMapping } from '../enrich_categories.js';
 import { fileURLToPath } from 'url';
+import { createMacChromeContext } from './browserFingerprint.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -14,18 +15,37 @@ const CATEGORY_MAPPINGS = loadCategoryMappings(path.join(__dirname, '..', 'categ
 
 // Load storage states if available
 let STORAGE_MAP = {};
+let DEFAULT_STORAGE_STATE = null;
 try {
-    const storageData = fs.readFileSync('pincodes_storage_map.json', 'utf8');
+    const storageData = fs.readFileSync(path.join(__dirname, 'pincodes_storage_map.json'), 'utf8');
     STORAGE_MAP = JSON.parse(storageData);
     console.log(`✅ Loaded storage states for pincodes: ${Object.keys(STORAGE_MAP).join(', ')}`);
 } catch (e) {
     console.warn('⚠️ Could not load pincodes_storage_map.json. Storage optimization will be disabled.');
 }
 
+try {
+    const defaultStorageData = fs.readFileSync(path.join(__dirname, 'zepto_storage_state.json'), 'utf8');
+    DEFAULT_STORAGE_STATE = JSON.parse(defaultStorageData);
+    console.log('✅ Loaded default Zepto storage state (zepto_storage_state.json)');
+} catch (e) {
+    DEFAULT_STORAGE_STATE = null;
+}
+
 const app = express();
 const PORT = process.env.PORT || 4089;
 const ZEPTO_BASE_ORIGIN = 'https://www.zepto.com';
 const ZEPTO_CDN_ORIGIN = 'https://cdn.zeptonow.com/production/';
+const ZEPTO_CRITICAL_COOKIE_NAMES = [
+    'session_id',
+    'device_id',
+    'marketplace',
+    'serviceability',
+    'prev_store_id',
+    'latitude',
+    'longitude',
+    'user_position'
+];
 
 // Middleware
 app.use(express.json());
@@ -33,6 +53,83 @@ app.use(express.json());
 // ==================== HELPER FUNCTIONS ====================
 
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+function safeJsonParse(value) {
+    try {
+        return JSON.parse(value);
+    } catch {
+        return null;
+    }
+}
+
+function decodeIfEncoded(value) {
+    if (typeof value !== 'string') return value;
+    try {
+        return decodeURIComponent(value);
+    } catch {
+        return value;
+    }
+}
+
+function cookieExists(cookies, name) {
+    return cookies.some((cookie) => cookie.name === name);
+}
+
+function ensurePrevStoreIdCookie(cookies) {
+    if (cookieExists(cookies, 'prev_store_id')) return;
+
+    const serviceabilityCookie = cookies.find((cookie) => cookie.name === 'serviceability');
+    if (!serviceabilityCookie?.value) return;
+
+    const parsed = safeJsonParse(decodeIfEncoded(serviceabilityCookie.value));
+    const primaryStoreId = parsed?.primaryStore?.storeId;
+    if (!primaryStoreId) return;
+
+    const oneYearFromNow = Math.floor(Date.now() / 1000) + 31536000;
+    cookies.push({
+        name: 'prev_store_id',
+        value: String(primaryStoreId),
+        domain: 'www.zepto.com',
+        path: '/',
+        expires: oneYearFromNow,
+        httpOnly: false,
+        secure: false,
+        sameSite: 'Lax'
+    });
+}
+
+function normalizeStorageState(storageState) {
+    if (!storageState) return undefined;
+
+    const normalized = {
+        cookies: Array.isArray(storageState.cookies) ? [...storageState.cookies] : [],
+        origins: Array.isArray(storageState.origins) ? [...storageState.origins] : []
+    };
+
+    ensurePrevStoreIdCookie(normalized.cookies);
+    return normalized;
+}
+
+function getStorageDiagnostics(storageState) {
+    if (!storageState) {
+        return {
+            cookieCount: 0,
+            localStorageCount: 0,
+            missingCriticalCookies: [...ZEPTO_CRITICAL_COOKIE_NAMES]
+        };
+    }
+
+    const cookieNames = new Set((storageState.cookies || []).map((cookie) => cookie.name));
+    const localStorageCount = (storageState.origins || []).reduce((count, origin) => {
+        return count + (origin.localStorage?.length || 0);
+    }, 0);
+
+    return {
+        cookieCount: storageState.cookies?.length || 0,
+        localStorageCount,
+        missingCriticalCookies: ZEPTO_CRITICAL_COOKIE_NAMES.filter((name) => !cookieNames.has(name))
+    };
+}
 
 const SELECTORS = {
     locationButton: [
@@ -588,6 +685,27 @@ async function fetchCategoryRsc(page, sourceUrl) {
 
     return page.evaluate(
         async ({ requestUrl, nextUrlHeader, nextRouterStateTreeHeader, referer }) => {
+            const getCookieValue = (cookieName) => {
+                const escapedName = cookieName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                const match = document.cookie.match(new RegExp(`(?:^|; )${escapedName}=([^;]*)`));
+                return match ? decodeURIComponent(match[1]) : '';
+            };
+
+            const getFirstLocalStorageValue = (keys = []) => {
+                for (const key of keys) {
+                    const value = localStorage.getItem(key);
+                    if (value && String(value).trim()) {
+                        return String(value).trim();
+                    }
+                }
+                return '';
+            };
+
+            const normalizeBearer = (token) => {
+                if (!token) return '';
+                return /^bearer\s+/i.test(token) ? token : `Bearer ${token}`;
+            };
+
             try {
                 const headers = {
                     accept: '*/*',
@@ -596,6 +714,25 @@ async function fetchCategoryRsc(page, sourceUrl) {
                     pragma: 'no-cache',
                     'cache-control': 'no-cache'
                 };
+
+                const accessToken = getFirstLocalStorageValue([
+                    'access_token',
+                    'accessToken',
+                    'auth_token',
+                    'authToken',
+                    'token',
+                    'jwt',
+                    'id_token'
+                ]);
+                const xsrfToken = getCookieValue('XSRF-TOKEN');
+
+                if (accessToken) {
+                    headers.authorization = normalizeBearer(accessToken);
+                    headers['x-access-token'] = accessToken;
+                }
+                if (xsrfToken) {
+                    headers['x-xsrf-token'] = xsrfToken;
+                }
 
                 if (nextUrlHeader) {
                     headers['next-url'] = nextUrlHeader;
@@ -688,8 +825,11 @@ function extractJsonFromChunkPayload(payload) {
 
 function parseRsc(rawText) {
     const chunks = [];
+    const normalizedText = String(rawText || '')
+        // Zepto can concatenate chunk records without newline, e.g. `...}]}2:[...`
+        .replace(/([}\]])([a-z0-9]{1,4}:)/gi, '$1\n$2');
 
-    for (const line of String(rawText || '').split(/\r?\n/)) {
+    for (const line of normalizedText.split(/\r?\n/)) {
         const trimmed = line.trim();
         if (!trimmed) {
             continue;
@@ -983,7 +1123,85 @@ function looksLikeRscProduct(node) {
     return Boolean(productId && skuId && name && price !== null && imagePath);
 }
 
-function normalizeRscProduct(node, productUrlLookup = new Map()) {
+function hasSponsoredTags(node) {
+    const tags = node?.meta?.tags;
+    if (Array.isArray(tags)) {
+        const hit = tags.some((tag) => {
+            const text = `${tag?.type || ''} ${tag?.tagType || ''} ${tag?.tagName || ''}`.toUpperCase();
+            return text.includes('SPONSORED');
+        });
+        if (hit) return true;
+    }
+
+    const tagsV2 = node?.meta?.tagsV2;
+    if (tagsV2 && typeof tagsV2 === 'object') {
+        for (const value of Object.values(tagsV2)) {
+            const tagItems = Array.isArray(value) ? value : [value];
+            for (const tag of tagItems) {
+                const text = `${tag?.type || ''} ${tag?.tagType || ''} ${tag?.tagName || ''}`.toUpperCase();
+                if (text.includes('SPONSORED')) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    const cardTags = node?.productCardTags;
+    if (cardTags && typeof cardTags === 'object') {
+        for (const value of Object.values(cardTags)) {
+            const tagItems = Array.isArray(value) ? value : [value];
+            for (const tag of tagItems) {
+                const text = `${tag?.type || ''} ${tag?.tagType || ''} ${tag?.tagName || ''}`.toUpperCase();
+                if (text.includes('SPONSORED')) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+function extractAdContextFromRsc(rawText) {
+    const context = {
+        boostedPvIds: new Set(),
+        adsStartRange: null,
+        adsEndRange: null
+    };
+
+    const chunks = parseRsc(rawText);
+    walkNodes(chunks, (node) => {
+        if (!isPlainObject(node)) return;
+
+        if (typeof node.boosted_pv_ids === 'string' && node.boosted_pv_ids.trim()) {
+            node.boosted_pv_ids
+                .split(',')
+                .map((id) => id.trim())
+                .filter(Boolean)
+                .forEach((id) => context.boostedPvIds.add(id));
+        }
+
+        if (context.adsStartRange === null && Number.isFinite(Number(node.ads_start_range))) {
+            context.adsStartRange = Number(node.ads_start_range);
+        }
+        if (context.adsEndRange === null && Number.isFinite(Number(node.ads_end_range))) {
+            context.adsEndRange = Number(node.ads_end_range);
+        }
+    });
+
+    return context;
+}
+
+function isAdByRange(index, adContext) {
+    if (!adContext) return false;
+    const { adsStartRange, adsEndRange } = adContext;
+    if (!Number.isFinite(adsStartRange) || !Number.isFinite(adsEndRange) || !Number.isFinite(index)) {
+        return false;
+    }
+    return index >= adsStartRange && index < adsEndRange;
+}
+
+function normalizeRscProduct(node, productUrlLookup = new Map(), adContext = null, itemIndex = -1) {
     const skuId = pickFirst(node, ['productVariant.id']) || null;
     const productUrl = normalizeProductUrl(
         productUrlLookup.get(String(skuId || '').trim()) ||
@@ -1011,6 +1229,20 @@ function normalizeRscProduct(node, productUrlLookup = new Map()) {
         originalPrice,
         pickFirst(node, ['discountPercent', 'discount_percentage', 'discount'])
     );
+    const explicitAdFlag = normalizeBoolean(
+        pickFirst(node, [
+            'is_ad',
+            'isAd',
+            'sponsored',
+            'isSponsored',
+            'is_sponsored',
+            'isSponsoredProduct',
+            'isPromoted'
+        ])
+    ) === true;
+    const taggedAsSponsored = hasSponsoredTags(node);
+    const boostedMatch = Boolean(skuId && adContext?.boostedPvIds?.has(String(skuId)));
+    const isAd = explicitAdFlag || taggedAsSponsored || boostedMatch;
 
     return {
         productId: productId || null,
@@ -1029,7 +1261,7 @@ function normalizeRscProduct(node, productUrlLookup = new Map()) {
             pickFirst(node, ['productVariant.formattedPacksize', 'productVariant.packsize', 'variant_name', 'variant', 'weight', 'unit', 'packsize', 'size']) ||
             null,
         rating: parseNumber(pickFirst(node, ['rating', 'avg_rating', 'average_rating'])),
-        isAd: normalizeBoolean(pickFirst(node, ['is_ad', 'isAd', 'sponsored'])) === true,
+        isAd,
         deliveryTime: pickFirst(node, ['eta', 'deliveryTime', 'delivery_time', 'etaText']) || null,
         isOutOfStock: resolveOutOfStock(node),
         productUrl,
@@ -1100,10 +1332,107 @@ function applyVariantGrouping(products = []) {
     return result;
 }
 
-function extractProductsFromRsc(rawText, category, config) {
+function extractPvidFromUrl(url) {
+    const match = String(url || '').match(/\/pvid\/([a-z0-9-]+)/i);
+    return match ? match[1] : null;
+}
+
+function extractSlugFromProductUrl(url) {
+    const match = String(url || '').match(/\/pn\/([^/?#]+)\/pvid\//i);
+    return match ? decodeURIComponent(match[1]) : null;
+}
+
+function deriveCategoryNameFromUrl(rawUrl) {
+    const url = String(rawUrl || '');
+    const match = url.match(/\/cn\/([^/]+)\/([^/]+)\//i);
+    if (!match) return 'Unknown Category';
+    const parts = [match[1], match[2]]
+        .map((part) => decodeURIComponent(part).replace(/-/g, ' ').trim())
+        .filter(Boolean);
+    return parts.length ? parts.join(' / ') : 'Unknown Category';
+}
+
+function extractProductsFromItemListSchema(rawText, category, config) {
+    const chunks = parseRsc(rawText);
+    const adContext = extractAdContextFromRsc(rawText);
+    const schemas = [];
+
+    walkNodes(chunks, (node) => {
+        if (!isPlainObject(node)) return;
+        if (node['@type'] === 'ItemList' && Array.isArray(node.itemListElement)) {
+            schemas.push(node);
+        }
+    });
+
     const products = [];
     const seen = new Set();
+    let discoveredIndex = -1;
+    const maxAdRangeLength = 8;
+    const shouldUseRange = Boolean(
+        adContext &&
+        Number.isFinite(adContext.adsStartRange) &&
+        Number.isFinite(adContext.adsEndRange) &&
+        adContext.adsEndRange > adContext.adsStartRange &&
+        (adContext.adsEndRange - adContext.adsStartRange) <= maxAdRangeLength
+    );
+
+    for (const schema of schemas) {
+        for (const entry of schema.itemListElement || []) {
+            discoveredIndex += 1;
+            const item = entry?.item || {};
+            const productUrl = item?.url || entry?.url || null;
+            const productId = extractPvidFromUrl(productUrl) || null;
+            const dedupeKey = productId || productUrl || item?.name;
+            if (!dedupeKey || seen.has(dedupeKey)) continue;
+            seen.add(dedupeKey);
+
+            const rawPrice = item?.offers?.price;
+            const currentPrice = convertPaiseToRupees(rawPrice);
+            const ratingValue = parseNumber(item?.aggregateRating?.ratingValue);
+            const availability = String(item?.offers?.availability || '').toLowerCase();
+
+            products.push({
+                productId,
+                baseProductId: productId,
+                skuId: productId,
+                productSlug: extractSlugFromProductUrl(productUrl),
+                productName: item?.name || null,
+                brand: null,
+                productImage: normalizeImageUrl(item?.image || null),
+                currentPrice,
+                originalPrice: null,
+                discountPercentage: null,
+                quantity: null,
+                rating: ratingValue,
+                isAd: Boolean((productId && adContext?.boostedPvIds?.has(String(productId))) || (shouldUseRange && isAdByRange(discoveredIndex, adContext))),
+                deliveryTime: null,
+                isOutOfStock: availability.includes('outofstock'),
+                productUrl,
+                categoryName: category.name,
+                subCategory: null,
+                isPrimary: true,
+                scrapedAt: new Date().toISOString(),
+                platform: 'Zepto',
+                pincode: config.pincode,
+                categoryUrl: category.url
+            });
+        }
+    }
+
+    return products
+        .slice(0, config.maxProductsPerSearch)
+        .map((product, index) => ({
+            ...product,
+            rank: index + 1
+        }));
+}
+
+function extractProductsFromRsc(rawText, category, config) {
+    const products = [];
     const productUrlLookup = buildProductUrlLookup(rawText);
+    const adContext = extractAdContextFromRsc(rawText);
+    const skuIndex = new Map();
+    let uniqueIndex = -1;
 
     for (const chunk of parseRsc(rawText)) {
         walkNodes(chunk, (node) => {
@@ -1111,20 +1440,68 @@ function extractProductsFromRsc(rawText, category, config) {
                 return;
             }
 
-            const normalized = normalizeRscProduct(node, productUrlLookup);
-            const identityKey = normalized.skuId || normalized.productId || normalized.productUrl || normalized.productName;
-            if (!identityKey || seen.has(identityKey)) {
+            const skuId = pickFirst(node, ['productVariant.id']);
+            const identityKey = String(skuId || '').trim();
+            if (!identityKey) return;
+
+            if (!skuIndex.has(identityKey)) {
+                uniqueIndex += 1;
+                const normalized = normalizeRscProduct(node, productUrlLookup, adContext, uniqueIndex);
+                skuIndex.set(identityKey, { arrayIndex: products.length, itemIndex: uniqueIndex });
+                products.push({
+                    ...normalized,
+                    categoryName: normalized.categoryName || category.name,
+                    categoryUrl: category.url,
+                    platform: 'Zepto',
+                    pincode: config.pincode
+                });
                 return;
             }
 
-            seen.add(identityKey);
-            products.push({
-                ...normalized,
-                categoryName: normalized.categoryName || category.name,
-                categoryUrl: category.url,
-                platform: 'Zepto',
-                pincode: config.pincode
-            });
+            const existingMeta = skuIndex.get(identityKey);
+            const incoming = normalizeRscProduct(node, productUrlLookup, adContext, existingMeta.itemIndex);
+            const existing = products[existingMeta.arrayIndex] || {};
+
+            const merged = { ...existing };
+            const isMissing = (value) => value === null || value === undefined || value === '';
+
+            for (const key of [
+                'productId',
+                'baseProductId',
+                'skuId',
+                'productSlug',
+                'productName',
+                'brand',
+                'productImage',
+                'quantity',
+                'deliveryTime',
+                'productUrl',
+                'categoryName',
+                'subCategory'
+            ]) {
+                if (isMissing(merged[key]) && !isMissing(incoming[key])) {
+                    merged[key] = incoming[key];
+                }
+            }
+
+            for (const key of ['currentPrice', 'originalPrice', 'discountPercentage', 'rating']) {
+                if ((merged[key] === null || merged[key] === undefined) && incoming[key] !== null && incoming[key] !== undefined) {
+                    merged[key] = incoming[key];
+                }
+            }
+
+            merged.isAd = Boolean(existing.isAd || incoming.isAd);
+            merged.isOutOfStock = Boolean(existing.isOutOfStock || incoming.isOutOfStock);
+            merged.isPrimary = Boolean(existing.isPrimary || incoming.isPrimary);
+
+            // Preserve stability of category/platform metadata assigned above.
+            merged.categoryName = merged.categoryName || category.name;
+            merged.categoryUrl = existing.categoryUrl || category.url;
+            merged.platform = existing.platform || 'Zepto';
+            merged.pincode = existing.pincode || config.pincode;
+            merged.scrapedAt = existing.scrapedAt || incoming.scrapedAt || merged.scrapedAt;
+
+            products[existingMeta.arrayIndex] = merged;
         });
     }
 
@@ -1177,14 +1554,17 @@ async function scrapeCategoryDirect(context, category, config) {
         }
 
         const products = extractProductsFromRsc(response.rawText, category, config);
-        rawResponseEntry.productCount = products.length;
-        if (!products.length) {
+        const finalProducts = products.length > 0
+            ? products
+            : extractProductsFromItemListSchema(response.rawText, category, config);
+        rawResponseEntry.productCount = finalProducts.length;
+        if (!finalProducts.length) {
             console.warn(`No products parsed from direct RSC response for: ${category.name}`);
             return [];
         }
 
-        console.log(`Scraped ${products.length} products from: ${category.name}`);
-        return products;
+        console.log(`Scraped ${finalProducts.length} products from: ${category.name}`);
+        return finalProducts;
     } catch (error) {
         console.error(`Error scraping ${category.name}: ${error.message}`);
         return [];
@@ -1295,7 +1675,10 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
             headless = true,
             navigationTimeout = 60000,
             proxyUrl = null,  // Optional Apify proxy URL
-            store = false
+            store = false,
+            watchUrl = null, // Debug: keep this category URL open in a visible tab while scraping
+            keepWatchOpen = false, // Debug: keep watch tab open after scraping (auto-closes after keepWatchOpenMs)
+            keepWatchOpenMs = 15 * 60 * 1000 // Debug: how long to keep the watch tab open after response
         } = req.body;
 
         // Normalize input: Support `urls` array by converting to categories objects
@@ -1303,7 +1686,7 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
         if (urls && Array.isArray(urls) && urls.length > 0) {
             urls.forEach(u => {
                 targetCategories.push({
-                    name: 'Unknown Category', // Will be populated or generic
+                    name: deriveCategoryNameFromUrl(u),
                     url: u
                 });
             });
@@ -1324,9 +1707,14 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
             console.log(`🔒 Using proxy: ${proxyUrl.split('@')[1] || 'configured'}`);
         }
 
+        const watchUrlNormalized = typeof watchUrl === 'string' && watchUrl.trim() ? watchUrl.trim() : null;
+        const shouldKeepWatchOpen = Boolean(watchUrlNormalized && keepWatchOpen);
+        const keepWatchDurationMs = Number.isFinite(Number(keepWatchOpenMs)) ? Math.max(0, Number(keepWatchOpenMs)) : 0;
+        const effectiveHeadless = watchUrlNormalized ? false : headless;
+
         // Launch browser with optional proxy
         const launchOptions = {
-            headless,
+            headless: effectiveHeadless,
             args: [
                 '--disable-blink-features=AutomationControlled',
                 '--disable-dev-shm-usage',
@@ -1355,34 +1743,59 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
 
 
         let storageState = undefined;
-        let shouldUseStoredState = false;
+        let shouldSkipManualPincodeSet = false;
+        let storageStateSource = null;
 
         if (STORAGE_MAP[pincode]) {
             console.log(`⚡ Found stored state for pincode ${pincode}, skipping manual location set.`);
-            storageState = STORAGE_MAP[pincode];
-            shouldUseStoredState = true;
+            storageState = normalizeStorageState(STORAGE_MAP[pincode]);
+            shouldSkipManualPincodeSet = true;
+            storageStateSource = `pincode:${pincode}`;
+        } else if (DEFAULT_STORAGE_STATE) {
+            console.log(`⚡ Using default storage state (logged-in session). Will still set pincode ${pincode} manually.`);
+            storageState = normalizeStorageState(DEFAULT_STORAGE_STATE);
+            storageStateSource = 'default';
         } else {
-            console.log(`ℹ️ No stored state for pincode ${pincode}, will set manually.`);
+            console.log(`ℹ️ No stored state available, will set pincode ${pincode} manually.`);
         }
 
-        const context = await browser.newContext({
-            userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
-            viewport: { width: 1920, height: 1080 },
-            locale: 'en-US',
-            timezoneId: 'Asia/Kolkata',
-            storageState: storageState, // Inject storage state if available
-            // Ensure httpCredentials are set if proxy is used (double safety)
+        if (storageState) {
+            const diagnostics = getStorageDiagnostics(storageState);
+            console.log(`[Storage] Source: ${storageStateSource || 'unknown'}`);
+            console.log(`[Storage] Cookies in state: ${diagnostics.cookieCount}, localStorage entries: ${diagnostics.localStorageCount}`);
+            if (diagnostics.missingCriticalCookies.length > 0) {
+                console.warn(`[Storage] Missing critical cookies: ${diagnostics.missingCriticalCookies.join(', ')}`);
+            } else {
+                console.log('[Storage] Critical cookies present');
+            }
+        }
+
+        const { context } = await createMacChromeContext(browser, {
+            storageState: storageState,
             httpCredentials: proxyUrl ? {
                 username: new URL(proxyUrl).username,
                 password: new URL(proxyUrl).password,
             } : undefined
         });
+        if (storageState?.cookies?.length) {
+            await context.addCookies(storageState.cookies);
+        }
+
+        let watchPage = null;
 
         // Block unnecessary resources to speed up loading
         await context.route('**/*', (route) => {
             const request = route.request();
             const resourceType = request.resourceType();
-            const blockedTypes = ['image', 'font', 'media', 'other'];
+            const blockedTypes = ['image', 'font', 'media'];
+
+            // If we're watching a page for debugging, don't block resources on that page
+            // so the user can see the full UI.
+            try {
+                if (watchPage && request.frame()?.page() === watchPage) {
+                    return route.continue();
+                }
+            } catch (_) { }
 
             if (blockedTypes.includes(resourceType)) {
                 return route.abort();
@@ -1390,8 +1803,8 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
             return route.continue();
         });
 
-        // Only run setPincode logic if we didn't use a stored state
-        if (!shouldUseStoredState) {
+        // Only skip pincode-setting when we have a pincode-specific stored state.
+        if (!shouldSkipManualPincodeSet) {
             // Set pincode with retry logic (up to 3 attempts)
             const setupPage = await context.newPage();
 
@@ -1421,6 +1834,21 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
             // If using stored state, verify we are logged in/location set by checking a dummy page or just trusting it
             // For now, we trust the state is valid as per user requirement to "fast" scrape
             console.log('✅ Used stored storage state for session.');
+        }
+
+        if (watchUrlNormalized) {
+            try {
+                watchPage = await context.newPage();
+                await watchPage.goto(watchUrlNormalized, {
+                    waitUntil: 'domcontentloaded',
+                    timeout: navigationTimeout
+                });
+                await watchPage.bringToFront();
+                console.log(`👀 Watching category tab: ${watchUrlNormalized}`);
+            } catch (e) {
+                console.warn(`⚠️ Could not open watchUrl tab: ${e.message}`);
+                watchPage = null;
+            }
         }
 
         // Scrape in batches
@@ -1457,7 +1885,27 @@ app.post('/zeptocategoryscrapper', async (req, res) => {
             }
         }
 
-        await browser.close();
+        if (watchPage && shouldKeepWatchOpen) {
+            const closeAfterMs = keepWatchDurationMs || 0;
+            console.log(`👀 Keeping watch tab open for ${closeAfterMs}ms (then auto-close)`);
+
+            setTimeout(async () => {
+                try {
+                    await watchPage.close();
+                } catch (_) { }
+                try {
+                    await browser.close();
+                } catch (_) { }
+            }, closeAfterMs);
+        } else {
+            if (watchPage) {
+                try {
+                    await watchPage.close();
+                } catch (_) { }
+            }
+
+            await browser.close();
+        }
 
         const allProducts = allResults.flat();
         const duration = ((Date.now() - startTime) / 1000).toFixed(2);

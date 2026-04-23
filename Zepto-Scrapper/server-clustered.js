@@ -10,6 +10,7 @@ import { fileURLToPath } from 'url';
 import { createServer } from 'http';
 import http from 'http';
 import https from 'https';
+import { createMacChromeContext } from './browserFingerprint.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -297,15 +298,7 @@ else {
         // Create new context if under limit
         if (contextPool.active.length + contextPool.creating < contextPool.maxContexts) {
             contextPool.creating++;
-            const newCtx = await browser.newContext({
-                extraHTTPHeaders: {
-                    'Accept-Language': 'en-US,en;q=0.9',
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8',
-                    'sec-ch-ua': '"Not_A Brand";v="8", "Chromium";v="120", "Google Chrome";v="120"',
-                    'sec-ch-ua-mobile': '?0',
-                    'sec-ch-ua-platform': '"Windows"',
-                }
-            });
+            const { context: newCtx } = await createMacChromeContext(browser);
             contextPool.creating--;
             contextPool.active.push(newCtx);
             console.log(`[Worker ${process.pid}] Created new context (total: ${contextPool.active.length})`);

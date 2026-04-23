@@ -20,20 +20,31 @@ const parseBoolean = (value) => {
 
 /**
  * Check if product is Quick/Fast delivery
- * Based on: If product is from seller "1" (Reliance Retail) AND only available as 1P, it's quick
+ * Based on pincode-specific inventory signals from the search response.
+ * A product should be considered Quick when:
+ * 1. seller_ids contains "1" (Reliance/JioMart 1P)
+ * 2. It has 1P inventory in the current response
+ * 3. It does NOT have any real 3P inventory for the current pincode
  * 
- * Conditions:
- * 1. seller_ids must contain "1" (Reliance/JioMart 1P)
- * 2. available_at_3p_seller must be "false" (NOT from 3P sellers)
+ * Note:
+ * `available_at_3p_seller` is not reliable for this badge because it can be
+ * "true" even when current pincode-level 3P inventory is only ["NA"].
  */
 const hasJiomartQuickLabel = (variantAttributes = {}) => {
-    // Condition 1: Must be seller "1" (Reliance/JioMart)
-    const sellerIds = variantAttributes.seller_ids?.text || [];
-    if (!sellerIds.includes("1")) return false;
-    
-    // Condition 2: Must NOT be available from 3P sellers
-    const available_at_3p_seller = variantAttributes.available_at_3p_seller?.text?.[0];
-    return available_at_3p_seller === "false";
+    const sellerIds = (variantAttributes.seller_ids?.text || []).map((id) => String(id).trim());
+    if (!sellerIds.includes('1')) return false;
+
+    const stores1p = (variantAttributes.inv_stores_1p?.text || [])
+        .map((store) => String(store).trim())
+        .filter(Boolean);
+    if (stores1p.length === 0) return false;
+
+    const stores3p = (variantAttributes.inv_stores_3p?.text || [])
+        .map((store) => String(store).trim())
+        .filter(Boolean);
+    const hasReal3pInventory = stores3p.some((store) => store.toUpperCase() !== 'NA');
+
+    return !hasReal3pInventory;
 };
 
 /**
@@ -201,6 +212,11 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
     // --- DOM SCRAPED HANDLING (FALLBACK) ---
     const fallbackPosition = Number(product.websitePosition || product.__websitePosition || rank);
     const fallbackRank = Number.isFinite(fallbackPosition) && fallbackPosition > 0 ? fallbackPosition : rank;
+    
+    // Check isAd from multiple sources (same as API path)
+    const fallbackAdTag = product.__adTag || product.adTag || 'N/A';
+    const fallbackIsSponsoredTag = typeof fallbackAdTag === 'string' && /(sponsor|ad)/i.test(fallbackAdTag);
+    const fallbackIsAd = product.__isAd === true || product.isAd === true || fallbackIsSponsoredTag;
 
     return {
         category: masterCategory,
@@ -219,7 +235,7 @@ export function transformJiomartProduct(product, categoryUrl, categoryName, subC
         quantity: safeString(product.quantity || product.packSize || 'N/A'),
         combo: safeString(product.combo || 'N/A'),
         deliveryTime: safeString(product.deliveryTime),
-        isAd: !!product.isAd,
+        isAd: fallbackIsAd,
         isQuick: parseBoolean(product.isQuick),
         rating: safeString(product.rating),
         currentPrice: cleanPrice(product.price || product.sellingPrice),

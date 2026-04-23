@@ -232,6 +232,25 @@ async function getStorageStateForPincode(browser, pincode, proxyUrl) {
     });
 
     const page = await context.newPage();
+
+    // === RESOURCE BLOCKING FOR INITIALIZATION ===
+    // Block unwanted resources to speed up page load
+    await page.route('**/*', (route) => {
+        const request = route.request();
+        const resourceType = request.resourceType();
+        const url = request.url();
+
+        const blockedTypes = ['image', 'stylesheet', 'font', 'media', 'manifest', 'other'];
+        const blockedExtensions = ['.css', '.woff', '.woff2', '.ttf', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico'];
+        const blockedDomains = ['google-analytics', 'googletagmanager', 'facebook.com', 'twitter.com', 'cdn.'];
+
+        if (blockedTypes.includes(resourceType) || blockedExtensions.some(ext => url.includes(ext)) || blockedDomains.some(domain => url.includes(domain))) {
+            route.abort();
+        } else {
+            route.continue();
+        }
+    });
+
     const stateFileName = `jiomart_${pincode}_${Date.now()}.json`;
     const statePath = path.join(SESSIONS_DIR, stateFileName);
 
@@ -389,6 +408,38 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             });
 
             const page = await context.newPage();
+
+            // === RESOURCE BLOCKING ===
+            // Block unwanted resources to speed up page load since we're using direct API
+            await page.route('**/*', (route) => {
+                const request = route.request();
+                const resourceType = request.resourceType();
+                const url = request.url();
+
+                // Block resources that are not needed for API calls
+                const blockedTypes = ['image', 'stylesheet', 'font', 'media', 'manifest', 'other'];
+                const blockedExtensions = ['.css', '.woff', '.woff2', '.ttf', '.svg', '.png', '.jpg', '.jpeg', '.gif', '.webp', '.ico'];
+                const blockedDomains = ['google-analytics', 'googletagmanager', 'facebook.com', 'twitter.com', 'cdn.'];
+
+                if (blockedTypes.includes(resourceType)) {
+                    route.abort();
+                    return;
+                }
+
+                if (blockedExtensions.some(ext => url.includes(ext))) {
+                    route.abort();
+                    return;
+                }
+
+                if (blockedDomains.some(domain => url.includes(domain))) {
+                    route.abort();
+                    return;
+                }
+
+                // Allow everything else (HTML, JSON, API calls, scripts)
+                route.continue();
+            });
+
             console.log(`Starting direct API scrape [Attempt ${attempt}] for: ${category.name}`);
             const capturedItems = [];
             const interceptedIds = new Set();
@@ -444,16 +495,17 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 return added;
             };
 
-            const extractSponsoredFromAdsPayload = (payload) => {
+            const extractSponsoredFromAdsPayload = (payload, pageNumber = 1) => {
                 const asi = payload?.result?.asi;
                 if (!asi || typeof asi !== 'object') return 0;
 
                 let newIds = 0;
-                for (const slotData of Object.values(asi)) {
+                for (const [slotKey, slotData] of Object.entries(asi)) {
                     const adsList = slotData?.adsList;
                     if (!Array.isArray(adsList)) continue;
 
-                    for (const adEntry of adsList) {
+                    for (let slotIndex = 0; slotIndex < adsList.length; slotIndex += 1) {
+                        const adEntry = adsList[slotIndex];
                         const product = adEntry?.product || {};
                         const productId = String(product.productId || '').trim();
                         if (!productId) continue;
@@ -467,12 +519,144 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                             brand: product.brand || 'N/A',
                             campaignId: adEntry?.config?.c || 'N/A',
                             adGroupId: adEntry?.config?.adg || 'N/A',
-                            cid: adEntry?.config?.cid || 'N/A'
+                            cid: adEntry?.config?.cid || 'N/A',
+                            pageNumber,
+                            slotKey,
+                            slotIndex: slotIndex + 1,
+                            product
                         });
                     }
                 }
 
                 return newIds;
+            };
+
+            const pushSponsoredProducts = (payload, pageNumber = 1) => {
+                if (!payload || !Array.isArray(payload.sponsoredProducts)) return 0;
+                let added = 0;
+                for (let idx = 0; idx < payload.sponsoredProducts.length; idx += 1) {
+                    const sponsoredItem = payload.sponsoredProducts[idx];
+                    if (!sponsoredItem || typeof sponsoredItem !== 'object') continue;
+
+                    const productId = String(sponsoredItem.productId || '').trim();
+                    if (!productId) continue;
+
+                    const adMeta = {
+                        tag: sponsoredItem.tag || 'sponsored',
+                        brand: sponsoredItem.brand || 'N/A',
+                        campaignId: sponsoredItem.campaignId || 'N/A',
+                        adGroupId: sponsoredItem.adGroupId || 'N/A',
+                        cid: sponsoredItem.cid || 'N/A',
+                        pageNumber,
+                        slotKey: 'trex-sponsored-products',
+                        slotIndex: idx + 1,
+                        product: sponsoredItem.product || sponsoredItem
+                    };
+
+                    if (!sponsoredProductMap.has(productId)) {
+                        sponsoredProductMap.set(productId, adMeta);
+                    }
+
+                    const hasRenderablePayload = !!(adMeta.product?.name || adMeta.product?.urlPath || adMeta.product?.imagePath);
+                    if (!hasRenderablePayload) {
+                        continue;
+                    }
+
+                    const key = `${productId}_sponsored`;
+                    if (interceptedIds.has(key)) continue;
+                    interceptedIds.add(key);
+
+                    const product = buildSyntheticSponsoredItem(productId, adMeta);
+                    if (!product) continue;
+
+                    product.__websitePosition = capturedItems.length + 1;
+                    capturedItems.push(product);
+                    added += 1;
+                }
+                return added;
+            };
+
+            const normalizeSponsoredImageUrl = (imagePath) => {
+                const raw = String(imagePath || '').trim();
+                if (!raw) return 'N/A';
+                if (/^https?:\/\//i.test(raw)) return raw;
+                return `https://www.jiomart.com/images/product/original/${raw.replace(/^\/+/, '')}`;
+            };
+
+            const buildSyntheticSponsoredItem = (productId, adMeta = {}) => {
+                const adProduct = adMeta.product || {};
+                const normalizedId = String(productId || '').trim();
+                if (!normalizedId) return null;
+
+                const itemId = normalizedId.endsWith('_P') ? normalizedId : `${normalizedId}_P`;
+                const imageUrl = normalizeSponsoredImageUrl(adProduct.imagePath);
+                const sellerName = Array.isArray(adProduct.sellerNames) && adProduct.sellerNames.length > 0
+                    ? adProduct.sellerNames[0]
+                    : (adProduct.brand || 'N/A');
+
+                const variantAttributes = {
+                    inv_stores_1p: { text: adProduct.available ? ['ADS_PAYLOAD'] : [] },
+                    inv_stores_3p: { text: ['NA'] }
+                };
+
+                const effectivePrice = Number(adProduct.effectivePrice);
+                if (Number.isFinite(effectivePrice)) {
+                    variantAttributes.avg_selling_price = { numbers: [effectivePrice] };
+                }
+
+                const discountPct = Number(adProduct.discountPct);
+                if (Number.isFinite(discountPct)) {
+                    variantAttributes.avg_discount_pct = { numbers: [discountPct] };
+                }
+
+                const markedPrice = Number(adProduct.markedPrice);
+                const discountValue = Number(adProduct.discount);
+                if (Number.isFinite(markedPrice) || Number.isFinite(effectivePrice)) {
+                    variantAttributes.buybox_mrp = {
+                        text: [[
+                            'ADS',
+                            adProduct.sellerId || '',
+                            sellerName,
+                            '',
+                            Number.isFinite(markedPrice) ? markedPrice : '',
+                            Number.isFinite(effectivePrice) ? effectivePrice : '',
+                            '',
+                            Number.isFinite(discountValue) ? discountValue : '',
+                            Number.isFinite(discountPct) ? discountPct : '',
+                            '',
+                            '2',
+                            ''
+                        ].join('|')]
+                    };
+                }
+
+                const variant = {
+                    id: itemId,
+                    name: adProduct.urlPath || '',
+                    uri: adProduct.urlPath || `https://www.jiomart.com/p/${normalizedId}`,
+                    images: imageUrl !== 'N/A' ? [{ uri: imageUrl }] : [],
+                    brands: adProduct.brand ? [adProduct.brand] : [],
+                    attributes: variantAttributes
+                };
+
+                return {
+                    id: itemId,
+                    product: {
+                        title: adProduct.name || `Sponsored Product ${normalizedId}`,
+                        brand: adProduct.brand || 'N/A',
+                        images: imageUrl !== 'N/A' ? [{ uri: imageUrl }] : [],
+                        variants: [variant]
+                    },
+                    __isAd: true,
+                    __adTag: adMeta.tag || adProduct.tag || 'sponsored',
+                    __adBrand: adMeta.brand || adProduct.brand || 'N/A',
+                    __adCampaignId: adMeta.campaignId || 'N/A',
+                    __adGroupId: adMeta.adGroupId || 'N/A',
+                    __adCid: adMeta.cid || 'N/A',
+                    __pageNumber: Number(adMeta.pageNumber || 0) > 0 ? Number(adMeta.pageNumber) : 1,
+                    __positionInPage: Number(adMeta.slotIndex || 0) > 0 ? Number(adMeta.slotIndex) : null,
+                    __sourceType: 'ads-payload'
+                };
             };
 
             const resolveCandidateProductIds = (item) => {
@@ -510,6 +694,34 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 }
 
                 return Array.from(ids);
+            };
+
+            const pushMissingSponsoredProductsFromAds = () => {
+                const existingIds = new Set();
+                for (const item of capturedItems) {
+                    resolveCandidateProductIds(item).forEach((id) => existingIds.add(id));
+                }
+
+                let added = 0;
+                for (const [productId, adMeta] of sponsoredProductMap.entries()) {
+                    if (existingIds.has(productId) || existingIds.has(`${productId}_P`)) {
+                        continue;
+                    }
+
+                    const syntheticItem = buildSyntheticSponsoredItem(productId, adMeta);
+                    if (!syntheticItem) continue;
+
+                    syntheticItem.__websitePosition = capturedItems.length + 1;
+                    if (!Number.isFinite(syntheticItem.__positionInPage) || syntheticItem.__positionInPage <= 0) {
+                        syntheticItem.__positionInPage = added + 1;
+                    }
+
+                    capturedItems.push(syntheticItem);
+                    resolveCandidateProductIds(syntheticItem).forEach((id) => existingIds.add(id));
+                    added += 1;
+                }
+
+                return added;
             };
 
             const annotateCapturedItemsWithAds = () => {
@@ -613,8 +825,9 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             }
 
             const initialAdded = pushResults(initialData, 1);
+            const sponsoredAdded = pushSponsoredProducts(initialData, 1);
             const totalSize = Number(initialData?.totalSize || 0);
-            console.log(`Initial trex/search page captured: +${initialAdded} items${totalSize > 0 ? ` (totalSize=${totalSize})` : ''}`);
+            console.log(`Initial trex/search page captured: +${initialAdded} items${sponsoredAdded > 0 ? ` +${sponsoredAdded} sponsored` : ''}${totalSize > 0 ? ` (totalSize=${totalSize})` : ''}`);
             apiResponses.push({
                 pageNumber: 1,
                 pageTokenUsed: null,
@@ -642,9 +855,10 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 ? { ...requestTemplateBody }
                 : {};
 
-            if (!requestBodyBase.pageSize || Number(requestBodyBase.pageSize) <= 0) {
-                requestBodyBase.pageSize = 50;
-            }
+            const requestedPageSize = Number(requestBodyBase.pageSize);
+            requestBodyBase.pageSize = Number.isFinite(requestedPageSize) && requestedPageSize > 0
+                ? requestedPageSize
+                : 50;
 
             const extraHeaders = {
                 'content-type': capturedHeaders['content-type'] || 'application/json',
@@ -738,8 +952,10 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
             const seenTokens = new Set();
             if (nextPageToken) seenTokens.add(nextPageToken);
 
+            const maxPages = 200;
             let pageCount = 1;
-            while (nextPageToken && pageCount < 200) {
+            let consecutivePagesWithoutNewItems = 0;
+            while (nextPageToken && pageCount < maxPages) {
                 const requestBody = {
                     ...requestBodyBase,
                     pageToken: nextPageToken
@@ -799,12 +1015,23 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
 
                 pageCount += 1;
                 const added = pushResults(result.data, pageCount);
-                console.log(`Page ${pageCount}: +${added} items (total ${capturedItems.length})`);
+                const sponsoredAdded = pushSponsoredProducts(result.data, pageCount);
+                console.log(`Page ${pageCount}: +${added} items${sponsoredAdded > 0 ? ` +${sponsoredAdded} sponsored` : ''} (total ${capturedItems.length})`);
                 apiResponses.push({
                     pageNumber: pageCount,
                     pageTokenUsed: nextPageToken,
                     response: result.data
                 });
+
+                if ((added + sponsoredAdded) === 0) {
+                    consecutivePagesWithoutNewItems += 1;
+                    if (consecutivePagesWithoutNewItems >= 5) {
+                        console.warn(`Pagination yielded no new items for ${category.name} across ${consecutivePagesWithoutNewItems} pages, stopping.`);
+                        break;
+                    }
+                } else {
+                    consecutivePagesWithoutNewItems = 0;
+                }
 
                 const candidateToken = result.data?.nextPageToken || null;
                 if (!candidateToken) break;
@@ -823,6 +1050,12 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                 await delay(220, 450);
             }
 
+            if (nextPageToken && pageCount >= maxPages) {
+                console.warn(`Reached pagination cap (${maxPages} pages) for ${category.name}; stopping with ${capturedItems.length}/${totalSize || 'unknown'} items collected.`);
+            }
+
+            const syntheticSponsoredAdded = pushMissingSponsoredProductsFromAds();
+
             if (capturedItems.length === 0) {
                 console.warn(`Extracted 0 items via direct API for ${category.name} (Attempt ${attempt})`);
                 if (attempt <= maxRetries) {
@@ -832,7 +1065,7 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
 
             const adTaggedCount = annotateCapturedItemsWithAds();
             console.log(`Extracted ${capturedItems.length} items from ${category.name} using direct API pagination.`);
-            console.log(`Sponsored mapping: ${sponsoredProductMap.size} sponsored ids, ${adTaggedCount} items tagged isAd=true`);
+            console.log(`Sponsored mapping: ${sponsoredProductMap.size} sponsored ids, ${syntheticSponsoredAdded} ads-only items materialized, ${adTaggedCount} items tagged isAd=true`);
 
             capturedItems.forEach((p) => {
                 p.categoryUrl = category.url;
@@ -860,6 +1093,7 @@ async function scrapeCategory(browser, category, contextOptions, maxRetries = 2)
                             totalAdResponses: adResponses.length,
                             totalItemsCaptured: capturedItems.length,
                             totalSponsoredIds: sponsoredProductMap.size,
+                            adsOnlyItemsAdded: syntheticSponsoredAdded,
                             adTaggedItems: adTaggedCount,
                             totalSize
                         },
